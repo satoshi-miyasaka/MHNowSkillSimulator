@@ -5,7 +5,7 @@ AWS Amplifyで公開する Monstar Hunter Now のスキルシミュレータ
 ## 構成
 
 <pre>
-App/
+app/
 ├── index.html       # 画面（HTML）
 ├── main.js          # メインロジック（100行未満のやつ）
 ├── config.json      # Pythonで変換したJSON
