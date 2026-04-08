@@ -12,11 +12,12 @@ document.querySelector('#app').innerHTML = `
   <div>
     <h1>Moster Hunter Now Skill Simulator</h1>
   </div>
-  <div>
-    ${buttons}
-  </div>
+  <div>${buttons}</div>
+  <div id="selectSkill"></div>
   <!-- button id="counter" type="button" class="counter"></button -->
 </section>
 `
+
+SkillButton.setSkillButtonScript(config);
 
 // setupCounter(document.querySelector('#counter'))
