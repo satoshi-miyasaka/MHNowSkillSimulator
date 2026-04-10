@@ -1,3 +1,5 @@
+import { armorSelect } from './skillCheck.js'
+
 export async function loadConfig() {
   try {
     const response = await fetch('/SkillData.json');
@@ -90,7 +92,7 @@ export function setSkillButtonScript(config) {
       let maxLevel = config[target].max_level;
       for (let i = 1; i <= maxLevel; i++) {
         let opt = document.createElement("option");
-        opt.value = `{"${target}":${i}}`;
+        opt.value = `${target}:${i}`;
         opt.innerText = `Level ${i}`;
         slct.appendChild(opt);
       }
@@ -99,4 +101,33 @@ export function setSkillButtonScript(config) {
     })
   });
 }
+export function setSkillCheckButtonScript(config) {
+  const button = document.getElementById('skillCheck');
+  button.addEventListener('click', () => {
+    const selectSkillLevels = document.querySelectorAll('.selectSkillLevel');
+    let request = {};
+    selectSkillLevels.forEach((select) => {
+      let skillLevel = select.value.split(":");
+      request[skillLevel[0]] = skillLevel[1];
+    })
 
+    let result = armorSelect(request, config);
+    let resultArea = document.getElementById('result');
+    let table = "<table>";
+    table += "<tr><td>頭</td><td>胴</td><td>腕</td><td>腰</td><td>足</td></tr>";
+    for (let i = 0; i < result.length; i++) {
+      table += "<tr>";
+      let armorList = result[i]['Armor'];
+      let skillList = result[i]['Skill'];
+      for (let i = 0; i < armorList.length; i++) {
+        table += "<td>" + armorList[i] + "</td>";
+      }
+      table += "</tr><tr><td colspan='5'>";
+      for (let skill in skillList) {
+        table += skill+":" + skillList[skill] + " ";
+      }
+      table += "</td></tr>";
+    }
+    resultArea.innerHTML = table;
+  });
+}
