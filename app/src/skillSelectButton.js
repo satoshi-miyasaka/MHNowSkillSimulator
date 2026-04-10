@@ -17,13 +17,33 @@ export function makeSkillButton(config) {
 
   buttons += '<hr />';
   buttons += '<h2>攻撃</h2>';
+  buttons += '<h3>攻撃力アップ</h3>';
   buttons += '<div>';
   map.forEach((value, key) => {
-    if (value['tag'].includes('攻撃')) buttons += btnTempl.replaceAll('##key##', key)
+    if (value['tag'].includes('攻撃力アップ')) buttons += btnTempl.replaceAll('##key##', key)
+  });
+  buttons += '</div>';
+  buttons += '<h3>ダメージアップ</h3>';
+  buttons += '<div>';
+  map.forEach((value, key) => {
+    if (value['tag'].includes('ダメージアップ')) buttons += btnTempl.replaceAll('##key##', key)
+  });
+  buttons += '</div>';
+  buttons += '<h3>会心</h3>';
+  buttons += '<div>';
+  map.forEach((value, key) => {
+    if (value['tag'].includes('会心')) buttons += btnTempl.replaceAll('##key##', key)
+  });
+  buttons += '</div>';
+  buttons += '<h3>破壊</h3>';
+  buttons += '<div>';
+  map.forEach((value, key) => {
+    if (value['tag'].includes('破壊')) buttons += btnTempl.replaceAll('##key##', key)
   });
   buttons += '</div>';
   buttons += '<hr />';
   buttons += '<h2>属性</h2>';
+  buttons += '<h3>属性</h3>';
   buttons += '<div>';
   map.forEach((value, key) => {
     if (value['tag'].includes('属性')) buttons += btnTempl.replaceAll('##key##', key)
