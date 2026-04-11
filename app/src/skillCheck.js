@@ -79,8 +79,8 @@ export function armorSelect(selectedSkills, config) {
         if (!(skill in skillSum)) skillSum[skill] = 0;
         skillSum[skill] += choiceLevel(skills[skill]);
       }
-      skillSums.push({'Armor': selectedArmors[i], 'Skill': skillSum});
     }
+    skillSums.push({'Armor': selectedArmors[i], 'Skill': skillSum});
   }
   return skillSums;
 }

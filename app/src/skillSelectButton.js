@@ -101,7 +101,9 @@ export function setSkillButtonScript(config) {
       let btn = document.createElement("button");
       btn.innerText = 'X';
       btn.value = target;
-      btn.addEventListener('click', (event) => { document.getElementById("div_"+event.target.value).remove() });
+      btn.addEventListener('click', (event) => {
+        document.getElementById("div_"+event.target.value).remove()
+      });
       div.appendChild(btn);
       let spn = document.createElement("span");
       spn.innerText = target;
