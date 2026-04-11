@@ -136,20 +136,21 @@ export function setSkillCheckButtonScript(config) {
     let result = armorSelect(request, config);
     let resultArea = document.getElementById('result');
     let table = "<table>";
-    table += "<tr><td>頭</td><td>胴</td><td>腕</td><td>腰</td><td>足</td></tr>";
     for (let i = 0; i < result.length; i++) {
-      table += "<tr>";
       let armorList = result[i]['Armor'];
       let skillList = result[i]['Skill'];
-      for (let i = 0; i < armorList.length; i++) {
-        table += "<td>" + armorList[i] + "</td>";
-      }
-      table += "</tr><tr><td colspan='5'>";
+      table += "<tr>";
+      table += "<tr><td>頭</td><td>"+armorList[0]+"</td><td rowspan='5'>";
       for (let skill in skillList) {
         table += skill+":" + skillList[skill] + " ";
       }
       table += "</td></tr>";
+      table += "<tr><td>胴</td><td>"+armorList[1]+"</td></tr>";
+      table += "<tr><td>腕</td><td>"+armorList[2]+"</td></tr>";
+      table += "<tr><td>腰</td><td>"+armorList[3]+"</td></tr>";
+      table += "<tr><td>足</td><td>"+armorList[4]+"</td></tr>";
     }
+    table += "</table>";
     resultArea.innerHTML = table;
   });
 }

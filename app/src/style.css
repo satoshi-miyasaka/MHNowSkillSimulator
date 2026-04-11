@@ -83,6 +83,10 @@ p {
   margin: 0;
 }
 
+table, tr, td {
+  border: 1px solid;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
