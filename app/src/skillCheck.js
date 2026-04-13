@@ -32,11 +32,11 @@ export function armorSelect(selectedSkills, config) {
   }
 
   // parts, armor_name, skill, level
-  let choiceEquip = {'head': {'自由枠': {'なし': 0}},
-          'body': {'自由枠': {'なし': 0}},
-          'arm': {'自由枠': {'なし': 0}},
-          'waist': {'自由枠': {'なし': 0}},
-          'foot': {'自由枠': {'なし': 0}}};
+  let choiceEquip = {'head': {'自由枠': {'なし': 0, '憑依スロット': 0}},
+          'body': {'自由枠': {'なし': 0, '憑依スロット': 0}},
+          'arm': {'自由枠': {'なし': 0, '憑依スロット': 0}},
+          'waist': {'自由枠': {'なし': 0, '憑依スロット': 0}},
+          'foot': {'自由枠': {'なし': 0, '憑依スロット': 0}}};
 
   // 必要なデータのみ集める
   for (let choiceSkill in selectedSkills) {
@@ -54,7 +54,6 @@ export function armorSelect(selectedSkills, config) {
       }
     }
   }
-  console.log(choiceEquip);
 
   // 集めたデータを組み合わせて判定の用意する
   let selectedArmors = [];
@@ -73,8 +72,8 @@ export function armorSelect(selectedSkills, config) {
               for (let skill in choiceEquip[parts][armor]) {
                 if (!(skill in skillSum)) skillSum[skill] = 0;
                 skillSum[skill] += choiceEquip[parts][armor][skill];
-                slotSum += choiceEquip[parts][armor]['憑依スロット']
               }
+              slotSum += choiceEquip[parts][armor]['憑依スロット']
             }
 
             // スキル数判定
@@ -85,7 +84,11 @@ export function armorSelect(selectedSkills, config) {
             let continueFlg = false;
             for (let choiceSkill in selectedSkills) {
               if (!(choiceSkill in skillSum)) {
-                slotSum -= selectedSkills[choiceSkill];
+                if ('憑依' in skillData[choiceSkill]) {
+                  slotSum -= selectedSkills[choiceSkill];
+                } else {
+                  continueFlg = true;
+                }
               } else if (skillSum[choiceSkill] < selectedSkills[choiceSkill]) {
                 if ('憑依' in skillData[choiceSkill]) {
                   slotSum -= (selectedSkills[choiceSkill] - skillSum[choiceSkill]);
@@ -93,12 +96,9 @@ export function armorSelect(selectedSkills, config) {
                   continueFlg = true;
                 }
               }
-              if (0 > slotSum) {
-                continueFlg = true;
-              }
             }
+            if (0 > slotSum) continueFlg = true;
             if (continueFlg) continue;
-            console.log("slot:"+slotSum);
             selectedArmors.push([head, body, arm, waist, foot]);
           }
         }
@@ -110,6 +110,7 @@ export function armorSelect(selectedSkills, config) {
   // 選ばれた装備の全スキル
   for (let i = 0; i < selectedArmors.length; i++) {
     let skillSum = {};
+    let slotSum = 0;
     for (let j = 0; j < 5; j++) {
       let armor = selectedArmors[i][j];
       let skills = armorData[armor];
@@ -117,8 +118,9 @@ export function armorSelect(selectedSkills, config) {
         if (!(skill in skillSum)) skillSum[skill] = 0;
         skillSum[skill] += choiceLevel(skills[skill]);
       }
+      slotSum += choiceLevel(slotData[armor]);
     }
-    skillSums.push({'Armor': selectedArmors[i], 'Skill': skillSum});
+    skillSums.push({'Armor': selectedArmors[i], 'Skill': skillSum, "Slot": slotSum});
   }
   return skillSums;
 }

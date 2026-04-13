@@ -147,15 +147,17 @@ export function setSkillCheckButtonScript(skillData) {
       let armorList = result[i]['Armor'];
       let skillList = result[i]['Skill'];
       table += "<tr>";
-      table += "<tr><td>頭</td><td>"+armorList[0]+"</td><td rowspan='5'>";
+      table += "<tr><td>頭</td><td>"+armorList[0]+"</td><td rowspan='4'>";
       for (let skill in skillList) {
         table += skill+":" + skillList[skill] + " ";
       }
       table += "</td></tr>";
+      table += "</td></tr>";
       table += "<tr><td>胴</td><td>"+armorList[1]+"</td></tr>";
       table += "<tr><td>腕</td><td>"+armorList[2]+"</td></tr>";
       table += "<tr><td>腰</td><td>"+armorList[3]+"</td></tr>";
-      table += "<tr><td>足</td><td>"+armorList[4]+"</td></tr>";
+      table += "<tr><td>足</td><td>"+armorList[4]+"</td>";
+      table += "<td>憑依スロット数: "+result[i]['Slot']+"</td></tr>";
     }
     table += "</table>";
     resultArea.innerHTML = table;
