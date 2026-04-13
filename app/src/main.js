@@ -1,12 +1,9 @@
 import './style.css'
-import { setupCounter } from './counter.js'
 import * as SkillButton from './skillSelectButton.js'
 
 let config = await SkillButton.loadConfig();
 let buttons = SkillButton.makeSkillButton(config);
 
-// XXX 理解したらsetupCounterを削除
-// XXX アセットにイメージあるけど、理解したら削除
 document.querySelector('#app').innerHTML = `
 <section>
   <div>
@@ -22,5 +19,3 @@ document.querySelector('#app').innerHTML = `
 
 SkillButton.setSkillButtonScript(config);
 SkillButton.setSkillCheckButtonScript(config);
-
-// setupCounter(document.querySelector('#counter'))
