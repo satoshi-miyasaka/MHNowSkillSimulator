@@ -1,3 +1,23 @@
+export function makeArmorData(config) {
+  let outputData = {};
+  for (let skill in config) {
+    for (let parts in config[skill]) {
+      if (('head' == parts)
+          || ('body' == parts)
+          || ('arm' == parts)
+          || ('waist' == parts)
+          || ('foot' == parts)) {
+        for (let armor in config[skill][parts]) {
+          if (!(armor in outputData)) outputData[armor] = {}
+          if (!(skill in outputData[armor])) outputData[armor][skill] = {};
+          outputData[armor][skill] = config[skill][parts][armor];
+        }
+      }
+    }
+  }
+  return outputData
+}
+
 export function armorSelect(selectedSkills, config) {
   let skillSums = [];
   for (let checkSkill in selectedSkills) {
@@ -91,22 +111,3 @@ function choiceLevel(gradeLevels) {
   return levels[levels.length -1];
 }
 
-function makeArmorData(config) {
-  let outputData = {};
-  for (let skill in config) {
-    for (let parts in config[skill]) {
-      if (('head' == parts)
-          || ('body' == parts)
-          || ('arm' == parts)
-          || ('waist' == parts)
-          || ('foot' == parts)) {
-        for (let armor in config[skill][parts]) {
-          if (!(armor in outputData)) outputData[armor] = {}
-          if (!(skill in outputData[armor])) outputData[armor][skill] = {};
-          outputData[armor][skill] = config[skill][parts][armor];
-        }
-      }
-    }
-  }
-  return outputData
-}

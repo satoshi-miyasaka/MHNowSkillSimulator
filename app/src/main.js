@@ -2,7 +2,7 @@ import './style.css'
 import * as SkillButton from './skillSelectButton.js'
 
 let config = await SkillButton.loadConfig();
-let buttons = SkillButton.makeSkillButton(config);
+let buttons = SkillButton.makeSkillButton(config['skillData']);
 
 document.querySelector('#app').innerHTML = `
 <section>
@@ -17,5 +17,5 @@ document.querySelector('#app').innerHTML = `
 </section>
 `
 
-SkillButton.setSkillButtonScript(config);
-SkillButton.setSkillCheckButtonScript(config);
+SkillButton.setSkillButtonScript(config['skillData']);
+SkillButton.setSkillCheckButtonScript(config['skillData']);

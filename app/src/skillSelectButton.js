@@ -1,19 +1,25 @@
-import { armorSelect } from './skillCheck.js'
+import { armorSelect, makeArmorData } from './skillCheck.js'
 
 export async function loadConfig() {
   try {
-    const response = await fetch('/SkillData.json');
-    const config = await response.json();
-    return config;
+    const skillDataConfig = await fetch('/SkillData.json');
+    const skillData = await skillDataConfig.json();
+
+    const slotDataConfig = await fetch('/SlotData.json');
+    const slotData = await slotDataConfig.json();
+
+    const armorData = makeArmorData(skillData);
+
+    return {'skillData': skillData, 'armorData': armorData, 'slotData': slotData};
   } catch (error) {
     console.error("スキルデータの読み込みに失敗しました:", error);
   }
 }
 
-export function makeSkillButton(config) {
+export function makeSkillButton(skillData) {
   let buttons = "";
   let btnTempl = '<button class="skillButton" value="##key##">##key##</button>';
-  let map = new Map(Object.entries(config));
+  let map = new Map(Object.entries(skillData));
 
   buttons += '<hr />';
   buttons += '<h2>攻撃</h2>';
@@ -87,7 +93,7 @@ export function makeSkillButton(config) {
   return buttons;
 }
 
-export function setSkillButtonScript(config) {
+export function setSkillButtonScript(skillData) {
   const buttons = document.querySelectorAll('.skillButton');
   const selectSkillArea = document.querySelector('#selectSkill');
 
@@ -111,7 +117,7 @@ export function setSkillButtonScript(config) {
       let slct = document.createElement("select");
       slct.setAttribute("class", "selectSkillLevel");
 
-      let maxLevel = config[target].max_level;
+      let maxLevel = skillData[target].max_level;
       for (let i = 1; i <= maxLevel; i++) {
         let opt = document.createElement("option");
         opt.value = `${target}:${i}`;
@@ -123,7 +129,7 @@ export function setSkillButtonScript(config) {
     })
   });
 }
-export function setSkillCheckButtonScript(config) {
+export function setSkillCheckButtonScript(skillData) {
   const button = document.getElementById('skillCheck');
   button.addEventListener('click', () => {
     const selectSkillLevels = document.querySelectorAll('.selectSkillLevel');
@@ -133,7 +139,7 @@ export function setSkillCheckButtonScript(config) {
       request[skillLevel[0]] = skillLevel[1];
     })
 
-    let result = armorSelect(request, config);
+    let result = armorSelect(request, skillData);
     let resultArea = document.getElementById('result');
     let table = "<table>";
     for (let i = 0; i < result.length; i++) {
