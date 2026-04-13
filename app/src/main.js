@@ -18,4 +18,4 @@ document.querySelector('#app').innerHTML = `
 `
 
 SkillButton.setSkillButtonScript(config['skillData']);
-SkillButton.setSkillCheckButtonScript(config['skillData']);
+SkillButton.setSkillCheckButtonScript(config);

@@ -129,6 +129,7 @@ export function setSkillButtonScript(skillData) {
     })
   });
 }
+
 export function setSkillCheckButtonScript(skillData) {
   const button = document.getElementById('skillCheck');
   button.addEventListener('click', () => {
