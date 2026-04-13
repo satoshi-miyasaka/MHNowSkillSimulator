@@ -18,7 +18,7 @@ export function makeArmorData(skillData) {
   return outputData
 }
 
-export function armorSelect(selectedSkills, config) {
+export function armorSelect(selectedSkills, isSlotCheck, config) {
   const skillData = config['skillData'];
   const armorData = config['armorData'];
   const slotData = config['slotData'];
@@ -84,13 +84,13 @@ export function armorSelect(selectedSkills, config) {
             let continueFlg = false;
             for (let choiceSkill in selectedSkills) {
               if (!(choiceSkill in skillSum)) {
-                if ('憑依' in skillData[choiceSkill]) {
+                if (isSlotCheck && '憑依' in skillData[choiceSkill]) {
                   slotSum -= selectedSkills[choiceSkill];
                 } else {
                   continueFlg = true;
                 }
               } else if (skillSum[choiceSkill] < selectedSkills[choiceSkill]) {
-                if ('憑依' in skillData[choiceSkill]) {
+                if (isSlotCheck && '憑依' in skillData[choiceSkill]) {
                   slotSum -= (selectedSkills[choiceSkill] - skillSum[choiceSkill]);
                 } else {
                   continueFlg = true;
@@ -110,7 +110,6 @@ export function armorSelect(selectedSkills, config) {
   // 選ばれた装備の全スキル
   for (let i = 0; i < selectedArmors.length; i++) {
     let skillSum = {};
-    let slotSum = 0;
     for (let j = 0; j < 5; j++) {
       let armor = selectedArmors[i][j];
       let skills = armorData[armor];
@@ -118,9 +117,9 @@ export function armorSelect(selectedSkills, config) {
         if (!(skill in skillSum)) skillSum[skill] = 0;
         skillSum[skill] += choiceLevel(skills[skill]);
       }
-      slotSum += choiceLevel(slotData[armor]);
+      selectedArmors[i][j] += "【" + choiceLevel(slotData[armor]) + "】";
     }
-    skillSums.push({'Armor': selectedArmors[i], 'Skill': skillSum, "Slot": slotSum});
+    skillSums.push({'Armor': selectedArmors[i], 'Skill': skillSum});
   }
   return skillSums;
 }

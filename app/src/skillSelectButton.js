@@ -134,32 +134,37 @@ export function setSkillCheckButtonScript(skillData) {
   const button = document.getElementById('skillCheck');
   button.addEventListener('click', () => {
     const selectSkillLevels = document.querySelectorAll('.selectSkillLevel');
+    const slotCheck = document.querySelector('#slotCheck');
     let request = {};
     selectSkillLevels.forEach((select) => {
       let skillLevel = select.value.split(":");
       request[skillLevel[0]] = skillLevel[1];
     })
 
-    let result = armorSelect(request, skillData);
     let resultArea = document.getElementById('result');
-    let table = "<table>";
-    for (let i = 0; i < result.length; i++) {
-      let armorList = result[i]['Armor'];
-      let skillList = result[i]['Skill'];
-      table += "<tr>";
-      table += "<tr><td>頭</td><td>"+armorList[0]+"</td><td rowspan='4'>";
-      for (let skill in skillList) {
-        table += skill+":" + skillList[skill] + " ";
+    resultArea.innerHTML = '<div>検索中</div>';
+    let result = armorSelect(request, slotCheck.checked, skillData);
+    if (0 == result.length) {
+      resultArea.innerHTML = '<div>検索結果なし</div>';
+    } else {
+      let table = "<table>";
+      for (let i = 0; i < result.length; i++) {
+        let armorList = result[i]['Armor'];
+        let skillList = result[i]['Skill'];
+        table += "<tr>";
+        table += "<tr><td>頭</td><td>"+armorList[0]+"</td><td rowspan='5'>";
+        for (let skill in skillList) {
+          table += skill+":" + skillList[skill] + " ";
+        }
+        table += "</td></tr>";
+        table += "</td></tr>";
+        table += "<tr><td>胴</td><td>"+armorList[1]+"</td></tr>";
+        table += "<tr><td>腕</td><td>"+armorList[2]+"</td></tr>";
+        table += "<tr><td>腰</td><td>"+armorList[3]+"</td></tr>";
+        table += "<tr><td>足</td><td>"+armorList[4]+"</td></tr>";
       }
-      table += "</td></tr>";
-      table += "</td></tr>";
-      table += "<tr><td>胴</td><td>"+armorList[1]+"</td></tr>";
-      table += "<tr><td>腕</td><td>"+armorList[2]+"</td></tr>";
-      table += "<tr><td>腰</td><td>"+armorList[3]+"</td></tr>";
-      table += "<tr><td>足</td><td>"+armorList[4]+"</td>";
-      table += "<td>憑依スロット数: "+result[i]['Slot']+"</td></tr>";
+      table += "</table>";
+      resultArea.innerHTML = table;
     }
-    table += "</table>";
-    resultArea.innerHTML = table;
   });
 }

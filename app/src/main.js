@@ -10,10 +10,13 @@ document.querySelector('#app').innerHTML = `
     <h1>Moster Hunter Now Skill Simulator</h1>
   </div>
   <div>${buttons}</div>
-  <div><button id="skillCheck">チェック</button></div>
+  <div>
+    <button id="skillCheck">チェック</button>
+    <input type="checkbox" id="slotCheck" />憑依錬成あり
+  </div>
   <div id="selectSkill"></div>
   <div id="result"></div>
-  <!-- button id="counter" type="button" class="counter"></button -->
+  <div>&copy;iNowLab,</div>
 </section>
 `
 
