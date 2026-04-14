@@ -1,4 +1,4 @@
-import { armorSelect, makeArmorData } from './skillCheck.js'
+import { makeArmorData, selectArmor, summarySkill } from './skillCheck.js'
 
 export async function loadConfig() {
   try {
@@ -130,7 +130,9 @@ export function setSkillCheckButtonScript(skillData) {
 
     let resultArea = document.getElementById('result');
     resultArea.innerHTML = '<div>検索中</div>';
-    let result = armorSelect(request, slotCheck.checked, skillData);
+    let selectedArmors = selectArmor(request, slotCheck.checked, skillData);
+    
+    let result = summarySkill(request, slotCheck.checked, skillData);
     if (0 == result.length) {
       resultArea.innerHTML = '<div>検索結果なし</div>';
     } else {
