@@ -24,6 +24,14 @@ function makeButtonTag(map, tag) {
       button.setAttribute('class', 'skillButton');
       button.setAttribute('value', key);
       button.innerText = key;
+      if ('憑依' in value && 'あり' ==  value['憑依']) {
+        button.classList.add('hyoiari');
+        button.innerText += '【憑依あり】';
+      }
+      if ('憑依' in value && 'のみ' ==  value['憑依']) {
+        button.classList.add('hyoinomi');
+        button.innerText += '【憑依のみ】';
+      }
       divButtons.appendChild(button);
     }
   });

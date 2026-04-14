@@ -118,3 +118,9 @@ table, tr, td {
   box-sizing: border-box;
 }
 
+.hyoiari {
+  background-color: #aff;
+}
+.hyoinomi {
+  background-color: #aaf;
+}

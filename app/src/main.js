@@ -3,7 +3,6 @@ import * as SkillButton from './skillSelectButton.js'
 
 let config = await SkillButton.loadConfig();
 let buttons = SkillButton.makeSkillButton(config['skillData']);
-console.log(buttons);
 
 document.querySelector('#app').innerHTML = `
 <section>
