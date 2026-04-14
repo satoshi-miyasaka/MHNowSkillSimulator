@@ -12,85 +12,64 @@ export async function loadConfig() {
 
     return {'skillData': skillData, 'armorData': armorData, 'slotData': slotData};
   } catch (error) {
-    console.error("スキルデータの読み込みに失敗しました:", error);
+    console.error('スキルデータの読み込みに失敗しました:', error);
   }
 }
 
+function makeButtonTag(map, tag) {
+  let divButtons = document.createElement('div');
+  map.forEach((value, key) => {
+    let button = document.createElement('button');
+    if (value['tag'].includes(tag)) {
+      button.setAttribute('class', 'skillButton');
+      button.setAttribute('value', key);
+      button.innerText = key;
+      divButtons.appendChild(button);
+    }
+  });
+  return divButtons;
+}
+
+function makeHTitle(tag, title) {
+  let hTitle = document.createElement(tag);
+  hTitle.innerText = title;
+  return hTitle;
+}
+
 export function makeSkillButton(skillData) {
-  let buttons = "";
-  let btnTempl = '<button class="skillButton" value="##key##">##key##</button>';
   let map = new Map(Object.entries(skillData));
 
-  buttons += '<hr />';
-  buttons += '<h2>攻撃</h2>';
-  buttons += '<h3>攻撃力アップ</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('攻撃力アップ')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<h3>ダメージアップ</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('ダメージアップ')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<h3>会心</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('会心')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<h3>破壊</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('破壊')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<hr />';
-  buttons += '<h2>属性</h2>';
-  buttons += '<h3>属性</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('属性')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<h3>状態異常</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('状態異常')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<hr />';
-  buttons += '<h2>アクション</h2>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('アクション')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<hr />';
-  buttons += '<h2>防御・耐性</h2>';
-  buttons += '<h3>防御</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('防御')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<h3>耐性</h3>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('耐性')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<hr />';
-  buttons += '<h2>その他</h2>';
-  buttons += '<div>';
-  map.forEach((value, key) => {
-    if (value['tag'].includes('その他')) buttons += btnTempl.replaceAll('##key##', key)
-  });
-  buttons += '</div>';
-  buttons += '<hr />';
-  return buttons;
+  let div = document.createElement('div');
+  div.appendChild(document.createElement('hr'));
+  div.appendChild(makeHTitle('h2', '攻撃'));
+  div.appendChild(makeHTitle('h3', '攻撃力アップ'));
+  div.appendChild(makeButtonTag(map, '攻撃力アップ'));
+  div.appendChild(makeHTitle('h3', 'ダメージアップ'));
+  div.appendChild(makeButtonTag(map, 'ダメージアップ'));
+  div.appendChild(makeHTitle('h3', '会心'));
+  div.appendChild(makeButtonTag(map, '会心'));
+  div.appendChild(makeHTitle('h3', '破壊'));
+  div.appendChild(makeButtonTag(map, '破壊'));
+  div.appendChild(document.createElement('hr'));
+  div.appendChild(makeHTitle('h2', '属性'));
+  div.appendChild(makeHTitle('h3', '属性'));
+  div.appendChild(makeButtonTag(map, '属性'));
+  div.appendChild(makeHTitle('h3', '状態異常'));
+  div.appendChild(makeButtonTag(map, '状態異常'));
+  div.appendChild(document.createElement('hr'));
+  div.appendChild(makeHTitle('h2', 'アクション'));
+  div.appendChild(makeButtonTag(map, 'アクション'));
+  div.appendChild(document.createElement('hr'));
+  div.appendChild(makeHTitle('h2', '防御・耐性'));
+  div.appendChild(makeHTitle('h3', '防御'));
+  div.appendChild(makeButtonTag(map, '防御'));
+  div.appendChild(makeHTitle('h3', '耐性'));
+  div.appendChild(makeButtonTag(map, '耐性'));
+  div.appendChild(document.createElement('hr'));
+  div.appendChild(makeHTitle('h2', 'その他'));
+  div.appendChild(makeButtonTag(map, 'その他'));
+  div.appendChild(document.createElement('hr'));
+  return div;
 }
 
 export function setSkillButtonScript(skillData) {
