@@ -17,19 +17,9 @@ export function makeArmorData(skillData) {
   }
   return outputData
 }
-
-export function armorSelect(selectedSkills, isSlotCheck, config) {
+export function selectArmor(selectedSkills, isSlotCheck, config) {
   const skillData = config['skillData'];
-  const armorData = config['armorData'];
   const slotData = config['slotData'];
-
-  let skillSums = [];
-  for (let checkSkill in selectedSkills) {
-    if (!(checkSkill in skillData)) {
-      console.log(checkSkill+" Not Exist");
-      return skillSums;
-    }
-  }
 
   // parts, armor_name, skill, level
   let choiceEquip = {'head': {'自由枠': {'なし': 0, '憑依スロット': 0}},
@@ -37,6 +27,14 @@ export function armorSelect(selectedSkills, isSlotCheck, config) {
           'arm': {'自由枠': {'なし': 0, '憑依スロット': 0}},
           'waist': {'自由枠': {'なし': 0, '憑依スロット': 0}},
           'foot': {'自由枠': {'なし': 0, '憑依スロット': 0}}};
+
+  let selectedArmors = [];
+  for (let checkSkill in selectedSkills) {
+    if (!(checkSkill in skillData)) {
+      console.log(checkSkill+" Not Exist");
+      return selectedArmors;
+    }
+  }
 
   // 必要なデータのみ集める
   for (let choiceSkill in selectedSkills) {
@@ -56,7 +54,6 @@ export function armorSelect(selectedSkills, isSlotCheck, config) {
   }
 
   // 集めたデータを組み合わせて判定の用意する
-  let selectedArmors = [];
   for (let head in choiceEquip['head']) {
     for (let body in choiceEquip['body']) {
       for (let arm in choiceEquip['arm']) {
@@ -75,10 +72,6 @@ export function armorSelect(selectedSkills, isSlotCheck, config) {
               }
               slotSum += choiceEquip[parts][armor]['憑依スロット']
             }
-
-            // スキル数判定
-            // TODO スロット入れたらいらない
-            // if (Object.keys(selectedSkills).length > Object.keys(skillSum).length) continue;
 
             // スキルレベル判定
             let continueFlg = false;
@@ -105,8 +98,15 @@ export function armorSelect(selectedSkills, isSlotCheck, config) {
       }
     }
   }
-  // TODO スキル存在チェックを実装するならここまで
 
+  return selectedArmors;
+}
+
+export function summarySkill(selectedArmors, config) {
+  const armorData = config['armorData']; //
+  const slotData = config['slotData'];
+
+  let skillSums = [];
   // 選ばれた装備の全スキル
   for (let i = 0; i < selectedArmors.length; i++) {
     let skillSum = {};
