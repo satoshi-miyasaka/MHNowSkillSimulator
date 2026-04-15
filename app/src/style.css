@@ -136,3 +136,6 @@ span {
   background-color: blue;
   color: white;
 }
+.no-wrap {
+  white-space: nowrap;
+}

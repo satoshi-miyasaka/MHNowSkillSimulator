@@ -122,7 +122,7 @@ export function setSkillCheckButtonScript(config) {
         let armorList = result[i]['Armor'];
         let skillList = result[i]['Skill'];
         table += '<tr>';
-        table += `<tr><td>頭</td><td>${armorList[0]['armor']}<br>憑依スロット:${armorList[0]['slot']}</td>`;
+        table += `<tr><td>頭</td><td class="no-wrap">${armorList[0]['armor']}<br>憑依スロット:${armorList[0]['slot']}</td>`;
         table += '<td rowspan="5">';
         for (let skill in skillList) {
           if (skillList[skill] > skillData[skill]['max_level']) {
@@ -137,10 +137,10 @@ export function setSkillCheckButtonScript(config) {
             table += `<span class="hyoi_skill">${skill}:${armorList[5][skill]}</span>`;
         }
         table += '</td></tr>';
-        table += `<tr><td>胴</td><td>${armorList[1]['armor']}<br>憑依スロット:${armorList[1]['slot']}</td></tr>`;
-        table += `<tr><td>腕</td><td>${armorList[2]['armor']}<br>憑依スロット:${armorList[2]['slot']}</td></tr>`;
-        table += `<tr><td>腰</td><td>${armorList[3]['armor']}<br>憑依スロット:${armorList[3]['slot']}</td></tr>`;
-        table += `<tr><td>足</td><td>${armorList[4]['armor']}<br>憑依スロット:${armorList[4]['slot']}</td></tr>`;
+        table += `<tr><td>胴</td><td class="no-wrap">${armorList[1]['armor']}<br>憑依スロット:${armorList[1]['slot']}</td></tr>`;
+        table += `<tr><td>腕</td><td class="no-wrap">${armorList[2]['armor']}<br>憑依スロット:${armorList[2]['slot']}</td></tr>`;
+        table += `<tr><td>腰</td><td class="no-wrap">${armorList[3]['armor']}<br>憑依スロット:${armorList[3]['slot']}</td></tr>`;
+        table += `<tr><td>足</td><td class="no-wrap">${armorList[4]['armor']}<br>憑依スロット:${armorList[4]['slot']}</td></tr>`;
       }
       table += '</table>';
       resultArea.innerHTML = table;
