@@ -1,5 +1,7 @@
 import { makeArmorData, selectArmor, summarySkill } from './skillCheck.js'
 
+var selectArmors = [];
+
 export async function loadConfig() {
   try {
     const skillDataConfig = await fetch('/SkillData.json');
@@ -14,34 +16,6 @@ export async function loadConfig() {
   } catch (error) {
     console.error('スキルデータの読み込みに失敗しました:', error);
   }
-}
-
-function makeButtonTag(map, tag) {
-  let divButtons = document.createElement('div');
-  map.forEach((value, key) => {
-    let button = document.createElement('button');
-    if (value['tag'].includes(tag)) {
-      button.setAttribute('class', 'skillButton');
-      button.setAttribute('value', key);
-      button.innerText = key;
-      if ('憑依' in value && 'あり' ==  value['憑依']) {
-        button.classList.add('hyoiari');
-        button.innerText += '【憑依あり】';
-      }
-      if ('憑依' in value && 'のみ' ==  value['憑依']) {
-        button.classList.add('hyoinomi');
-        button.innerText += '【憑依のみ】';
-      }
-      divButtons.appendChild(button);
-    }
-  });
-  return divButtons;
-}
-
-function makeHTitle(tag, title) {
-  let hTitle = document.createElement(tag);
-  hTitle.innerText = title;
-  return hTitle;
 }
 
 export function makeSkillButton(skillData) {
@@ -80,7 +54,8 @@ export function makeSkillButton(skillData) {
   return div;
 }
 
-export function setSkillButtonScript(skillData) {
+export function setSkillButtonScript(config) {
+  const skillData = config['skillData'];
   const buttons = document.querySelectorAll('.skillButton');
   const selectSkillArea = document.querySelector('#selectSkill');
 
@@ -96,6 +71,7 @@ export function setSkillButtonScript(skillData) {
       btn.value = target;
       btn.addEventListener('click', (event) => {
         document.getElementById("div_"+event.target.value).remove()
+        selectArmors = preSkillCheck(config);
       });
       div.appendChild(btn);
       let spn = document.createElement("span");
@@ -111,28 +87,30 @@ export function setSkillButtonScript(skillData) {
         opt.innerText = `Level ${i}`;
         slct.appendChild(opt);
       }
+      slct.addEventListener('change', (event) => {
+        selectArmors = preSkillCheck(config);
+      });
       div.appendChild(slct);
       selectSkillArea.appendChild(div);
+
+      selectArmors = preSkillCheck(config);
     })
   });
+
+  const slotCheckBox = document.querySelector('#slotCheck');
+  slotCheckBox.addEventListener('change', (event) => {
+    let selectArmors = preSkillCheck(config);
+  });
+  
 }
 
-export function setSkillCheckButtonScript(skillData) {
+export function setSkillCheckButtonScript(config) {
   const button = document.getElementById('skillCheck');
   button.addEventListener('click', () => {
-    const selectSkillLevels = document.querySelectorAll('.selectSkillLevel');
-    const slotCheck = document.querySelector('#slotCheck');
-    let request = {};
-    selectSkillLevels.forEach((select) => {
-      let skillLevel = select.value.split(":");
-      request[skillLevel[0]] = skillLevel[1];
-    })
-
     let resultArea = document.getElementById('result');
     resultArea.innerHTML = '<div>検索中</div>';
-    let selectedArmors = selectArmor(request, slotCheck.checked, skillData);
-    
-    let result = summarySkill(request, slotCheck.checked, skillData);
+
+    let result = summarySkill(selectArmors, config);
     if (0 == result.length) {
       resultArea.innerHTML = '<div>検索結果なし</div>';
     } else {
@@ -156,4 +134,49 @@ export function setSkillCheckButtonScript(skillData) {
       resultArea.innerHTML = table;
     }
   });
+}
+
+function makeButtonTag(map, tag) {
+  let divButtons = document.createElement('div');
+  map.forEach((value, key) => {
+    let button = document.createElement('button');
+    if (value['tag'].includes(tag)) {
+      button.setAttribute('class', 'skillButton');
+      button.setAttribute('value', key);
+      button.innerText = key;
+      if ('憑依' in value && 'あり' ==  value['憑依']) {
+        button.classList.add('hyoiari');
+        button.innerText += '【憑依あり】';
+      }
+      if ('憑依' in value && 'のみ' ==  value['憑依']) {
+        button.classList.add('hyoinomi');
+        button.innerText += '【憑依のみ】';
+      }
+      divButtons.appendChild(button);
+    }
+  });
+  return divButtons;
+}
+
+function makeHTitle(tag, title) {
+  let hTitle = document.createElement(tag);
+  hTitle.innerText = title;
+  return hTitle;
+}
+
+function preSkillCheck(config) {
+  const selectSkillLevels = document.querySelectorAll('.selectSkillLevel');
+  const slotCheck = document.querySelector('#slotCheck');
+  let request = {};
+  selectSkillLevels.forEach((select) => {
+    let skillLevel = select.value.split(":");
+    request[skillLevel[0]] = skillLevel[1];
+  })
+  let selectedArmors = selectArmor(request, slotCheck.checked, config);
+  if (0 == selectedArmors.length) {
+    document.querySelector('#skillCheck').disabled = true;
+  } else {
+    document.querySelector('#skillCheck').disabled = false;
+  }
+  return selectedArmors;
 }

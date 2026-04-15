@@ -20,6 +20,7 @@ document.querySelector('#app').innerHTML = `
 </section>
 `
 
+document.querySelector('#skillCheck').disabled = true;
 document.querySelector('#skillButtons').innerHTML = buttons.outerHTML;
-SkillButton.setSkillButtonScript(config['skillData']);
+SkillButton.setSkillButtonScript(config);
 SkillButton.setSkillCheckButtonScript(config);
