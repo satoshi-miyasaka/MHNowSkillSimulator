@@ -64,6 +64,7 @@ export function selectArmor(selectedSkills, isSlotCheck, config) {
             // 一つの装備で複数の選択スキルがあることがある
             let skillSum = {};
             let slotSum = 0;
+            let slotSkill = {};
             for (let parts in choiceEquip) {
               let armor = eval(parts);
               for (let skill in choiceEquip[parts][armor]) {
@@ -79,12 +80,14 @@ export function selectArmor(selectedSkills, isSlotCheck, config) {
               if (!(choiceSkill in skillSum)) {
                 if (isSlotCheck && '憑依' in skillData[choiceSkill]) {
                   slotSum -= selectedSkills[choiceSkill];
+                  slotSkill[choiceSkill] = selectedSkills[choiceSkill];
                 } else {
                   continueFlg = true;
                 }
               } else if (skillSum[choiceSkill] < selectedSkills[choiceSkill]) {
                 if (isSlotCheck && '憑依' in skillData[choiceSkill]) {
                   slotSum -= (selectedSkills[choiceSkill] - skillSum[choiceSkill]);
+                  slotSkill[choiceSkill] = (selectedSkills[choiceSkill] - skillSum[choiceSkill]);
                 } else {
                   continueFlg = true;
                 }
@@ -92,7 +95,7 @@ export function selectArmor(selectedSkills, isSlotCheck, config) {
             }
             if (0 > slotSum) continueFlg = true;
             if (continueFlg) continue;
-            selectedArmors.push([head, body, arm, waist, foot]);
+            selectedArmors.push([head, body, arm, waist, foot, slotSkill]);
           }
         }
       }
@@ -103,7 +106,7 @@ export function selectArmor(selectedSkills, isSlotCheck, config) {
 }
 
 export function summarySkill(selectedArmors, config) {
-  const armorData = config['armorData']; //
+  const armorData = config['armorData'];
   const slotData = config['slotData'];
 
   let skillSums = [];
@@ -117,7 +120,7 @@ export function summarySkill(selectedArmors, config) {
         if (!(skill in skillSum)) skillSum[skill] = 0;
         skillSum[skill] += choiceLevel(skills[skill]);
       }
-      selectedArmors[i][j] += "【" + choiceLevel(slotData[armor]) + "】";
+      selectedArmors[i][j] = {'armor': armor, 'slot': choiceLevel(slotData[armor])};
     }
     skillSums.push({'Armor': selectedArmors[i], 'Skill': skillSum});
   }

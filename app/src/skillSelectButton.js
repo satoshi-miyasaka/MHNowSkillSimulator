@@ -1,6 +1,7 @@
 import { makeArmorData, selectArmor, summarySkill } from './skillCheck.js'
 
 var selectArmors = [];
+var request = {};
 
 export async function loadConfig() {
   try {
@@ -62,6 +63,7 @@ export function setSkillButtonScript(config) {
   skillButtons.forEach((skillButton) => {
     skillButton.addEventListener('click', (event) => {
       let skillName = event.target.value;
+      request[skillName] = 1;
       if (document.getElementById('div_'+skillName)) return;
 
       let div = document.createElement('div');
@@ -71,7 +73,8 @@ export function setSkillButtonScript(config) {
       removeButton.value = skillName;
       removeButton.addEventListener('click', (event) => {
         document.getElementById('div_'+event.target.value).remove()
-        selectArmors = preSkillCheck(config);
+        delete request[event.target.value]
+        preSkillCheck(config).then((val) => { selectArmors = val });
       });
       div.appendChild(removeButton);
       let skillNameSpan = document.createElement('span');
@@ -83,33 +86,33 @@ export function setSkillButtonScript(config) {
       let maxLevel = skillData[skillName].max_level;
       for (let i = 1; i <= maxLevel; i++) {
         let option = document.createElement('option');
-        option.value = `${skillName}:${i}`;
+        option.value = i;
         option.innerText = `Level ${i}`;
         levelSelect.appendChild(option);
       }
       levelSelect.addEventListener('change', (event) => {
-        selectArmors = preSkillCheck(config);
+        request[skillName] = levelSelect.value;
+        preSkillCheck(config).then((val) => { selectArmors = val });
       });
       div.appendChild(levelSelect);
       selectSkillArea.appendChild(div);
 
-      selectArmors = preSkillCheck(config);
+      preSkillCheck(config).then((val) => { selectArmors = val });
     })
   });
 
   const slotCheckBox = document.querySelector('#slotCheck');
   slotCheckBox.addEventListener('change', (event) => {
-    selectArmors = preSkillCheck(config);
+    preSkillCheck(config).then((val) => { selectArmors = val });
   });
   
 }
 
 export function setSkillCheckButtonScript(config) {
+  const skillData = config['skillData'];
   const button = document.getElementById('skillCheck');
   button.addEventListener('click', () => {
     let resultArea = document.getElementById('result');
-    resultArea.innerHTML = '<div>検索中</div>';
-
     let result = summarySkill(selectArmors, config);
     if (0 == result.length) {
       resultArea.innerHTML = '<div>検索結果なし</div>';
@@ -119,16 +122,25 @@ export function setSkillCheckButtonScript(config) {
         let armorList = result[i]['Armor'];
         let skillList = result[i]['Skill'];
         table += '<tr>';
-        table += '<tr><td>頭</td><td>'+armorList[0]+'</td><td rowspan="5">';
+        table += `<tr><td>頭</td><td>${armorList[0]['armor']}<br>憑依スロット:${armorList[0]['slot']}</td>`;
+        table += '<td rowspan="5">';
         for (let skill in skillList) {
-          table += skill+':' + skillList[skill] + ' ';
+          if (skillList[skill] > skillData[skill]['max_level']) {
+            table += '<span class="level_over">';
+          } else {
+            table += '<span>';
+          }
+          table += skill+':' + skillList[skill]+'</span>';
+        }
+        table += '<br /><span class="hyoi_skill">【憑依錬成】</span>';
+        for (let skill in armorList[5]) {
+            table += `<span class="hyoi_skill">${skill}:${armorList[5][skill]}</span>`;
         }
         table += '</td></tr>';
-        table += '</td></tr>';
-        table += '<tr><td>胴</td><td>'+armorList[1]+'</td></tr>';
-        table += '<tr><td>腕</td><td>'+armorList[2]+'</td></tr>';
-        table += '<tr><td>腰</td><td>'+armorList[3]+'</td></tr>';
-        table += '<tr><td>足</td><td>'+armorList[4]+'</td></tr>';
+        table += `<tr><td>胴</td><td>${armorList[1]['armor']}<br>憑依スロット:${armorList[1]['slot']}</td></tr>`;
+        table += `<tr><td>腕</td><td>${armorList[2]['armor']}<br>憑依スロット:${armorList[2]['slot']}</td></tr>`;
+        table += `<tr><td>腰</td><td>${armorList[3]['armor']}<br>憑依スロット:${armorList[3]['slot']}</td></tr>`;
+        table += `<tr><td>足</td><td>${armorList[4]['armor']}<br>憑依スロット:${armorList[4]['slot']}</td></tr>`;
       }
       table += '</table>';
       resultArea.innerHTML = table;
@@ -146,11 +158,11 @@ function makeButtonTag(map, tag) {
       button.innerText = key;
       if ('憑依' in value && 'あり' ==  value['憑依']) {
         button.classList.add('hyoiari');
-        button.innerText += '【憑依あり】';
+//        button.innerText += '【憑依あり】';
       }
       if ('憑依' in value && 'のみ' ==  value['憑依']) {
         button.classList.add('hyoinomi');
-        button.innerText += '【憑依のみ】';
+//        button.innerText += '【憑依のみ】';
       }
       divButtons.appendChild(button);
     }
@@ -164,19 +176,13 @@ function makeHTitle(tag, title) {
   return hTitle;
 }
 
-function preSkillCheck(config) {
+async function preSkillCheck(config) {
+  document.querySelector('#skillCheck').disabled = true;
   const selectSkillLevels = document.querySelectorAll('.selectSkillLevel');
   const slotCheck = document.querySelector('#slotCheck');
-  let request = {};
-  selectSkillLevels.forEach((select) => {
-    let skillLevel = select.value.split(':');
-    request[skillLevel[0]] = skillLevel[1];
-  })
   let selectedArmors = selectArmor(request, slotCheck.checked, config);
-  if (0 == selectedArmors.length) {
-    document.querySelector('#skillCheck').disabled = true;
-  } else {
-    document.querySelector('#skillCheck').disabled = false;
-  }
+  if (0 != selectedArmors.length) document.querySelector('#skillCheck').disabled = false;
   return selectedArmors;
 }
+
+

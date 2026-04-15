@@ -126,3 +126,12 @@ table, tr, td {
   background-color: #aaf;
   color: black;
 }
+span {
+  margin: 0.5em;
+}
+.level_over {
+  color: red;
+}
+.hyoi_skill {
+  color: blue;
+}
