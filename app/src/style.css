@@ -133,5 +133,6 @@ span {
   color: red;
 }
 .hyoi_skill {
-  color: blue;
+  background-color: blue;
+  color: white;
 }
