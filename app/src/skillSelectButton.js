@@ -99,7 +99,7 @@ export function setSkillButtonScript(config) {
 
   const slotCheckBox = document.querySelector('#slotCheck');
   slotCheckBox.addEventListener('change', (event) => {
-    let selectArmors = preSkillCheck(config);
+    selectArmors = preSkillCheck(config);
   });
   
 }
