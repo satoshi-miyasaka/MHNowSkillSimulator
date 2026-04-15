@@ -56,41 +56,41 @@ export function makeSkillButton(skillData) {
 
 export function setSkillButtonScript(config) {
   const skillData = config['skillData'];
-  const buttons = document.querySelectorAll('.skillButton');
+  const skillButtons = document.querySelectorAll('.skillButton');
   const selectSkillArea = document.querySelector('#selectSkill');
 
-  buttons.forEach((button) => {
-    button.addEventListener('click', (event) => {
-      let target = event.target.value;
-      if (document.getElementById("div_"+target)) return;
+  skillButtons.forEach((skillButton) => {
+    skillButton.addEventListener('click', (event) => {
+      let skillName = event.target.value;
+      if (document.getElementById('div_'+skillName)) return;
 
-      let div = document.createElement("div");
-      div.setAttribute("id", "div_"+target);
-      let btn = document.createElement("button");
-      btn.innerText = 'X';
-      btn.value = target;
-      btn.addEventListener('click', (event) => {
-        document.getElementById("div_"+event.target.value).remove()
+      let div = document.createElement('div');
+      div.setAttribute('id', 'div_'+skillName);
+      let removeButton = document.createElement('button');
+      removeButton.innerText = 'X';
+      removeButton.value = skillName;
+      removeButton.addEventListener('click', (event) => {
+        document.getElementById('div_'+event.target.value).remove()
         selectArmors = preSkillCheck(config);
       });
-      div.appendChild(btn);
-      let spn = document.createElement("span");
-      spn.innerText = target;
-      div.appendChild(spn);
-      let slct = document.createElement("select");
-      slct.setAttribute("class", "selectSkillLevel");
+      div.appendChild(removeButton);
+      let skillNameSpan = document.createElement('span');
+      skillNameSpan.innerText = skillName;
+      div.appendChild(skillNameSpan);
+      let levelSelect = document.createElement('select');
+      levelSelect.setAttribute('class', 'selectSkillLevel');
 
-      let maxLevel = skillData[target].max_level;
+      let maxLevel = skillData[skillName].max_level;
       for (let i = 1; i <= maxLevel; i++) {
-        let opt = document.createElement("option");
-        opt.value = `${target}:${i}`;
-        opt.innerText = `Level ${i}`;
-        slct.appendChild(opt);
+        let option = document.createElement('option');
+        option.value = `${skillName}:${i}`;
+        option.innerText = `Level ${i}`;
+        levelSelect.appendChild(option);
       }
-      slct.addEventListener('change', (event) => {
+      levelSelect.addEventListener('change', (event) => {
         selectArmors = preSkillCheck(config);
       });
-      div.appendChild(slct);
+      div.appendChild(levelSelect);
       selectSkillArea.appendChild(div);
 
       selectArmors = preSkillCheck(config);
@@ -114,23 +114,23 @@ export function setSkillCheckButtonScript(config) {
     if (0 == result.length) {
       resultArea.innerHTML = '<div>検索結果なし</div>';
     } else {
-      let table = "<table>";
+      let table = '<table>';
       for (let i = 0; i < result.length; i++) {
         let armorList = result[i]['Armor'];
         let skillList = result[i]['Skill'];
-        table += "<tr>";
-        table += "<tr><td>頭</td><td>"+armorList[0]+"</td><td rowspan='5'>";
+        table += '<tr>';
+        table += '<tr><td>頭</td><td>'+armorList[0]+'</td><td rowspan="5">';
         for (let skill in skillList) {
-          table += skill+":" + skillList[skill] + " ";
+          table += skill+':' + skillList[skill] + ' ';
         }
-        table += "</td></tr>";
-        table += "</td></tr>";
-        table += "<tr><td>胴</td><td>"+armorList[1]+"</td></tr>";
-        table += "<tr><td>腕</td><td>"+armorList[2]+"</td></tr>";
-        table += "<tr><td>腰</td><td>"+armorList[3]+"</td></tr>";
-        table += "<tr><td>足</td><td>"+armorList[4]+"</td></tr>";
+        table += '</td></tr>';
+        table += '</td></tr>';
+        table += '<tr><td>胴</td><td>'+armorList[1]+'</td></tr>';
+        table += '<tr><td>腕</td><td>'+armorList[2]+'</td></tr>';
+        table += '<tr><td>腰</td><td>'+armorList[3]+'</td></tr>';
+        table += '<tr><td>足</td><td>'+armorList[4]+'</td></tr>';
       }
-      table += "</table>";
+      table += '</table>';
       resultArea.innerHTML = table;
     }
   });
@@ -169,7 +169,7 @@ function preSkillCheck(config) {
   const slotCheck = document.querySelector('#slotCheck');
   let request = {};
   selectSkillLevels.forEach((select) => {
-    let skillLevel = select.value.split(":");
+    let skillLevel = select.value.split(':');
     request[skillLevel[0]] = skillLevel[1];
   })
   let selectedArmors = selectArmor(request, slotCheck.checked, config);
