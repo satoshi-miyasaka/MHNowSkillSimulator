@@ -7,7 +7,7 @@ let buttons = SkillButton.makeSkillButton(config['skillData']);
 document.querySelector('#app').innerHTML = `
 <section>
   <div>
-    <h1>Moster Hunter Now Skill Simulator</h1>
+    <h1>Moster&nbsp;Hunter&nbsp;Now Skill&nbsp;Simulator</h1>
   </div>
   <div id="skillButtons"></div>
   <div id="selectSkill"></div>
@@ -25,3 +25,5 @@ document.querySelector('#skillCheck').disabled = true;
 document.querySelector('#skillButtons').innerHTML = buttons.outerHTML;
 SkillButton.setSkillButtonScript(config);
 SkillButton.setSkillCheckButtonScript(config);
+
+
