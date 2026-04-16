@@ -87,23 +87,8 @@ table, tr, td {
   border: 1px solid;
 }
 
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+select {
+  font-size: 1em;
 }
 
 #app {
@@ -138,4 +123,20 @@ span {
 }
 .no-wrap {
   white-space: nowrap;
+}
+.skillButton {
+  padding: 10px 30px;
+  text-decoration: none;
+  font-size: 1em;
+  border-radius: 25px;
+}
+.foldButton,
+.removeButton {
+  text-decoration: none;
+  font-size: 1em;
+  border-radius: 50%;
+}
+
+#copyRight {
+  margin: 0.5em;
 }

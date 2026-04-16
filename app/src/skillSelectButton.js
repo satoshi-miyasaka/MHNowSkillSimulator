@@ -21,44 +21,21 @@ export async function loadConfig() {
 
 export function makeSkillButton(skillData) {
   let map = new Map(Object.entries(skillData));
-
-  let div = document.createElement('div');
-  div.appendChild(document.createElement('hr'));
-  div.appendChild(makeHTitle('h2', '攻撃'));
-  div.appendChild(makeHTitle('h3', '攻撃力アップ'));
-  div.appendChild(makeButtonTag(map, '攻撃力アップ'));
-  div.appendChild(makeHTitle('h3', 'ダメージアップ'));
-  div.appendChild(makeButtonTag(map, 'ダメージアップ'));
-  div.appendChild(makeHTitle('h3', '会心'));
-  div.appendChild(makeButtonTag(map, '会心'));
-  div.appendChild(makeHTitle('h3', '破壊'));
-  div.appendChild(makeButtonTag(map, '破壊'));
-  div.appendChild(document.createElement('hr'));
-  div.appendChild(makeHTitle('h2', '属性'));
-  div.appendChild(makeHTitle('h3', '属性'));
-  div.appendChild(makeButtonTag(map, '属性'));
-  div.appendChild(makeHTitle('h3', '状態異常'));
-  div.appendChild(makeButtonTag(map, '状態異常'));
-  div.appendChild(document.createElement('hr'));
-  div.appendChild(makeHTitle('h2', 'アクション'));
-  div.appendChild(makeButtonTag(map, 'アクション'));
-  div.appendChild(document.createElement('hr'));
-  div.appendChild(makeHTitle('h2', '防御・耐性'));
-  div.appendChild(makeHTitle('h3', '防御'));
-  div.appendChild(makeButtonTag(map, '防御'));
-  div.appendChild(makeHTitle('h3', '耐性'));
-  div.appendChild(makeButtonTag(map, '耐性'));
-  div.appendChild(document.createElement('hr'));
-  div.appendChild(makeHTitle('h2', 'その他'));
-  div.appendChild(makeButtonTag(map, 'その他'));
-  div.appendChild(document.createElement('hr'));
-  return div;
+  let result = '';
+  result += makeSkillDiv('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '破壊'], map);
+  result += makeSkillDiv('属性・状態異常', ['属性', '状態異常'], map);
+  result += makeSkillDiv('アクション', ['アクション'], map);
+  result += makeSkillDiv('防御・耐性', ['防御', '耐性'], map);
+  result += makeSkillDiv('その他', ['その他'], map);
+  return result;
 }
 
 export function setSkillButtonScript(config) {
+  // addEventListenerを使いたいのでDOMのまま
   const skillData = config['skillData'];
   const skillButtons = document.querySelectorAll('.skillButton');
   const selectSkillArea = document.querySelector('#selectSkill');
+  const foldButtons = document.querySelectorAll('.foldButton');
 
   skillButtons.forEach((skillButton) => {
     skillButton.addEventListener('click', (event) => {
@@ -69,7 +46,8 @@ export function setSkillButtonScript(config) {
       let div = document.createElement('div');
       div.setAttribute('id', 'div_'+skillName);
       let removeButton = document.createElement('button');
-      removeButton.innerText = 'X';
+      removeButton.setAttribute('class', 'removeButton');
+      removeButton.innerText = 'Ｘ';
       removeButton.value = skillName;
       removeButton.addEventListener('click', (event) => {
         document.getElementById('div_'+event.target.value).remove()
@@ -105,7 +83,18 @@ export function setSkillButtonScript(config) {
   slotCheckBox.addEventListener('change', (event) => {
     preSkillCheck(config).then((val) => { selectArmors = val });
   });
-  
+
+  foldButtons.forEach((foldButton) => {
+    foldButton.addEventListener('click', (event) => {
+      const target =  document.getElementById( event.target.value );
+      if ('none' == target.style.display) {
+        target.style.display = 'inline-block';
+      } else {
+        target.style.display = 'none';
+      }
+    });
+  });
+
 }
 
 export function setSkillCheckButtonScript(config) {
@@ -142,38 +131,41 @@ export function setSkillCheckButtonScript(config) {
         table += `<tr><td>腰</td><td class="no-wrap">${armorList[3]['armor']}<br>憑依スロット:${armorList[3]['slot']}</td></tr>`;
         table += `<tr><td>足</td><td class="no-wrap">${armorList[4]['armor']}<br>憑依スロット:${armorList[4]['slot']}</td></tr>`;
       }
-      table += '</table>';
-      resultArea.innerHTML = table;
+      table += '</table>'; resultArea.innerHTML = table;
     }
   });
 }
 
-function makeButtonTag(map, tag) {
-  let divButtons = document.createElement('div');
-  map.forEach((value, key) => {
-    let button = document.createElement('button');
-    if (value['tag'].includes(tag)) {
-      button.setAttribute('class', 'skillButton');
-      button.setAttribute('value', key);
-      button.innerText = key;
-      if ('憑依' in value && 'あり' ==  value['憑依']) {
-        button.classList.add('hyoiari');
-//        button.innerText += '【憑依あり】';
-      }
-      if ('憑依' in value && 'のみ' ==  value['憑依']) {
-        button.classList.add('hyoinomi');
-//        button.innerText += '【憑依のみ】';
-      }
-      divButtons.appendChild(button);
-    }
-  });
-  return divButtons;
-}
+function makeSkillDiv(main, sub, map) {
+  let result = '';
+  result += `<hr>`;
+  result += `<h2>${main}<button class="foldButton" value="${main}">▼</button></h2>`;
+  result += `<div id="${main}" style="display: none;">`;
 
-function makeHTitle(tag, title) {
-  let hTitle = document.createElement(tag);
-  hTitle.innerText = title;
-  return hTitle;
+  for (let i = 0; i < sub.length; i++) {
+    result += `<h3>${sub[i]}</h3>`;
+
+    let  divButtonsNothing = '';
+    let divButtonsExist = '';
+    let divButtonsOnly = '';
+    map.forEach((value, key) => {
+      if (value['tag'].includes(sub[i])) {
+        let button = `<button class="skillButton" value="${key}">${key}</button>`;
+        if ('憑依' in value && 'あり' ==  value['憑依']) {
+          divButtonsExist += button;
+        } else if ('憑依' in value && 'のみ' ==  value['憑依']) {
+          divButtonsOnly += button;
+        } else {
+          divButtonsNothing += button;
+        }
+      }
+    });
+    result += divButtonsNothing.length ? '<p>漂流石なし</p>' + divButtonsNothing : '';
+    result += divButtonsExist.length ? '<p>漂流石あり</p>' + divButtonsExist : '';
+    result += divButtonsOnly.length ? '<p>漂流石のみ</p>' + divButtonsOnly : '';
+  }
+  result += '</div>';
+  return result;
 }
 
 async function preSkillCheck(config) {
@@ -184,5 +176,3 @@ async function preSkillCheck(config) {
   if (0 != selectedArmors.length) document.querySelector('#skillCheck').disabled = false;
   return selectedArmors;
 }
-
-
