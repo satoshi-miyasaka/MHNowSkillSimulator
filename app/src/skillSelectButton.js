@@ -21,13 +21,13 @@ export async function loadConfig() {
 
 export function makeSkillButton(skillData) {
   let map = new Map(Object.entries(skillData));
-  let div = document.createElement('div');
-  div.appendChild(makeSkillDiv('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '破壊'], map));
-  div.appendChild(makeSkillDiv('属性・状態異常', ['属性', '状態異常'], map));
-  div.appendChild(makeSkillDiv('アクション', ['アクション'], map));
-  div.appendChild(makeSkillDiv('防御・耐性', ['防御', '耐性'], map));
-  div.appendChild(makeSkillDiv('その他', ['その他'], map));
-  return div;
+  let result = '';
+  result += makeSkillDiv('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '破壊'], map);
+  result += makeSkillDiv('属性・状態異常', ['属性', '状態異常'], map);
+  result += makeSkillDiv('アクション', ['アクション'], map);
+  result += makeSkillDiv('防御・耐性', ['防御', '耐性'], map);
+  result += makeSkillDiv('その他', ['その他'], map);
+  return result;
 }
 
 export function setSkillButtonScript(config) {
@@ -45,7 +45,8 @@ export function setSkillButtonScript(config) {
       let div = document.createElement('div');
       div.setAttribute('id', 'div_'+skillName);
       let removeButton = document.createElement('button');
-      removeButton.innerText = 'X';
+      removeButton.setAttribute('class', 'removeButton');
+      removeButton.innerText = 'Ｘ';
       removeButton.value = skillName;
       removeButton.addEventListener('click', (event) => {
         document.getElementById('div_'+event.target.value).remove()
@@ -135,59 +136,35 @@ export function setSkillCheckButtonScript(config) {
 }
 
 function makeSkillDiv(main, sub, map) {
-  const div = document.createElement('div');
-  div.appendChild(document.createElement('hr'));
-  const h2 = document.createElement('h2');
-  h2.innerText = main;
-  const foldButton = document.createElement('button');
-  foldButton.innerText = '▼';
-  foldButton.setAttribute('class', 'foldButton');
-  foldButton.value = main;
-  h2.appendChild(foldButton);
-  div.appendChild(h2);
-
-  const skillButtonDiv = document.createElement('div');
-  skillButtonDiv.setAttribute('id', main);
+  let result = '';
+  result += `<hr>`;
+  result += `<h2>${main}<button class="foldButton" value="${main}">▼</button></h2>`;
+  result += `<div id="${main}" style="display: none;">`;
 
   for (let i = 0; i < sub.length; i++) {
-    const h3 = document.createElement('h3');
-    h3.innerText = sub[i];
-    skillButtonDiv.appendChild(h3);
+    result += `<h3>${sub[i]}</h3>`;
 
-    const divButtonsNothing = document.createElement('div');
-    const divButtonsExist = document.createElement('div');
-    const divButtonsOnly = document.createElement('div');
-    let titleP = document.createElement('p');
-    titleP.innerText = '憑依錬成なし';
-    divButtonsNothing.appendChild(titleP);
-    titleP = document.createElement('p');
-    titleP.innerText = '憑依錬成あり';
-    divButtonsExist.appendChild(titleP);
-    titleP = document.createElement('p');
-    titleP.innerText = '憑依錬成のみ';
-    divButtonsOnly.appendChild(titleP);
-
+    let  divButtonsNothing = '';
+    let divButtonsExist = '';
+    let divButtonsOnly = '';
     map.forEach((value, key) => {
-      const button = document.createElement('button');
       if (value['tag'].includes(sub[i])) {
-        button.setAttribute('class', 'skillButton');
-        button.setAttribute('value', key);
-        button.innerText = key;
+        let button = `<button class="skillButton" value="${key}">${key}</button>`;
         if ('憑依' in value && 'あり' ==  value['憑依']) {
-          divButtonsExist.appendChild(button);
+          divButtonsExist += button;
         } else if ('憑依' in value && 'のみ' ==  value['憑依']) {
-          divButtonsOnly.appendChild(button);
+          divButtonsOnly += button;
         } else {
-          divButtonsNothing.appendChild(button);
+          divButtonsNothing += button;
         }
       }
     });
-    skillButtonDiv.appendChild(divButtonsNothing);
-    skillButtonDiv.appendChild(divButtonsExist);
-    skillButtonDiv.appendChild(divButtonsOnly);
+    result += divButtonsNothing.length ? '<p>漂流石なし</p>' + divButtonsNothing : '';
+    result += divButtonsExist.length ? '<p>漂流石あり</p>' + divButtonsExist : '';
+    result += divButtonsOnly.length ? '<p>漂流石のみ</p>' + divButtonsOnly : '';
   }
-  div.appendChild(skillButtonDiv);
-  return div;
+  result += '</div>';
+  return result;
 }
 
 async function preSkillCheck(config) {
