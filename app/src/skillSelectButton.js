@@ -34,7 +34,7 @@ export function makeSkillButton(skillData) {
   div.appendChild(makeHTitle('h3', '破壊'));
   div.appendChild(makeButtonTag(map, '破壊'));
   div.appendChild(document.createElement('hr'));
-  div.appendChild(makeHTitle('h2', '属性'));
+  div.appendChild(makeHTitle('h2', '属性・状態異常'));
   div.appendChild(makeHTitle('h3', '属性'));
   div.appendChild(makeButtonTag(map, '属性'));
   div.appendChild(makeHTitle('h3', '状態異常'));
@@ -150,6 +150,18 @@ export function setSkillCheckButtonScript(config) {
 
 function makeButtonTag(map, tag) {
   let divButtons = document.createElement('div');
+  let divButtonsNothing = document.createElement('div');
+  let divButtonsExist = document.createElement('div');
+  let divButtonsOnly = document.createElement('div');
+  let titleP = document.createElement('p');
+  titleP.innerText = '憑依錬成なし';
+  divButtonsNothing.appendChild(titleP);
+  titleP = document.createElement('p');
+  titleP.innerText = '憑依錬成あり';
+  divButtonsExist.appendChild(titleP);
+  titleP = document.createElement('p');
+  titleP.innerText = '憑依錬成のみ';
+  divButtonsOnly.appendChild(titleP);
   map.forEach((value, key) => {
     let button = document.createElement('button');
     if (value['tag'].includes(tag)) {
@@ -157,16 +169,17 @@ function makeButtonTag(map, tag) {
       button.setAttribute('value', key);
       button.innerText = key;
       if ('憑依' in value && 'あり' ==  value['憑依']) {
-        button.classList.add('hyoiari');
-//        button.innerText += '【憑依あり】';
+        divButtonsExist.appendChild(button);
+      } else if ('憑依' in value && 'のみ' ==  value['憑依']) {
+        divButtonsOnly.appendChild(button);
+      } else {
+        divButtonsNothing.appendChild(button);
       }
-      if ('憑依' in value && 'のみ' ==  value['憑依']) {
-        button.classList.add('hyoinomi');
-//        button.innerText += '【憑依のみ】';
-      }
-      divButtons.appendChild(button);
     }
   });
+  divButtons.appendChild(divButtonsNothing);
+  divButtons.appendChild(divButtonsExist);
+  divButtons.appendChild(divButtonsOnly);
   return divButtons;
 }
 
