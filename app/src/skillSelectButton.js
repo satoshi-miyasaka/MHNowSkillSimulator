@@ -31,6 +31,7 @@ export function makeSkillButton(skillData) {
 }
 
 export function setSkillButtonScript(config) {
+  // addEventListenerを使いたいのでDOMのまま
   const skillData = config['skillData'];
   const skillButtons = document.querySelectorAll('.skillButton');
   const selectSkillArea = document.querySelector('#selectSkill');

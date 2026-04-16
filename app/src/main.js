@@ -20,7 +20,7 @@ document.querySelector('#app').innerHTML = `
   <hr />
   <div id="result"></div>
   <hr />
-  <div>&copy;iKnowLab,</div>
+  <div id="copyRight">&copy;iKnowLab,</div>
 </section>
 `
 

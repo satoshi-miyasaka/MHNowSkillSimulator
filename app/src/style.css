@@ -87,6 +87,10 @@ table, tr, td {
   border: 1px solid;
 }
 
+select {
+  font-size: 1em;
+}
+
 #app {
   width: 1126px;
   max-width: 100%;
@@ -127,4 +131,8 @@ span {
   text-decoration: none;
   font-size: 1em;
   border-radius: 50%;
+}
+
+#copyRight {
+  margin: 0.5em;
 }
