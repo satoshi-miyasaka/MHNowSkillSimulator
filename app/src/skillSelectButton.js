@@ -22,7 +22,7 @@ export async function loadConfig() {
 export function makeSkillButton(skillData) {
   let map = new Map(Object.entries(skillData));
   let result = '';
-  result += makeSkillDiv('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '破壊'], map);
+  result += makeSkillDiv('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '攻撃・その他'], map);
   result += makeSkillDiv('属性・状態異常', ['属性', '状態異常'], map);
   result += makeSkillDiv('アクション', ['アクション'], map);
   result += makeSkillDiv('防御・耐性', ['防御', '耐性'], map);
