@@ -87,11 +87,12 @@ export function setSkillButtonScript(config) {
   foldButtons.forEach((foldButton) => {
     foldButton.addEventListener('click', (event) => {
       const target =  document.getElementById( event.target.value );
-      if ('none' == target.style.display) {
-        target.style.display = 'inline-block';
-      } else {
-        target.style.display = 'none';
-      }
+      const skillDivs = document.querySelectorAll('.skill_div');
+      const flag = target.style.display == 'none';
+      skillDivs.forEach((skillDiv) => {
+        skillDiv.style.display = 'none';
+      });
+      target.style.display = flag ? 'inline-block' : 'none';
     });
   });
 
@@ -140,7 +141,7 @@ function makeSkillDiv(main, sub, map) {
   let result = '';
   result += `<hr>`;
   result += `<h2>${main}<button class="foldButton" value="${main}">▼</button></h2>`;
-  result += `<div id="${main}" style="display: none;">`;
+  result += `<div id="${main}" class="skill_div" style="display: none;">`;
 
   for (let i = 0; i < sub.length; i++) {
     result += `<h3>${sub[i]}</h3>`;
