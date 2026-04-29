@@ -104,7 +104,6 @@ export function selectArmor(selectedSkills, isSlotCheck, config) {
 
   return selectedArmors;
 }
-
 export function summarySkill(selectedArmors, config) {
   const armorData = config['armorData'];
   const slotData = config['slotData'];
@@ -126,10 +125,103 @@ export function summarySkill(selectedArmors, config) {
   }
   return skillSums;
 }
-
 function choiceLevel(gradeLevels) {
   let levels = [0];
   for (let key in gradeLevels) levels.push(gradeLevels[key]);
   return levels[levels.length -1];
 }
+function damage(skillData, selectedArmors) {
+  // ↓攻撃力 × 攻撃力倍率↓ + 攻撃力UP + 攻撃増強【会心】
+  let attack = 0;
+  let attackPlus = 0;
+  let attackRaito = 0;
 
+  // ↓↓(属性攻撃力 + 属性攻撃力UP) × 属性攻撃力倍率↓ × 弱点補正↓
+  let attr = 0;
+  let attrPlus = 0;
+  let attrRaito = 0;
+
+  let attackCritical = 0;
+  let attrCritical = 0;
+
+  let damageRaito = 0;
+
+/*
+○無条件
+グループハント強化【攻撃】:
+攻撃:
+果敢:
+滅尽龍の渇望:
+力任せ:
+攻撃活性:
+攻撃増強【会心】:
+
+○会心
+凶会心:
+弱点特効:
+見切り:
+超会心:
+
+○特定攻撃
+ジャスト巧撃:
+ジャスト巧撃【持続】:
+チェンジブースト:
+攻めの守勢:
+溜打・響音強化:
+目覚めの一撃:
+軽巧:
+闇討ち:
+ジャスト溜め解放:
+変形攻撃強化:
+ラストバレット:
+砲術:
+
+○段階
+フルチャージ:
+力の解放:
+勇猛:
+尻上がり:
+本領発揮:
+火事場力:
+追撃:
+
+○一時
+連撃:
+闘気活性:
+逆恨み:
+不屈:
+劫血纏:
+堅忍不抜:
+死中に活:
+追い打ち【毒】:
+追い打ち【麻痺】:
+邁進:
+鬼火纏:
+不退転:
+災禍転福:
+状態異常蓄積時威力UP:
+
+適正距離威力UP:
+- 弓・ボウガン
+通常弾・属性通常弾強化:
+- 通常弾・属性通常弾
+
+攻撃・境地:
+- 攻撃-Lv5
+連撃・境地:
+- 連撃-Lv5
+
+反射:
+- 追加ダメージ
+
+SPスキル威力UP:
+- SPダメージ
+
+○ダメージなし
+KO術:
+破壊王:
+破壊王【SPスキル】:
+
+*/
+
+}
