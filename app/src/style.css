@@ -140,3 +140,7 @@ span {
 #copyRight {
   margin: 0.5em;
 }
+
+.inputNumeric {
+  text-align: right
+}
