@@ -5,6 +5,7 @@ document.querySelector('#app').innerHTML = `
   <h1>Moster&nbsp;Hunter&nbsp;Now Skill&nbsp;Simulator</h1>
 </section>
 <section>
+  <!-- 削除ボタンを止め、トグルボタンに変更 -->
   <div id="SkillButton">
     <h2>攻撃</h2>
     <h3>攻撃力アップ</h3>
@@ -19,6 +20,7 @@ document.querySelector('#app').innerHTML = `
   </div>
   <hr />
   <div>
+    <!-- 選択したスキルの装備を全部並べる -->
     <table>
       <tr><th colspan="3">頭</th><th colspan="3">胴</th><th colspan="3">腕</th><th colspan="3">腰</th><th colspan="3">足</th></tr>
       <tr>
@@ -68,31 +70,32 @@ document.querySelector('#app').innerHTML = `
         <td><input type="radio" name="waist" /></td>
         <td>自由枠<br /><select><option>G1</oprion></select></td>
         <td> <div>攻撃:1</div> <div>憑依錬成:1</div> </td>
-        <td><input type="radio" name="foot" /></td>
-        <td>自由枠<br /><select><option>G1</oprion></select></td>
-        <td> <div>攻撃:1</div> <div>憑依錬成:1</div> </td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </table>
   </div>
   <hr />
   <div id="ChoiceSkill">
+    <!-- 選択したスキルをレベル0で並べ、選択した装備でレベルと憑依錬成数を反映する -->
     <table>
       <tr>
-        <th>スキル</th><th>装備レベル</th><th>効果</th><th>憑依錬成</th><th>武器スキル</th>
+        <th>スキル</th><th>装備レベル</th><th>効果</th><th>憑依錬成<input type="text" size="2" maxlength="2" /></th><th>武器スキル</th>
       </tr>
       <tr>
         <td>攻撃</td>
         <td><select><option>Lv 1</option><option>Lv 2</option><option>Lv 3</option></select></td>
         <td></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" /><button>+</button></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" /><button>+</button></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
       </tr>
       <tr>
         <td>攻撃</td>
         <td><select><option>Lv 1</option><option>Lv 2</option><option>Lv 3</option></select></td>
         <td></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" /><button>+</button></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" /><button>+</button></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
       </tr>
     </table>
   </div>
