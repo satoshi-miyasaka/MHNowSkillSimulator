@@ -103,6 +103,25 @@ select {
   box-sizing: border-box;
 }
 
+.SkillButton {
+  padding: 10px 30px;
+  text-decoration: none;
+  font-size: 1em;
+  border-radius: 25px;
+}
+.OnSelect {
+  color: #aaa
+}
+.Nothing {
+  background-color: #aff
+}
+.Exist {
+  background-color: #faf
+}
+.Only {
+  background-color: #ffa
+}
+
 .hyoiari {
   background-color: #aff;
   color: black;
@@ -123,12 +142,6 @@ span {
 }
 .no-wrap {
   white-space: nowrap;
-}
-.skillButton {
-  padding: 10px 30px;
-  text-decoration: none;
-  font-size: 1em;
-  border-radius: 25px;
 }
 .foldButton,
 .removeButton {
