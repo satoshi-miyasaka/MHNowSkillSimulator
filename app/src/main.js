@@ -3,6 +3,7 @@ import * as common from './common.js'
 import * as make from './makeElements.js'
 
 const config = await common.loadConfig();
+let selectSkillList = [];
 
 document.querySelector('#app').innerHTML = `
 <section>
@@ -27,13 +28,14 @@ document.querySelector('#SkillDiv').innerHTML = make.makeSkillDiv(config['skillD
 
 document.querySelectorAll('.SkillButton').forEach((skillButton) => {
   skillButton.addEventListener('click', (event) => {
-    if (event.target.classList.contains('NonSelect')) {
-      event.target.classList.remove('NonSelect');
+    if (!event.target.classList.contains('OnSelect')) {
       event.target.classList.add('OnSelect');
     } else {
       event.target.classList.remove('OnSelect');
-      event.target.classList.add('NonSelect');
     }
+    let selectSkillList = [];
+    let obj = document.querySelectorAll('.OnSelect').forEach((onSelect) => {
+      selectSkillList.push(onSelect.value);
+    });
   })
 })
-
