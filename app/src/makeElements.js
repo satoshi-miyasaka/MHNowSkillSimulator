@@ -20,35 +20,19 @@ export function setArmorChoice(skillList, config) {
   let waistArmor = [];
   let footArmor = [];
 
+  let selectedArmorName = [];
   for (let i = 0; i < skillList.length; i++) {
-    if (skillData[skillList[i]]['head']) for (let key in skillData[skillList[i]]['head']) headArmor.push(key);
-    if (skillData[skillList[i]]['body']) for (let key in skillData[skillList[i]]['body']) bodyArmor.push(key);
-    if (skillData[skillList[i]]['arm']) for (let key in skillData[skillList[i]]['arm']) armArmor.push(key);
-    if (skillData[skillList[i]]['waist']) for (let key in skillData[skillList[i]]['waist']) waistArmor.push(key);
-    if (skillData[skillList[i]]['foot']) for (let key in skillData[skillList[i]]['foot']) footArmor.push(key);
+    setArmorData('head', skillData[skillList[i]], selectedArmorName, headArmor);
+    setArmorData('body', skillData[skillList[i]], selectedArmorName, bodyArmor);
+    setArmorData('arm', skillData[skillList[i]], selectedArmorName, armArmor);
+    setArmorData('waist', skillData[skillList[i]], selectedArmorName, waistArmor);
+    setArmorData('foot', skillData[skillList[i]], selectedArmorName, footArmor);
   }
-  let result = `
-  <table>
-    <tr>
-      <th colspan="2">頭</th><th colspan="2">胴</th><th colspan="2">腕</th><th colspan="2">腰</th><th colspan="2">足</th>
-    </tr>
-    <tr>
-      <td><input type="radio" name="head" value="自由枠" checked /></td>
-      <td>自由枠</td>
-      <td><input type="radio" name="body" value="自由枠" checked /></td>
-      <td>自由枠</td>
-      <td><input type="radio" name="arm" value="自由枠" checked /></td>
-      <td>自由枠</td>
-      <td><input type="radio" name="waist" value="自由枠" checked /></td>
-      <td>自由枠</td>
-      <td><input type="radio" name="foot" value="自由枠" checked /></td>
-      <td>自由枠</td>
-    </tr>
-  `
 
   let options = '';
   for (let j = 1; j <= 10; j++) options += `<option>Grade${j}</option>`;
 
+  let result = '';
   let i = 0;
   while (true) {
     let armorNameWork = '';
@@ -109,11 +93,29 @@ export function setArmorChoice(skillList, config) {
     result += `<tr>${armorNameWork}</tr><tr>${skillWork}</tr>`;
     i++;
   }
-  result += '</table>';
-  document.getElementById('ArmorChoice').innerHTML = result;
+  document.getElementById('ArmorChoice').innerHTML = `
+    <table>
+      <tr>
+        <th colspan="2">頭</th><th colspan="2">胴</th><th colspan="2">腕</th><th colspan="2">腰</th><th colspan="2">足</th>
+      </tr>
+      <tr>
+        <td><input type="radio" name="head" value="自由枠" checked /></td>
+        <td>自由枠</td>
+        <td><input type="radio" name="body" value="自由枠" checked /></td>
+        <td>自由枠</td>
+        <td><input type="radio" name="arm" value="自由枠" checked /></td>
+        <td>自由枠</td>
+        <td><input type="radio" name="waist" value="自由枠" checked /></td>
+        <td>自由枠</td>
+        <td><input type="radio" name="foot" value="自由枠" checked /></td>
+        <td>自由枠</td>
+      </tr>
+      ${result}
+    </table>
+  `
 }
 
-export function setChoiceSkill(selectList, config) {
+export function setChoiceSkill(skillList, selectList, config) {
   let skillData = config['skillData'];
   let armorData = config['armorData'];
   let slotData = config['slotData'];
@@ -130,16 +132,34 @@ export function setChoiceSkill(selectList, config) {
   }
   let temp = '';
   for (let skillName in skillSummary) {
-    temp += `<tr><td>${skillName}</td><td>${skillSummary[skillName]}</td>`;
-    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>`;
-    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>`;
+    if (skillSummary[skillName] > skillData[skillName]['max_level']) {
+      temp += `<tr><td>${skillName}</td><td class="level_over">${skillSummary[skillName]}</td>`;
+    } else {
+      temp += `<tr><td>${skillName}</td><td>${skillSummary[skillName]}</td>`;
+    }
+    if ('憑依' in skillData[skillName]) {
+      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" class="inputNumeric" /><button>+</button></td>`;
+    } else {
+      temp += `<td></td>`;
+    }
+    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" class="inputNumeric" /><button>+</button></td>`;
     temp += `<td></td></tr>`;
   }
-
+  for (let i = 0; i < skillList.length; i++) {
+    if (!(skillList[i] in skillSummary)) {
+      temp += `<tr><td>${skillList[i]}</td><td>0</td>`;
+      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" /><button>+</button></td>`;
+      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" /><button>+</button></td>`;
+      temp += `<td></td></tr>`;
+    }
+  }
   document.getElementById('ChoiceSkill').innerHTML = `
     <table>
       <tr>
-        <th>スキル</th><th>装備レベル</th><th>憑依錬成<input type="text" size="2" maxlength="2" value="${slotSummary}" /></th><th>武器スキル</th><th>効果</th>
+        <th>スキル</th>
+        <th>装備レベル</th>
+        <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" /></th>
+        <th>武器スキル</th><th>効果</th>
       </tr>
       ${temp}
     </table>
@@ -307,4 +327,15 @@ function choiceLevel(gradeLevels) {
   let levels = [0];
   for (let key in gradeLevels) levels.push(gradeLevels[key]);
   return levels[levels.length -1];
+}
+
+function setArmorData(pos, skillData, selectedArmorName, posArmor) {
+  if (skillData[pos]) {
+    for (let key in skillData[pos]) {
+      if (!selectedArmorName.includes(key)) {
+        selectedArmorName.push(key);
+        posArmor.push(key);
+      }
+    }
+  }
 }

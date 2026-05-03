@@ -14,19 +14,19 @@ export function setSkillButton(config) {
         skillList.push(onSelect[i].value);
       }
       element.setArmorChoice(skillList, config);
-      setArmorChoiceRedio(config);
+      setArmorChoiceRedio(skillList, config);
     });
   });
 }
 
-function setArmorChoiceRedio(config) {
+function setArmorChoiceRedio(skillList, config) {
   let select = document.querySelectorAll('input[type="radio"]');
   for (let i = 0; i < select.length; i++) {
     select[i].addEventListener('click', (event) => {
       let choise = document.querySelectorAll('input[type="radio"]');
       let choiseArmor = [];
       for (let j = 0; j < choise.length; j++) if (choise[j].checked) choiseArmor.push(choise[j].value);
-      element.setChoiceSkill(choiseArmor, config);
+      element.setChoiceSkill(skillList, choiseArmor, config);
     });
   }
 }
