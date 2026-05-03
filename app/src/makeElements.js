@@ -33,15 +33,15 @@ export function setArmorChoice(skillList, config) {
       <th colspan="2">頭</th><th colspan="2">胴</th><th colspan="2">腕</th><th colspan="2">腰</th><th colspan="2">足</th>
     </tr>
     <tr>
-      <td><input type="radio" name="head" checked="true" /></td>
+      <td><input type="radio" name="head" value="自由枠" checked /></td>
       <td>自由枠</td>
-      <td><input type="radio" name="body" checked="true" /></td>
+      <td><input type="radio" name="body" value="自由枠" checked /></td>
       <td>自由枠</td>
-      <td><input type="radio" name="arm" checked="true" /></td>
+      <td><input type="radio" name="arm" value="自由枠" checked /></td>
       <td>自由枠</td>
-      <td><input type="radio" name="waist" checked="true" /></td>
+      <td><input type="radio" name="waist" value="自由枠" checked /></td>
       <td>自由枠</td>
-      <td><input type="radio" name="foot" checked="true" /></td>
+      <td><input type="radio" name="foot" value="自由枠" checked /></td>
       <td>自由枠</td>
     </tr>
   `
@@ -57,7 +57,8 @@ export function setArmorChoice(skillList, config) {
     let flag = 0;
     if (i < headArmor.length) {
       let armorName = headArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="head" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      armorNameWork += `<td rowspan="2"><input type="radio" name="head" value="${armorName}" /></td>`;
+      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
       skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
@@ -66,7 +67,8 @@ export function setArmorChoice(skillList, config) {
     }
     if (i < bodyArmor.length) {
       let armorName = bodyArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="body" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      armorNameWork += `<td rowspan="2"><input type="radio" name="body" value="${armorName}" /></td>`;
+      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
       skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
@@ -75,7 +77,8 @@ export function setArmorChoice(skillList, config) {
     }
     if (i < armArmor.length) {
       let armorName = armArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="arm" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      armorNameWork += `<td rowspan="2"><input type="radio" name="arm" value="${armorName}" /></td>`;
+      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
       skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
@@ -84,7 +87,8 @@ export function setArmorChoice(skillList, config) {
     }
     if (i < waistArmor.length) {
       let armorName = waistArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="waist" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      armorNameWork += `<td rowspan="2"><input type="radio" name="waist" value="${armorName}" /></td>`;
+      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
       skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
@@ -93,7 +97,8 @@ export function setArmorChoice(skillList, config) {
     }
     if (i < footArmor.length) {
       let armorName = footArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="foot" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      armorNameWork += `<td rowspan="2"><input type="radio" name="foot" value="${armorName}" /></td>`;
+      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
       skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
@@ -108,8 +113,29 @@ export function setArmorChoice(skillList, config) {
   document.getElementById('ArmorChoice').innerHTML = result;
 }
 
-export function setChoiceSkill(selectList, skillData) {
-  document.getElementById('ChoiceSkill').innerHTML = '<p>test2</p>';
+export function setChoiceSkill(selectList, config) {
+  console.log(selectList);
+  document.getElementById('ChoiceSkill').innerHTML = `
+    <table>
+      <tr>
+        <th>スキル</th><th>装備レベル</th><th>効果</th><th>憑依錬成<input type="text" size="2" maxlength="2" /></th><th>武器スキル</th>
+      </tr>
+      <tr>
+        <td>攻撃</td>
+        <td><select><option>Lv 1</option><option>Lv 2</option><option>Lv 3</option></select></td>
+        <td></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
+      </tr>
+      <tr>
+        <td>攻撃</td>
+        <td><select><option>Lv 1</option><option>Lv 2</option><option>Lv 3</option></select></td>
+        <td></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
+        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
+      </tr>
+    </table>
+    `
 }
 
 export function setSkillButtonScript(config) {
