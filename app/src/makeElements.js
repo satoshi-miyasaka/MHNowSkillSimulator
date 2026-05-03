@@ -138,11 +138,11 @@ export function setChoiceSkill(skillList, selectList, config) {
       temp += `<tr><td>${skillName}</td><td>${skillSummary[skillName]}</td>`;
     }
     if ('憑依' in skillData[skillName]) {
-      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" class="inputNumeric" /><button>+</button></td>`;
+      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
     } else {
       temp += `<td></td>`;
     }
-    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" class="inputNumeric" /><button>+</button></td>`;
+    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
     temp += `<td></td></tr>`;
   }
   for (let i = 0; i < skillList.length; i++) {
@@ -150,11 +150,11 @@ export function setChoiceSkill(skillList, selectList, config) {
       let skillName = skillList[i];
       temp += `<tr><td>${skillName}</td><td>0</td>`;
       if ('憑依' in skillData[skillName]) {
-        temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" class="inputNumeric" /><button>+</button></td>`;
+        temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
       } else {
         temp += `<td></td>`;
       }
-      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" /><button>+</button></td>`;
+      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
       temp += `<td></td></tr>`;
     }
   }
