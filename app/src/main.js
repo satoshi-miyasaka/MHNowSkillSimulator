@@ -1,9 +1,9 @@
 import './style.css'
 import * as common from './common.js'
-import * as make from './makeElements.js'
+import * as element from './makeElements.js'
+import * as onEvent from './setScript.js'
 
 const config = await common.loadConfig();
-let selectSkillList = [];
 
 document.querySelector('#app').innerHTML = `
 <section>
@@ -11,31 +11,18 @@ document.querySelector('#app').innerHTML = `
 </section>
 <section>
   <!-- 削除ボタンを止め、トグルボタンに変更 -->
-  <div id="SkillDiv" />
+  <div id="SkillDiv"></div>
   <!-- 選択したスキルの装備を全部並べる -->
-  <div id="ArmorChoice" />
+  <div id="ArmorChoice"></div>
   <!-- 選択したスキルをレベル0で並べ、選択した装備でレベルと憑依錬成数を反映する -->
-  <div id="ChoiceSkill" />
+  <div id="ChoiceSkill"></div>
   <!-- ダメージ計算 -->
-  <div id="CalcDamage" />
+  <div id="CalcDamage"></div>
 </section>
 <section>
   <div id="copyRight">&copy;iKnowLab,</div>
 </section>
 `
 
-document.querySelector('#SkillDiv').innerHTML = make.makeSkillDiv(config['skillData']);
-
-document.querySelectorAll('.SkillButton').forEach((skillButton) => {
-  skillButton.addEventListener('click', (event) => {
-    if (!event.target.classList.contains('OnSelect')) {
-      event.target.classList.add('OnSelect');
-    } else {
-      event.target.classList.remove('OnSelect');
-    }
-    let selectSkillList = [];
-    let obj = document.querySelectorAll('.OnSelect').forEach((onSelect) => {
-      selectSkillList.push(onSelect.value);
-    });
-  })
-})
+document.getElementById('SkillDiv').innerHTML = element.setSkillDiv(config['skillData']);
+onEvent.setSkillButton(config);

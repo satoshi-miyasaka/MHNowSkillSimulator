@@ -1,4 +1,4 @@
-export function makeSkillDiv(skillData) {
+export function setSkillDiv(skillData) {
   let map = new Map(Object.entries(skillData));
   let result = '';
   result += makeSkillButton('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '攻撃・その他'], map);
@@ -7,6 +7,109 @@ export function makeSkillDiv(skillData) {
   result += makeSkillButton('防御・耐性', ['防御', '耐性'], map);
   result += makeSkillButton('その他', ['その他'], map);
   return result;
+}
+
+export function setArmorChoice(skillList, config) {
+  let skillData = config['skillData'];
+  let armorData = config['armorData'];
+  let slotData = config['slotData'];
+
+  let headArmor = [];
+  let bodyArmor = [];
+  let armArmor = [];
+  let waistArmor = [];
+  let footArmor = [];
+
+  for (let i = 0; i < skillList.length; i++) {
+    if (skillData[skillList[i]]['head']) for (let key in skillData[skillList[i]]['head']) headArmor.push(key);
+    if (skillData[skillList[i]]['body']) for (let key in skillData[skillList[i]]['body']) bodyArmor.push(key);
+    if (skillData[skillList[i]]['arm']) for (let key in skillData[skillList[i]]['arm']) armArmor.push(key);
+    if (skillData[skillList[i]]['waist']) for (let key in skillData[skillList[i]]['waist']) waistArmor.push(key);
+    if (skillData[skillList[i]]['foot']) for (let key in skillData[skillList[i]]['foot']) footArmor.push(key);
+  }
+  let result = `
+  <table>
+    <tr>
+      <th colspan="2">頭</th><th colspan="2">胴</th><th colspan="2">腕</th><th colspan="2">腰</th><th colspan="2">足</th>
+    </tr>
+    <tr>
+      <td><input type="radio" name="head" checked="true" /></td>
+      <td>自由枠</td>
+      <td><input type="radio" name="body" checked="true" /></td>
+      <td>自由枠</td>
+      <td><input type="radio" name="arm" checked="true" /></td>
+      <td>自由枠</td>
+      <td><input type="radio" name="waist" checked="true" /></td>
+      <td>自由枠</td>
+      <td><input type="radio" name="foot" checked="true" /></td>
+      <td>自由枠</td>
+    </tr>
+  `
+
+  let options = '';
+  for (let j = 1; j <= 10; j++) options += `<option>Grade${j}</option>`;
+
+  let i = 0;
+  while (true) {
+    let armorNameWork = '';
+    let skillWork = '';
+
+    let flag = 0;
+    if (i < headArmor.length) {
+      let armorName = headArmor[i];
+      armorNameWork += `<td rowspan="2"><input type="radio" name="head" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+    } else {
+      armorNameWork += `<td rowspan="2"></td><td></td>`;
+      skillWork += `<td></td>`;
+      flag++;
+    }
+    if (i < bodyArmor.length) {
+      let armorName = bodyArmor[i];
+      armorNameWork += `<td rowspan="2"><input type="radio" name="body" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+    } else {
+      armorNameWork += `<td rowspan="2"></td><td></td>`;
+      skillWork += `<td></td>`;
+      flag++;
+    }
+    if (i < armArmor.length) {
+      let armorName = armArmor[i];
+      armorNameWork += `<td rowspan="2"><input type="radio" name="arm" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+    } else {
+      armorNameWork += `<td rowspan="2"></td><td></td>`;
+      skillWork += `<td></td>`;
+      flag++;
+    }
+    if (i < waistArmor.length) {
+      let armorName = waistArmor[i];
+      armorNameWork += `<td rowspan="2"><input type="radio" name="waist" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+    } else {
+      armorNameWork += `<td rowspan="2"></td><td></td>`;
+      skillWork += `<td></td>`;
+      flag++;
+    }
+    if (i < footArmor.length) {
+      let armorName = footArmor[i];
+      armorNameWork += `<td rowspan="2"><input type="radio" name="foot" /></td><td>${armorName}<br /><select>${options}</select></td>`;
+      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+    } else {
+      armorNameWork += `<td rowspan="2"></td><td></td>`;
+      skillWork += `<td></td>`;
+      flag++;
+    }
+    if (5 == flag) break;
+    result += `<tr>${armorNameWork}</tr><tr>${skillWork}</tr>`;
+    i++;
+  }
+  result += '</table>';
+  document.getElementById('ArmorChoice').innerHTML = result;
+}
+
+export function setChoiceSkill(selectList, skillData) {
+  document.getElementById('ChoiceSkill').innerHTML = '<p>test2</p>';
 }
 
 export function setSkillButtonScript(config) {
@@ -149,11 +252,23 @@ function makeSkillButton(main, sub, map) {
   return result;
 }
 
-async function preSkillCheck(config) {
-  document.querySelector('#skillCheck').disabled = true;
-  const selectSkillLevels = document.querySelectorAll('.selectSkillLevel');
-  const slotCheck = document.querySelector('#slotCheck');
-  let selectedArmors = selectArmor(request, slotCheck.checked, config);
-  if (0 != selectedArmors.length) document.querySelector('#skillCheck').disabled = false;
-  return selectedArmors;
+function selectSkillGrade(armorName, greade, armorData, slotData) {
+  let temp = '';
+  let result = '';
+  for (let skillName in armorData[armorName]) {
+    for (let skillGrade in armorData[armorName][skillName]) {
+      if (skillGrade <= greade) {
+        temp = `<p>${skillName}:Lv.${armorData[armorName][skillName][skillGrade]}</p>`;
+      }
+    }
+    result += temp;
+  }
+  temp = '';
+  for (let slotGrade in slotData[armorName]) {
+    if (slotGrade <= greade) {
+      temp = `<p>憑依スロット:${slotData[armorName][slotGrade]}</p>`;
+    }
+  }
+  result += temp;
+  return result;
 }
