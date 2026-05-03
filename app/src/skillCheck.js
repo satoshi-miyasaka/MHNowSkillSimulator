@@ -106,8 +106,4 @@ export function summarySkill(selectedArmors, config) {
   }
   return skillSums;
 }
-function choiceLevel(gradeLevels) {
-  let levels = [0];
-  for (let key in gradeLevels) levels.push(gradeLevels[key]);
-  return levels[levels.length -1];
-}
+

@@ -114,26 +114,34 @@ export function setArmorChoice(skillList, config) {
 }
 
 export function setChoiceSkill(selectList, config) {
-  console.log(selectList);
+  let skillData = config['skillData'];
+  let armorData = config['armorData'];
+  let slotData = config['slotData'];
+
+  let skillSummary = {};
+  let slotSummary = 0;
+  for (let i = 0; i < selectList.length; i++) {
+    let armorName = selectList[i];
+    for (let skillName in armorData[armorName]) {
+      if (!(skillName in skillSummary)) skillSummary[skillName] = 0;
+      skillSummary[skillName] += choiceLevel(armorData[armorName][skillName]);
+    }
+    slotSummary += choiceLevel(slotData[armorName]);
+  }
+  let temp = '';
+  for (let skillName in skillSummary) {
+    temp += `<tr><td>${skillName}</td><td>${skillSummary[skillName]}</td>`;
+    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>`;
+    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>`;
+    temp += `<td></td></tr>`;
+  }
+
   document.getElementById('ChoiceSkill').innerHTML = `
     <table>
       <tr>
-        <th>スキル</th><th>装備レベル</th><th>効果</th><th>憑依錬成<input type="text" size="2" maxlength="2" /></th><th>武器スキル</th>
+        <th>スキル</th><th>装備レベル</th><th>憑依錬成<input type="text" size="2" maxlength="2" value="${slotSummary}" /></th><th>武器スキル</th><th>効果</th>
       </tr>
-      <tr>
-        <td>攻撃</td>
-        <td><select><option>Lv 1</option><option>Lv 2</option><option>Lv 3</option></select></td>
-        <td></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
-      </tr>
-      <tr>
-        <td>攻撃</td>
-        <td><select><option>Lv 1</option><option>Lv 2</option><option>Lv 3</option></select></td>
-        <td></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
-        <td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" /><button>+</button></td>
-      </tr>
+      ${temp}
     </table>
     `
 }
@@ -283,18 +291,20 @@ function selectSkillGrade(armorName, greade, armorData, slotData) {
   let result = '';
   for (let skillName in armorData[armorName]) {
     for (let skillGrade in armorData[armorName][skillName]) {
-      if (skillGrade <= greade) {
-        temp = `<p>${skillName}:Lv.${armorData[armorName][skillName][skillGrade]}</p>`;
-      }
+      temp = `<p>${skillName}:Lv.${choiceLevel(armorData[armorName][skillName])}</p>`;
     }
     result += temp;
   }
   temp = '';
   for (let slotGrade in slotData[armorName]) {
-    if (slotGrade <= greade) {
-      temp = `<p>憑依スロット:${slotData[armorName][slotGrade]}</p>`;
-    }
+      temp = `<p>憑依スロット:${choiceLevel(slotData[armorName])}</p>`;
   }
   result += temp;
   return result;
+}
+
+function choiceLevel(gradeLevels) {
+  let levels = [0];
+  for (let key in gradeLevels) levels.push(gradeLevels[key]);
+  return levels[levels.length -1];
 }
