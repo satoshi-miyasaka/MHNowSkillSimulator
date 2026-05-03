@@ -19,6 +19,21 @@ export function setSkillButton(config) {
   });
 }
 
+export function setFoldButtonScript() {
+  const foldButtons = document.querySelectorAll('.foldButton');
+  foldButtons.forEach((foldButton) => {
+    foldButton.addEventListener('click', (event) => {
+      const target =  document.getElementById(event.target.value);
+      const skillDivs = document.querySelectorAll('.skill_div');
+      const flag = target.style.display == 'none';
+      skillDivs.forEach((skillDiv) => {
+        skillDiv.style.display = 'none';
+      });
+      target.style.display = flag ? 'inline-block' : 'none';
+    });
+  });
+}
+
 function setArmorChoiceRedio(skillList, config) {
   let select = document.querySelectorAll('input[type="radio"]');
   for (let i = 0; i < select.length; i++) {
@@ -30,3 +45,4 @@ function setArmorChoiceRedio(skillList, config) {
     });
   }
 }
+

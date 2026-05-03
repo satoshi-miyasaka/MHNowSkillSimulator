@@ -12,12 +12,15 @@ document.querySelector('#app').innerHTML = `
 <section>
   <!-- 削除ボタンを止め、トグルボタンに変更 -->
   <div id="SkillDiv"></div>
-  <!-- 選択したスキルの装備を全部並べる -->
-  <div id="ArmorChoice"></div>
-  <!-- 選択したスキルをレベル0で並べ、選択した装備でレベルと憑依錬成数を反映する -->
-  <div id="ChoiceSkill"></div>
-  <!-- ダメージ計算 -->
-  <div id="CalcDamage"></div>
+  <h2>装備選択<button class="foldButton" value="armor">▼</button></h2>
+  <div id="armor" style="display:none" class="skill_div">
+    <!-- 選択したスキルの装備を全部並べる -->
+    <div id="ArmorChoice"></div>
+    <!-- 選択したスキルをレベル0で並べ、選択した装備でレベルと憑依錬成数を反映する -->
+    <div id="ChoiceSkill"></div>
+    <!-- ダメージ計算 -->
+    <div id="CalcDamage"></div>
+  </div>
 </section>
 <section>
   <div id="copyRight">&copy;iKnowLab,</div>
@@ -26,3 +29,4 @@ document.querySelector('#app').innerHTML = `
 
 document.getElementById('SkillDiv').innerHTML = element.setSkillDiv(config['skillData']);
 onEvent.setSkillButton(config);
+onEvent.setFoldButtonScript();

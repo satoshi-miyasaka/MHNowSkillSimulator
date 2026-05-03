@@ -143,8 +143,7 @@ span {
 .no-wrap {
   white-space: nowrap;
 }
-.foldButton,
-.removeButton {
+.foldButton {
   text-decoration: none;
   font-size: 1em;
   border-radius: 50%;
@@ -156,4 +155,8 @@ span {
 
 .inputNumeric {
   text-align: right
+}
+
+.skill_div {
+  border: 1px solid;
 }

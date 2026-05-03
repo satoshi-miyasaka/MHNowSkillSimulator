@@ -147,8 +147,13 @@ export function setChoiceSkill(skillList, selectList, config) {
   }
   for (let i = 0; i < skillList.length; i++) {
     if (!(skillList[i] in skillSummary)) {
-      temp += `<tr><td>${skillList[i]}</td><td>0</td>`;
-      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" /><button>+</button></td>`;
+      let skillName = skillList[i];
+      temp += `<tr><td>${skillName}</td><td>0</td>`;
+      if ('憑依' in skillData[skillName]) {
+        temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="2" maxlength="2" class="inputNumeric" /><button>+</button></td>`;
+      } else {
+        temp += `<td></td>`;
+      }
       temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" /><button>+</button></td>`;
       temp += `<td></td></tr>`;
     }
@@ -278,8 +283,7 @@ export function setSkillCheckButtonScript(config) {
 function makeSkillButton(main, sub, map) {
   let result = '';
   result += `<h2>${main}<button class="foldButton" value="${main}">▼</button></h2>`;
-  // result += `<div id="${main}" class="skill_div" style="display: none;">`;
-  result += `<div id="${main}" class="skill_div">`;
+  result += `<div id="${main}" class="skill_div" style="display: none;">`;
 
   for (let i = 0; i < sub.length; i++) {
     result += `<h3>${sub[i]}</h3>`;
