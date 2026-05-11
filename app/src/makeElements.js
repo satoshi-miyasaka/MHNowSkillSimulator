@@ -132,32 +132,54 @@ export function setChoiceSkill(skillList, selectList, config) {
   }
   let temp = '';
   for (let skillName in skillSummary) {
-    let skillKoka = skillData[skillName]['効果'][(skillSummary[skillName] > skillData[skillName]['max_level'] ? skillData[skillName]['max_level'] : skillSummary[skillName])-1];
+    let skillKoka = skillData[skillName]['効果'][
+      (skillSummary[skillName] > skillData[skillName]['max_level']
+      ? skillData[skillName]['max_level']
+      : skillSummary[skillName])-1];
     if (skillSummary[skillName] > skillData[skillName]['max_level']) {
       temp += `<tr><td>${skillName}</td><td class="level_over">${skillSummary[skillName]}</td>`;
     } else {
       temp += `<tr><td>${skillName}</td><td>${skillSummary[skillName]}</td>`;
     }
     if ('憑依' in skillData[skillName]) {
-      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
+      temp += `<td>
+      <button class="buttonMinus">-</button>
+      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+      <button class="buttoPlus">+</button>
+      </td>`;
     } else {
       temp += `<td></td>`;
     }
-    temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
-    temp += `<td>${skillKoka}</td></tr>`;
+    temp += `<td>
+    <button class="buttonMinus">-</button>
+    <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+    <button class="buttonPlus">+</button>
+    </td>`;
+    temp += `<td></td><td>${skillKoka}</td></tr>`;
   }
   for (let i = 0; i < skillList.length; i++) {
     let skillName = skillList[i];
-    let skillKoka = skillData[skillName]['効果'][(skillSummary[skillName] > skillData[skillName]['max_level'] ? skillData[skillName]['max_level'] : skillSummary[skillName])-1];
+    let skillKoka = skillData[skillName]['効果']
+      [(skillSummary[skillName] > skillData[skillName]['max_level']
+      ? skillData[skillName]['max_level']
+      : skillSummary[skillName])-1];
     if (!(skillList[i] in skillSummary)) {
       temp += `<tr><td>${skillName}</td><td>0</td>`;
       if ('憑依' in skillData[skillName]) {
-        temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
+        temp += `<td>
+        <button class="buttonMinus">-</button>
+        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+        <button class="buttonPlus">+</button>
+        </td>`;
       } else {
         temp += `<td></td>`;
       }
-      temp += `<td><button>-</button><input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" /><button>+</button></td>`;
-    temp += `<td>${skillKoka}</td></tr>`;
+      temp += `<td>
+      <button class="buttonMinus" onclick="console.log(this.parentElement.children[1])">-</button>
+      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+      <button class="buttonPlus">+</button>
+      </td>`;
+    temp += `<td></td><td>${skillKoka}</td></tr>`;
     }
   }
   document.getElementById('ChoiceSkill').innerHTML = `
@@ -166,7 +188,7 @@ export function setChoiceSkill(skillList, selectList, config) {
         <th>スキル</th>
         <th>装備レベル</th>
         <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" /></th>
-        <th>武器スキル</th><th>効果</th>
+        <th>武器スキル</th><th>計</th><th>効果</th>
       </tr>
       ${temp}
     </table>
