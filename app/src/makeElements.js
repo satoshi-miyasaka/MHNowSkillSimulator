@@ -1,6 +1,37 @@
 import * as common from './common.js'
 
 export function setSkillDiv(skillData) {
+  const makeSkillButton = function(main, sub, map) {
+    let result = '';
+    result += `<h2>${main}<button class="foldButton" value="${main}">▼</button></h2>`;
+    result += `<div id="${main}" class="skill_div" style="display: none;">`;
+
+    for (let i = 0; i < sub.length; i++) {
+      result += `<h3>${sub[i]}</h3>`;
+
+      let  divButtonsNothing = '';
+      let divButtonsExist = '';
+      let divButtonsOnly = '';
+      const button = function(key, clazz) {return `<button class="SkillButton NonSelect ${clazz}" value="${key}">${key}</button>`};
+      map.forEach((value, key) => {
+        if (value['tag'].includes(sub[i])) {
+          if ('憑依' in value && 'あり' ==  value['憑依']) {
+            divButtonsExist += button(key, 'Exist');
+          } else if ('憑依' in value && 'のみ' ==  value['憑依']) {
+            divButtonsOnly += button(key, 'Only');
+          } else {
+            divButtonsNothing += button(key, 'Nothing');
+          }
+        }
+      });
+      result += divButtonsNothing.length ? divButtonsNothing : '';
+      result += divButtonsExist.length ? divButtonsExist : '';
+      result += divButtonsOnly.length ? divButtonsOnly : '';
+    }
+    result += '</div>';
+    return result;
+  }
+
   let map = new Map(Object.entries(skillData));
   let result = '';
   result += makeSkillButton('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '攻撃・その他'], map);
@@ -23,6 +54,18 @@ export function setArmorChoice(skillList, config) {
   let footArmor = [];
 
   let selectedArmorName = [];
+
+  const setArmorData = function(pos, skillData, selectedArmorName, posArmor) {
+    if (skillData[pos]) {
+      for (let key in skillData[pos]) {
+        if (!selectedArmorName.includes(key)) {
+          selectedArmorName.push(key);
+          posArmor.push(key);
+        }
+      }
+    }
+  }
+
   for (let i = 0; i < skillList.length; i++) {
     setArmorData('head', skillData[skillList[i]], selectedArmorName, headArmor);
     setArmorData('body', skillData[skillList[i]], selectedArmorName, bodyArmor);
@@ -110,6 +153,13 @@ export function setChoiceSkill(skillList, selectHash, config) {
     slotSummary += common.choiceLevel(slotData[armorName], selectHash[armorName]);
   }
   let temp = '';
+  const plusMinusSet = function(arg) {
+    return `<td>
+    <button class="minus ${arg}">-</button>
+    <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric ${arg}" />
+    <button class="plus ${arg}">+</button>
+    </td>`;
+  }
   for (let skillName in skillSummary) {
     let level = 0;
     let styleClass = '';
@@ -126,19 +176,11 @@ export function setChoiceSkill(skillList, selectHash, config) {
       readonly="true" size="1" maxlength="1" class="inputNumeric${styleClass}" />
     </td>`;
     if ('憑依' in skillData[skillName]) {
-      temp += `<td>
-      <button class="minus">-</button>
-      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric slot" />
-      <button class="plus">+</button>
-      </td>`;
+      temp += plusMinusSet('slot');
     } else {
       temp += `<td></td>`;
     }
-    temp += `<td>
-    <button class="minus wapon">-</button>
-    <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric wapon" />
-    <button class="plus wapon">+</button>
-    </td>`;
+    temp += plusMinusSet('wapon');
     temp += `<td>${skillKoka}</td></tr>`;
   }
   for (let i = 0; i < skillList.length; i++) {
@@ -150,19 +192,11 @@ export function setChoiceSkill(skillList, selectHash, config) {
     if (!(skillList[i] in skillSummary)) {
       temp += `<tr><td>${skillName}</td><td>0</td>`;
       if ('憑依' in skillData[skillName]) {
-        temp += `<td>
-        <button class="minus">-</button>
-        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric slot" />
-        <button class="plus">+</button>
-        </td>`;
+        temp += plusMinusSet('slot');
       } else {
         temp += `<td></td>`;
       }
-      temp += `<td>
-      <button class="minus wapon">-</button>
-      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric wapon" />
-      <button class="plus wapon">+</button>
-      </td>`;
+      temp += plusMinusSet('wapon');
       temp += `<td>${skillKoka}</td></tr>`;
     }
   }
@@ -177,45 +211,4 @@ export function setChoiceSkill(skillList, selectHash, config) {
       ${temp}
     </table>
     `
-}
-
-function makeSkillButton(main, sub, map) {
-  let result = '';
-  result += `<h2>${main}<button class="foldButton" value="${main}">▼</button></h2>`;
-  result += `<div id="${main}" class="skill_div" style="display: none;">`;
-
-  for (let i = 0; i < sub.length; i++) {
-    result += `<h3>${sub[i]}</h3>`;
-
-    let  divButtonsNothing = '';
-    let divButtonsExist = '';
-    let divButtonsOnly = '';
-    map.forEach((value, key) => {
-      if (value['tag'].includes(sub[i])) {
-        if ('憑依' in value && 'あり' ==  value['憑依']) {
-          divButtonsExist += `<button class="SkillButton NonSelect Exist " value="${key}">${key}</button>`;
-        } else if ('憑依' in value && 'のみ' ==  value['憑依']) {
-          divButtonsOnly += `<button class="SkillButton NonSelect Only " value="${key}">${key}</button>`;
-        } else {
-          divButtonsNothing += `<button class="SkillButton NonSelect Nothing" value="${key}">${key}</button>`;
-        }
-      }
-    });
-    result += divButtonsNothing.length ? divButtonsNothing : '';
-    result += divButtonsExist.length ? divButtonsExist : '';
-    result += divButtonsOnly.length ? divButtonsOnly : '';
-  }
-  result += '</div>';
-  return result;
-}
-
-function setArmorData(pos, skillData, selectedArmorName, posArmor) {
-  if (skillData[pos]) {
-    for (let key in skillData[pos]) {
-      if (!selectedArmorName.includes(key)) {
-        selectedArmorName.push(key);
-        posArmor.push(key);
-      }
-    }
-  }
 }
