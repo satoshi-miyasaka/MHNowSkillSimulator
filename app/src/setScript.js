@@ -99,6 +99,25 @@ function setArmorGradeSelect(config) {
       const tdPos = ['head', 'body', 'arm', 'waist', 'foot'].indexOf(armorPos) +1;
       this.parentElement.parentElement.nextElementSibling.querySelector(`td:nth-child(${tdPos})`).innerHTML =
           common.selectSkillGrade(armorName, grade, config['armorData'], config['slotData']);
+      if (this.parentElement.previousElementSibling.children[0].checked) {
+        // TODO setArmorChoiceRadio setSkillButton からロジックをコピーしているので
+        // 見直したい
+        let skillList = [];
+        const onSelect = document.querySelectorAll('.OnSelect');
+        for (let i = 0; i < onSelect.length; i++) {
+          skillList.push(onSelect[i].value);
+        }
+
+        let choise = document.querySelectorAll('input[type="radio"]');
+        let choiseArmor = {};
+        for (let i = 0; i < choise.length; i++) {
+          if (choise[i].checked && '自由枠' != choise[i].value) choiseArmor[choise[i].value] =
+              choise[i].parentElement.nextElementSibling.querySelector('select').value;
+        }
+        element.setChoiceSkill(skillList, choiseArmor, config);
+        setPlusMinusButton(config);
+
+      }
     });
   });
 }
