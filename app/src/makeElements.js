@@ -30,7 +30,8 @@ export function setArmorChoice(skillList, config) {
   }
 
   let options = '';
-  for (let j = 1; j <= 10; j++) options += `<option>Grade${j}</option>`;
+  for (let i = 1; i <= 7; i++) options += `<option value="${i}">Grade${i}</option>`;
+  options += `<option selected="true" value="8">Grade8～</option>`;
 
   let result = '';
   let i = 0;
