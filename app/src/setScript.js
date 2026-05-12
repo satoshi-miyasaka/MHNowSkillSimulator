@@ -57,16 +57,7 @@ function setPlusMinusButton(config) {
         slot.value = Number(slot.value) - 1;
         if (!isWapon) slotSum.value = Number(slotSum.value) + 1;
       }
-      // SkillLevel
-      let levelSum = 0;
-      this.parentElement.parentElement.querySelectorAll('input').forEach((input) => {
-        levelSum += Number(input.value);
-      })
-      const skillName = this.parentElement.parentElement.querySelector('td').innerText;
-      const maxLevel = config['skillData'][skillName]['max_level'];
-      const koka = config['skillData'][skillName]['効果'][Math.min(levelSum, maxLevel) -1];
-      console.log(this.parentElement.parentElement.querySelector('td:nth-child(6)'));
-      this.parentElement.parentElement.querySelector('td:nth-child(6)').innerText = koka;
+      setKoka(this.parentElement.parentElement, config['skillData']);
     })
   });
   document.querySelectorAll('button.plus').forEach((button) => {
@@ -78,6 +69,18 @@ function setPlusMinusButton(config) {
         slot.value = Number(slot.value) + 1;
         if (!isWapon) slotSum.value = Number(slotSum.value) - 1;
       }
+      setKoka(this.parentElement.parentElement, config['skillData']);
     })
   });
+}
+
+function setKoka(parentTr, skillData) {
+  let levelSum = 0;
+  parentTr.querySelectorAll('input').forEach((input) => {
+    levelSum += Number(input.value);
+  })
+  const skillName = parentTr.querySelector('td:nth-child(1)').innerText;
+  const maxLevel = skillData[skillName]['max_level'];
+  const koka = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
+  parentTr.querySelector('td:nth-child(5)').innerText = koka;
 }
