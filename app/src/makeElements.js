@@ -143,17 +143,17 @@ export function setChoiceSkill(skillList, selectList, config) {
     }
     if ('憑依' in skillData[skillName]) {
       temp += `<td>
-      <button class="buttonMinus">-</button>
+      <button class="minus">-</button>
       <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-      <button class="buttoPlus">+</button>
+      <button class="plus">+</button>
       </td>`;
     } else {
       temp += `<td></td>`;
     }
     temp += `<td>
-    <button class="buttonMinus">-</button>
+    <button class="minusWapon">-</button>
     <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-    <button class="buttonPlus">+</button>
+    <button class="plusWapon">+</button>
     </td>`;
     temp += `<td></td><td>${skillKoka}</td></tr>`;
   }
@@ -167,17 +167,17 @@ export function setChoiceSkill(skillList, selectList, config) {
       temp += `<tr><td>${skillName}</td><td>0</td>`;
       if ('憑依' in skillData[skillName]) {
         temp += `<td>
-        <button class="buttonMinus">-</button>
+        <button class="minus">-</button>
         <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-        <button class="buttonPlus">+</button>
+        <button class="plus">+</button>
         </td>`;
       } else {
         temp += `<td></td>`;
       }
       temp += `<td>
-      <button class="buttonMinus" onclick="console.log(this.parentElement.children[1])">-</button>
+      <button class="minusWapon">-</button>
       <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-      <button class="buttonPlus">+</button>
+      <button class="plusWapon">+</button>
       </td>`;
     temp += `<td></td><td>${skillKoka}</td></tr>`;
     }
@@ -187,7 +187,7 @@ export function setChoiceSkill(skillList, selectList, config) {
       <tr>
         <th>スキル</th>
         <th>装備レベル</th>
-        <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" /></th>
+        <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" /></th>
         <th>武器スキル</th><th>計</th><th>効果</th>
       </tr>
       ${temp}
