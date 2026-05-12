@@ -129,9 +129,9 @@ export function setChoiceSkill(skillList, selectList, config) {
     let armorName = selectList[i];
     for (let skillName in armorData[armorName]) {
       if (!(skillName in skillSummary)) skillSummary[skillName] = 0;
-      skillSummary[skillName] += choiceLevel(armorData[armorName][skillName]);
+      skillSummary[skillName] += common.choiceLevel(armorData[armorName][skillName], 8);
     }
-    slotSummary += choiceLevel(slotData[armorName]);
+    slotSummary += common.choiceLevel(slotData[armorName], 8);
   }
   let temp = '';
   for (let skillName in skillSummary) {
@@ -190,7 +190,7 @@ export function setChoiceSkill(skillList, selectList, config) {
       <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric wapon" />
       <button class="plus wapon">+</button>
       </td>`;
-    temp += `<td>${skillKoka}</td></tr>`;
+      temp += `<td>${skillKoka}</td></tr>`;
     }
   }
   document.getElementById('ChoiceSkill').innerHTML = `

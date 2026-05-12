@@ -81,7 +81,7 @@ function setKoka(parentTr, skillData) {
   parentTr.querySelectorAll('input').forEach((input) => {
     levelSum += Number(input.value);
   })
-  const skillName = parentTr.querySelector('td:nth-child(1)').innerText;
+  const skillName = parentTr.firstElementChild.innerText;
   const maxLevel = skillData[skillName]['max_level'];
   const koka = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
   parentTr.querySelector('td:nth-child(5)').innerText = koka;
