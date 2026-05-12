@@ -38,62 +38,46 @@ export function setArmorChoice(skillList, config) {
   let result = '';
   let i = 0;
   while (true) {
-    let armorNameWork = '';
-    let skillWork = '';
+    const MakeClass = class {
+      constructor(armorData, slotData, options) {
+        this.armorData = armorData;
+        this.slotData = slotData;
+        this.armorNameWork = '';
+        this.skillWork = '';
+        this.count = 0;
+        this.options = options;
+      }
+      setElement(i, armors, pos) {
+        if (i < armors.length) {
+          let armorName = armors[i];
+          this.armorNameWork += `<td rowspan="2"><input type="radio" name="${pos}" value="${armorName}" /></td>`;
+          this.armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${this.options}</select></td>`;
+          this.skillWork += `<td>${common.selectSkillGrade(armorName, 8, this.armorData, this.slotData)}</td>`;
+        } else {
+          this.armorNameWork += `<td rowspan="2"></td><td></td>`;
+          this.skillWork += `<td></td>`;
+          this.count++;
+        }
+      }
+      get getArmorNameWork() {
+        return this.armorNameWork
+      }
+      get getSkillWork() {
+        return this.skillWork
+      }
+      get isBreak() {
+        return 5 == this.count
+      }
+    }
 
-    let flag = 0;
-    if (i < headArmor.length) {
-      let armorName = headArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="head" value="${armorName}" /></td>`;
-      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
-      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
-    } else {
-      armorNameWork += `<td rowspan="2"></td><td></td>`;
-      skillWork += `<td></td>`;
-      flag++;
-    }
-    if (i < bodyArmor.length) {
-      let armorName = bodyArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="body" value="${armorName}" /></td>`;
-      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
-      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
-    } else {
-      armorNameWork += `<td rowspan="2"></td><td></td>`;
-      skillWork += `<td></td>`;
-      flag++;
-    }
-    if (i < armArmor.length) {
-      let armorName = armArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="arm" value="${armorName}" /></td>`;
-      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
-      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
-    } else {
-      armorNameWork += `<td rowspan="2"></td><td></td>`;
-      skillWork += `<td></td>`;
-      flag++;
-    }
-    if (i < waistArmor.length) {
-      let armorName = waistArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="waist" value="${armorName}" /></td>`;
-      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
-      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
-    } else {
-      armorNameWork += `<td rowspan="2"></td><td></td>`;
-      skillWork += `<td></td>`;
-      flag++;
-    }
-    if (i < footArmor.length) {
-      let armorName = footArmor[i];
-      armorNameWork += `<td rowspan="2"><input type="radio" name="foot" value="${armorName}" /></td>`;
-      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
-      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
-    } else {
-      armorNameWork += `<td rowspan="2"></td><td></td>`;
-      skillWork += `<td></td>`;
-      flag++;
-    }
-    if (5 == flag) break;
-    result += `<tr>${armorNameWork}</tr><tr>${skillWork}</tr>`;
+    let make = new MakeClass(armorData, slotData, options);
+    make.setElement(i, headArmor, 'head');
+    make.setElement(i, bodyArmor, 'body');
+    make.setElement(i, armArmor, 'arm');
+    make.setElement(i, waistArmor, 'waist');
+    make.setElement(i, footArmor, 'foot');
+    if (make.isBreak) break;
+    result += `<tr>${make.armorNameWork}</tr><tr>${make.skillWork}</tr>`;
     i++;
   }
   document.getElementById('ArmorChoice').innerHTML = `
