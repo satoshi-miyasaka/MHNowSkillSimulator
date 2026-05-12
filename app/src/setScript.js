@@ -35,21 +35,20 @@ export function setFoldButtonScript() {
 }
 
 function setArmorChoiceRedio(skillList, config) {
-  let select = document.querySelectorAll('input[type="radio"]');
-  for (let i = 0; i < select.length; i++) {
-    select[i].addEventListener('click', () => {
+  document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+    radio.addEventListener('click', () => {
       let choise = document.querySelectorAll('input[type="radio"]');
       let choiseArmor = [];
-      for (let j = 0; j < choise.length; j++) if (choise[j].checked) choiseArmor.push(choise[j].value);
+      for (let i = 0; i < choise.length; i++) if (choise[i].checked) choiseArmor.push(choise[i].value);
       element.setChoiceSkill(skillList, choiseArmor, config);
-      setPlusMinusButton();
+      setPlusMinusButton(config);
     });
-  }
+  });
 }
 
-function setPlusMinusButton() {
-  let buttons = document.querySelectorAll('button.minus');
-  buttons.forEach((button) => {
+function setPlusMinusButton(config) {
+  // Button
+  document.querySelectorAll('button.minus').forEach((button) => {
     button.addEventListener('click', function() {
       const isWapon = this.classList.contains('wapon');
       const slotSum = document.getElementById('SlotSum');
@@ -58,10 +57,19 @@ function setPlusMinusButton() {
         slot.value = Number(slot.value) - 1;
         if (!isWapon) slotSum.value = Number(slotSum.value) + 1;
       }
+      // SkillLevel
+      let levelSum = 0;
+      this.parentElement.parentElement.querySelectorAll('input').forEach((input) => {
+        levelSum += Number(input.value);
+      })
+      const skillName = this.parentElement.parentElement.querySelector('td').innerText;
+      const maxLevel = config['skillData'][skillName]['max_level'];
+      const koka = config['skillData'][skillName]['効果'][Math.min(levelSum, maxLevel) -1];
+      console.log(this.parentElement.parentElement.querySelector('td:nth-child(6)'));
+      this.parentElement.parentElement.querySelector('td:nth-child(6)').innerText = koka;
     })
   });
-  buttons = document.querySelectorAll('button.plus');
-  buttons.forEach((button) => {
+  document.querySelectorAll('button.plus').forEach((button) => {
     button.addEventListener('click', function() {
       const isWapon = this.classList.contains('wapon');
       const slotSum = document.getElementById('SlotSum');

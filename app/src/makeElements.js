@@ -137,9 +137,17 @@ export function setChoiceSkill(skillList, selectList, config) {
       ? skillData[skillName]['max_level']
       : skillSummary[skillName])-1];
     if (skillSummary[skillName] > skillData[skillName]['max_level']) {
-      temp += `<tr><td>${skillName}</td><td class="level_over">${skillSummary[skillName]}</td>`;
+      temp += `<tr><td>${skillName}</td>
+      <td class="level_over">
+        <input type="text" value="${skillSummary[skillName]}"
+        readonly="true" size="1" maxlength="1" class="inputNumeric slot" />
+      </td>`;
     } else {
-      temp += `<tr><td>${skillName}</td><td>${skillSummary[skillName]}</td>`;
+      temp += `<tr><td>${skillName}</td>
+      <td>
+        <input type="text" value="${skillSummary[skillName]}"
+        readonly="true" size="1" maxlength="1" class="inputNumeric slot" />
+      </td>`;
     }
     if ('憑依' in skillData[skillName]) {
       temp += `<td>
@@ -193,115 +201,6 @@ export function setChoiceSkill(skillList, selectList, config) {
       ${temp}
     </table>
     `
-}
-
-export function setSkillButtonScript(config) {
-  // addEventListenerを使いたいのでDOMのまま
-  const skillData = config['skillData'];
-  const skillButtons = document.querySelectorAll('.skillButton');
-  const selectSkillArea = document.querySelector('#selectSkill');
-  const foldButtons = document.querySelectorAll('.foldButton');
-
-  skillButtons.forEach((skillButton) => {
-    skillButton.addEventListener('click', (event) => {
-      let skillName = event.target.value;
-      request[skillName] = 1;
-      if (document.getElementById('div_'+skillName)) return;
-
-      let div = document.createElement('div');
-      div.setAttribute('id', 'div_'+skillName);
-      let removeButton = document.createElement('button');
-      removeButton.setAttribute('class', 'removeButton');
-      removeButton.innerText = 'Ｘ';
-      removeButton.value = skillName;
-      removeButton.addEventListener('click', (event) => {
-        document.getElementById('div_'+event.target.value).remove()
-        delete request[event.target.value]
-        preSkillCheck(config).then((val) => { selectArmors = val });
-      });
-      div.appendChild(removeButton);
-      let skillNameSpan = document.createElement('span');
-      skillNameSpan.innerText = skillName;
-      div.appendChild(skillNameSpan);
-      let levelSelect = document.createElement('select');
-      levelSelect.setAttribute('class', 'selectSkillLevel');
-
-      let maxLevel = skillData[skillName].max_level;
-      for (let i = 1; i <= maxLevel; i++) {
-        let option = document.createElement('option');
-        option.value = i;
-        option.innerText = `Level ${i}`;
-        levelSelect.appendChild(option);
-      }
-      levelSelect.addEventListener('change', (event) => {
-        request[skillName] = levelSelect.value;
-        preSkillCheck(config).then((val) => { selectArmors = val });
-      });
-      div.appendChild(levelSelect);
-      selectSkillArea.appendChild(div);
-
-      preSkillCheck(config).then((val) => { selectArmors = val });
-    })
-  });
-
-  const slotCheckBox = document.querySelector('#slotCheck');
-  slotCheckBox.addEventListener('change', (event) => {
-    preSkillCheck(config).then((val) => { selectArmors = val });
-  });
-
-  foldButtons.forEach((foldButton) => {
-    foldButton.addEventListener('click', (event) => {
-      const target =  document.getElementById( event.target.value );
-      const skillDivs = document.querySelectorAll('.skill_div');
-      const flag = target.style.display == 'none';
-      skillDivs.forEach((skillDiv) => {
-        skillDiv.style.display = 'none';
-      });
-      target.style.display = flag ? 'inline-block' : 'none';
-    });
-  });
-
-}
-
-export function setSkillCheckButtonScript(config) {
-  const skillData = config['skillData'];
-  const button = document.getElementById('skillCheck');
-  button.addEventListener('click', () => {
-    let resultArea = document.getElementById('result');
-    let result = summarySkill(selectArmors, config);
-    if (0 == result.length) {
-      resultArea.innerHTML = '<div>検索結果なし</div>';
-    } else {
-      let table = '<table>';
-      for (let i = 0; i < result.length; i++) {
-        let armorList = result[i]['Armor'];
-        let skillList = result[i]['Skill'];
-        table += '<tr>';
-        table += `<tr><td>頭</td><td class="no-wrap">${armorList[0]['armor']}<br>憑依スロット:${armorList[0]['slot']}</td>`;
-        table += '<td rowspan="2">';
-        for (let skill in skillList) {
-          if (skillList[skill] > skillData[skill]['max_level']) {
-            table += '<span class="level_over">';
-          } else {
-            table += '<span>';
-          }
-          table += skill+':' + skillList[skill]+'</span>';
-        }
-        table += '</td></tr>';
-        table += `<tr><td>胴</td><td class="no-wrap">${armorList[1]['armor']}<br>憑依スロット:${armorList[1]['slot']}</td></tr>`;
-        table += `<tr><td>腕</td><td class="no-wrap">${armorList[2]['armor']}<br>憑依スロット:${armorList[2]['slot']}</td>`;
-        table += '<td rowspan="2">';
-        table += '<br /><span>【憑依錬成】</span>';
-        for (let skill in armorList[5]) {
-            table += `<span>${skill}:${armorList[5][skill]}</span>`;
-        }
-        table += '</td></tr>';
-        table += `<tr><td>腰</td><td class="no-wrap">${armorList[3]['armor']}<br>憑依スロット:${armorList[3]['slot']}</td></tr>`;
-        table += `<tr><td>足</td><td class="no-wrap">${armorList[4]['armor']}<br>憑依スロット:${armorList[4]['slot']}</td></tr>`;
-      }
-      table += '</table>'; resultArea.innerHTML = table;
-    }
-  });
 }
 
 function makeSkillButton(main, sub, map) {
