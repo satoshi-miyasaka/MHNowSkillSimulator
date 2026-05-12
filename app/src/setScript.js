@@ -1,4 +1,5 @@
 import * as element from './makeElements.js'
+import * as common from './common.js'
 
 export function setSkillButton(config) {
   document.querySelectorAll('.SkillButton').forEach((skillButton) => {
@@ -14,7 +15,8 @@ export function setSkillButton(config) {
         skillList.push(onSelect[i].value);
       }
       element.setArmorChoice(skillList, config);
-      setArmorChoiceRedio(skillList, config);
+      setArmorChoiceRadio(skillList, config);
+      setArmorGradeSelect(config);
     });
   });
 }
@@ -34,7 +36,7 @@ export function setFoldButtonScript() {
   });
 }
 
-function setArmorChoiceRedio(skillList, config) {
+function setArmorChoiceRadio(skillList, config) {
   document.querySelectorAll('input[type="radio"]').forEach((radio) => {
     radio.addEventListener('click', () => {
       let choise = document.querySelectorAll('input[type="radio"]');
@@ -83,4 +85,17 @@ function setKoka(parentTr, skillData) {
   const maxLevel = skillData[skillName]['max_level'];
   const koka = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
   parentTr.querySelector('td:nth-child(5)').innerText = koka;
+}
+
+function setArmorGradeSelect(config) {
+  document.querySelectorAll('select.armorGrade').forEach((select) => {
+    select.addEventListener('change', function(event) {
+      const grade = this.value;
+      const armorName = this.previousElementSibling.innerText;
+      const armorPos = this.parentElement.previousElementSibling.children[0].name;
+      const tdPos = ['head', 'body', 'arm', 'waist', 'foot'].indexOf(armorPos) +1;
+      this.parentElement.parentElement.nextElementSibling.querySelector(`td:nth-child(${tdPos})`).innerHTML =
+          common.selectSkillGrade(armorName, grade, config['armorData'], config['slotData']);
+    });
+  });
 }

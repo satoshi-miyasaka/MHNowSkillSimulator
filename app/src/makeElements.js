@@ -1,3 +1,5 @@
+import * as common from './common.js'
+
 export function setSkillDiv(skillData) {
   let map = new Map(Object.entries(skillData));
   let result = '';
@@ -43,8 +45,8 @@ export function setArmorChoice(skillList, config) {
     if (i < headArmor.length) {
       let armorName = headArmor[i];
       armorNameWork += `<td rowspan="2"><input type="radio" name="head" value="${armorName}" /></td>`;
-      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
-      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
+      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
       skillWork += `<td></td>`;
@@ -53,8 +55,8 @@ export function setArmorChoice(skillList, config) {
     if (i < bodyArmor.length) {
       let armorName = bodyArmor[i];
       armorNameWork += `<td rowspan="2"><input type="radio" name="body" value="${armorName}" /></td>`;
-      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
-      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
+      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
       skillWork += `<td></td>`;
@@ -63,8 +65,8 @@ export function setArmorChoice(skillList, config) {
     if (i < armArmor.length) {
       let armorName = armArmor[i];
       armorNameWork += `<td rowspan="2"><input type="radio" name="arm" value="${armorName}" /></td>`;
-      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
-      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
+      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
       skillWork += `<td></td>`;
@@ -73,8 +75,8 @@ export function setArmorChoice(skillList, config) {
     if (i < waistArmor.length) {
       let armorName = waistArmor[i];
       armorNameWork += `<td rowspan="2"><input type="radio" name="waist" value="${armorName}" /></td>`;
-      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
-      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
+      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
       skillWork += `<td></td>`;
@@ -83,8 +85,8 @@ export function setArmorChoice(skillList, config) {
     if (i < footArmor.length) {
       let armorName = footArmor[i];
       armorNameWork += `<td rowspan="2"><input type="radio" name="foot" value="${armorName}" /></td>`;
-      armorNameWork += `<td>${armorName}<br /><select>${options}</select></td>`;
-      skillWork += `<td>${selectSkillGrade(armorName, 10, armorData, slotData)}</td>`;
+      armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${options}</select></td>`;
+      skillWork += `<td>${common.selectSkillGrade(armorName, 8, armorData, slotData)}</td>`;
     } else {
       armorNameWork += `<td rowspan="2"></td><td></td>`;
       skillWork += `<td></td>`;
@@ -232,29 +234,6 @@ function makeSkillButton(main, sub, map) {
   }
   result += '</div>';
   return result;
-}
-
-function selectSkillGrade(armorName, greade, armorData, slotData) {
-  let temp = '';
-  let result = '';
-  for (let skillName in armorData[armorName]) {
-    for (let skillGrade in armorData[armorName][skillName]) {
-      temp = `<p>${skillName}:Lv.${choiceLevel(armorData[armorName][skillName])}</p>`;
-    }
-    result += temp;
-  }
-  temp = '';
-  for (let slotGrade in slotData[armorName]) {
-      temp = `<p>憑依スロット:${choiceLevel(slotData[armorName])}</p>`;
-  }
-  result += temp;
-  return result;
-}
-
-function choiceLevel(gradeLevels) {
-  let levels = [0];
-  for (let key in gradeLevels) levels.push(gradeLevels[key]);
-  return levels[levels.length -1];
 }
 
 function setArmorData(pos, skillData, selectedArmorName, posArmor) {

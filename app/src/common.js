@@ -33,3 +33,27 @@ function makeArmorData(skillData) {
   }
   return outputData
 }
+
+export function selectSkillGrade(armorName, grade, armorData, slotData) {
+  let temp = '';
+  let result = '';
+  for (let skillName in armorData[armorName]) {
+    for (let skillGrade in armorData[armorName][skillName]) {
+      if (skillGrade <= grade) temp = `<p>${skillName}:Lv.${choiceLevel(armorData[armorName][skillName], grade)}</p>`;
+    }
+    result += temp;
+  }
+  temp = '';
+  for (let slotGrade in slotData[armorName]) {
+      if (slotGrade <= grade) temp = `<p>憑依スロット:${choiceLevel(slotData[armorName], grade)}</p>`;
+  }
+  result += temp;
+  return result;
+}
+
+function choiceLevel(gradeLevels, grade) {
+  let levels = [0];
+  for (let key in gradeLevels) if (key <= grade) levels.push(gradeLevels[key]);
+  return levels[levels.length -1];
+}
+
