@@ -80,23 +80,16 @@ export function setArmorChoice(skillList, config) {
     result += `<tr>${make.armorNameWork}</tr><tr>${make.skillWork}</tr>`;
     i++;
   }
+  let free = '';
+  ['head', 'body', 'arm', 'waist', 'foot'].forEach((pos) => {
+    free += `<td><input type="radio" name="${pos}" value="自由枠" checked /></td><td>自由枠</td> `
+  });
   document.getElementById('ArmorChoice').innerHTML = `
     <table>
       <tr>
         <th colspan="2">頭</th><th colspan="2">胴</th><th colspan="2">腕</th><th colspan="2">腰</th><th colspan="2">足</th>
       </tr>
-      <tr>
-        <td><input type="radio" name="head" value="自由枠" checked /></td>
-        <td>自由枠</td>
-        <td><input type="radio" name="body" value="自由枠" checked /></td>
-        <td>自由枠</td>
-        <td><input type="radio" name="arm" value="自由枠" checked /></td>
-        <td>自由枠</td>
-        <td><input type="radio" name="waist" value="自由枠" checked /></td>
-        <td>自由枠</td>
-        <td><input type="radio" name="foot" value="自由枠" checked /></td>
-        <td>自由枠</td>
-      </tr>
+      <tr>${free}</tr>
       ${result}
     </table>
   `
@@ -118,23 +111,20 @@ export function setChoiceSkill(skillList, selectHash, config) {
   }
   let temp = '';
   for (let skillName in skillSummary) {
-    let skillKoka = skillData[skillName]['効果'][
-      (skillSummary[skillName] > skillData[skillName]['max_level']
-      ? skillData[skillName]['max_level']
-      : skillSummary[skillName])-1];
+    let level = 0;
+    let styleClass = '';
     if (skillSummary[skillName] > skillData[skillName]['max_level']) {
-      temp += `<tr><td>${skillName}</td>
-      <td class="level_over">
-        <input type="text" value="${skillSummary[skillName]}"
-        readonly="true" size="1" maxlength="1" class="inputNumeric" />
-      </td>`;
+      level = skillData[skillName]['max_level'];
+      styleClass = ' level_over';
     } else {
-      temp += `<tr><td>${skillName}</td>
-      <td>
-        <input type="text" value="${skillSummary[skillName]}"
-        readonly="true" size="1" maxlength="1" class="inputNumeric" />
-      </td>`;
+      level = skillSummary[skillName];
     }
+    let skillKoka = skillData[skillName]['効果'][level -1];
+    temp += `<tr><td>${skillName}</td>
+    <td>
+      <input type="text" value="${skillSummary[skillName]}"
+      readonly="true" size="1" maxlength="1" class="inputNumeric${styleClass}" />
+    </td>`;
     if ('憑依' in skillData[skillName]) {
       temp += `<td>
       <button class="minus">-</button>

@@ -103,22 +103,26 @@ select {
   box-sizing: border-box;
 }
 
-.SkillButton {
+#copyRight {
+  margin: 0.5em;
+}
+
+button.SkillButton {
   padding: 10px 30px;
   text-decoration: none;
   font-size: 1em;
   border-radius: 25px;
 }
-.OnSelect {
+button.OnSelect {
   color: #aaa
 }
-.Nothing {
+button.Nothing {
   background-color: #aff
 }
-.Exist {
+button.Exist {
   background-color: #faf
 }
-.Only {
+button.Only {
   background-color: #ffa
 }
 
@@ -130,11 +134,8 @@ select {
   background-color: #aaf;
   color: black;
 }
-span {
-  margin: 0.5em;
-}
-.level_over {
-  color: red;
+input.level_over {
+  background-color: red;
 }
 .hyoi_skill {
   background-color: blue;
@@ -143,17 +144,13 @@ span {
 .no-wrap {
   white-space: nowrap;
 }
-.foldButton {
+button.foldButton {
   text-decoration: none;
   font-size: 1em;
   border-radius: 50%;
 }
 
-#copyRight {
-  margin: 0.5em;
-}
-
-.inputNumeric {
+input.inputNumeric {
   text-align: right
 }
 
