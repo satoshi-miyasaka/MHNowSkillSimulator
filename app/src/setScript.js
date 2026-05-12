@@ -40,8 +40,11 @@ function setArmorChoiceRadio(skillList, config) {
   document.querySelectorAll('input[type="radio"]').forEach((radio) => {
     radio.addEventListener('click', () => {
       let choise = document.querySelectorAll('input[type="radio"]');
-      let choiseArmor = [];
-      for (let i = 0; i < choise.length; i++) if (choise[i].checked) choiseArmor.push(choise[i].value);
+      let choiseArmor = {};
+      for (let i = 0; i < choise.length; i++) {
+        if (choise[i].checked && '自由枠' != choise[i].value) choiseArmor[choise[i].value] =
+            choise[i].parentElement.nextElementSibling.querySelector('select').value;
+      }
       element.setChoiceSkill(skillList, choiseArmor, config);
       setPlusMinusButton(config);
     });

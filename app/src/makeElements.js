@@ -118,20 +118,19 @@ export function setArmorChoice(skillList, config) {
   `
 }
 
-export function setChoiceSkill(skillList, selectList, config) {
+export function setChoiceSkill(skillList, selectHash, config) {
   let skillData = config['skillData'];
   let armorData = config['armorData'];
   let slotData = config['slotData'];
 
   let skillSummary = {};
   let slotSummary = 0;
-  for (let i = 0; i < selectList.length; i++) {
-    let armorName = selectList[i];
+  for (let armorName in selectHash) {
     for (let skillName in armorData[armorName]) {
       if (!(skillName in skillSummary)) skillSummary[skillName] = 0;
-      skillSummary[skillName] += common.choiceLevel(armorData[armorName][skillName], 8);
+      skillSummary[skillName] += common.choiceLevel(armorData[armorName][skillName], selectHash[armorName]);
     }
-    slotSummary += common.choiceLevel(slotData[armorName], 8);
+    slotSummary += common.choiceLevel(slotData[armorName], selectHash[armorName]);
   }
   let temp = '';
   for (let skillName in skillSummary) {
