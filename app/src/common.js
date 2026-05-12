@@ -35,10 +35,10 @@ function makeArmorData(skillData) {
 }
 
 export function selectSkillGrade(armorName, grade, armorData, slotData) {
-  // XXX グレードが低いとスキルが重複するバグがある
   let temp = '';
   let result = '';
   for (let skillName in armorData[armorName]) {
+    temp = '';
     for (let skillGrade in armorData[armorName][skillName]) {
       if (skillGrade <= grade) temp = `<p>${skillName}:Lv.${choiceLevel(armorData[armorName][skillName], grade)}</p>`;
     }
