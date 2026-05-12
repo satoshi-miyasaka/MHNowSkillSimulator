@@ -144,7 +144,7 @@ export function setChoiceSkill(skillList, selectList, config) {
     if ('憑依' in skillData[skillName]) {
       temp += `<td>
       <button class="minus">-</button>
-      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric slot" />
       <button class="plus">+</button>
       </td>`;
     } else {
@@ -152,7 +152,7 @@ export function setChoiceSkill(skillList, selectList, config) {
     }
     temp += `<td>
     <button class="minus wapon">-</button>
-    <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+    <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric wapon" />
     <button class="plus wapon">+</button>
     </td>`;
     temp += `<td></td><td>${skillKoka}</td></tr>`;
@@ -168,16 +168,16 @@ export function setChoiceSkill(skillList, selectList, config) {
       if ('憑依' in skillData[skillName]) {
         temp += `<td>
         <button class="minus">-</button>
-        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric slot" />
         <button class="plus">+</button>
         </td>`;
       } else {
         temp += `<td></td>`;
       }
       temp += `<td>
-      <button class="minusWapon">-</button>
-      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-      <button class="plusWapon">+</button>
+      <button class="minus wapon">-</button>
+      <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric wapon" />
+      <button class="plus wapon">+</button>
       </td>`;
     temp += `<td></td><td>${skillKoka}</td></tr>`;
     }
