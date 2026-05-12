@@ -151,9 +151,9 @@ export function setChoiceSkill(skillList, selectList, config) {
       temp += `<td></td>`;
     }
     temp += `<td>
-    <button class="minusWapon">-</button>
+    <button class="minus wapon">-</button>
     <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-    <button class="plusWapon">+</button>
+    <button class="plus wapon">+</button>
     </td>`;
     temp += `<td></td><td>${skillKoka}</td></tr>`;
   }

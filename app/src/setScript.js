@@ -49,43 +49,27 @@ function setArmorChoiceRedio(skillList, config) {
 
 function setPlusMinusButton() {
   let buttons = document.querySelectorAll('button.minus');
-  console.log(buttons);
   buttons.forEach((button) => {
     button.addEventListener('click', (event) => {
+      const isWapon = event.target.classList.contains('wapon');
       const slotSum = document.getElementById('SlotSum');
       const slot = event.target.parentElement.children[1];
       if (slot.value > 0) {
         slot.value = Number(slot.value) - 1;
-        slotSum.value = Number(slotSum.value) + 1;
+        if (!isWapon) slotSum.value = Number(slotSum.value) + 1;
       }
     })
   });
   buttons = document.querySelectorAll('button.plus');
   buttons.forEach((button) => {
     button.addEventListener('click', (event) => {
+      const isWapon = event.target.classList.contains('wapon');
       const slotSum = document.getElementById('SlotSum');
       const slot = event.target.parentElement.children[1];
-      if (slotSum.value > 0) {
+      if (isWapon || slotSum.value > 0) {
         slot.value = Number(slot.value) + 1;
-        slotSum.value = Number(slotSum.value) - 1;
+        if (!isWapon) slotSum.value = Number(slotSum.value) - 1;
       }
-    })
-  });
-  buttons = document.querySelectorAll('button.minusWapon');
-  console.log(buttons);
-  buttons.forEach((button) => {
-    button.addEventListener('click', (event) => {
-      const slot = event.target.parentElement.children[1];
-      if (slot.value > 0) {
-        slot.value = Number(slot.value) - 1;
-      }
-    })
-  });
-  buttons = document.querySelectorAll('button.plusWapon');
-  buttons.forEach((button) => {
-    button.addEventListener('click', (event) => {
-      const slot = event.target.parentElement.children[1];
-      slot.value = Number(slot.value) + 1;
     })
   });
 }
