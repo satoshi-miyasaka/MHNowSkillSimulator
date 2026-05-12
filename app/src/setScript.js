@@ -43,7 +43,6 @@ function setArmorChoiceRadio(skillList, config) {
 }
 
 function setPlusMinusButton(config) {
-  // Button
   document.querySelectorAll('button.minus').forEach((button) => {
     button.addEventListener('click', function() {
       const isWapon = this.classList.contains('wapon');
@@ -53,7 +52,7 @@ function setPlusMinusButton(config) {
         slot.value = Number(slot.value) - 1;
         if (!isWapon) slotSum.value = Number(slotSum.value) + 1;
       }
-      setKoka(this.parentElement.parentElement, config['skillData']);
+      setEffect(this.parentElement.parentElement, config['skillData']);
     })
   });
   document.querySelectorAll('button.plus').forEach((button) => {
@@ -65,20 +64,20 @@ function setPlusMinusButton(config) {
         slot.value = Number(slot.value) + 1;
         if (!isWapon) slotSum.value = Number(slotSum.value) - 1;
       }
-      setKoka(this.parentElement.parentElement, config['skillData']);
+      setEffect(this.parentElement.parentElement, config['skillData']);
     })
   });
 }
 
-function setKoka(parentTr, skillData) {
+function setEffect(parentTr, skillData) {
   let levelSum = 0;
   parentTr.querySelectorAll('input').forEach((input) => {
     levelSum += Number(input.value);
   })
   const skillName = parentTr.firstElementChild.innerText;
   const maxLevel = skillData[skillName]['max_level'];
-  const koka = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
-  parentTr.querySelector('td:nth-child(5)').innerText = koka;
+  const effect = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
+  parentTr.querySelector('td:nth-child(5)').innerText = effect;
 }
 
 function setArmorGradeSelect(config) {
@@ -106,6 +105,7 @@ function makeSkillList() {
   }
   return skillList;
 }
+
 function makeChoiseArmor() {
   let choise = document.querySelectorAll('input[type="radio"]');
   let choiseArmor = {};

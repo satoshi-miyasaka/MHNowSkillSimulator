@@ -169,7 +169,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
     } else {
       level = skillSummary[skillName];
     }
-    let skillKoka = skillData[skillName]['効果'][level -1];
+    let skillEffect = skillData[skillName]['効果'][level -1];
     temp += `<tr><td>${skillName}</td>
     <td>
       <input type="text" value="${skillSummary[skillName]}"
@@ -181,11 +181,11 @@ export function setChoiceSkill(skillList, selectHash, config) {
       temp += `<td></td>`;
     }
     temp += plusMinusSet('wapon');
-    temp += `<td>${skillKoka}</td></tr>`;
+    temp += `<td>${skillEffect}</td></tr>`;
   }
   for (let i = 0; i < skillList.length; i++) {
     let skillName = skillList[i];
-    let skillKoka = skillData[skillName]['効果']
+    let skillEffect = skillData[skillName]['効果']
       [(skillSummary[skillName] > skillData[skillName]['max_level']
       ? skillData[skillName]['max_level']
       : skillSummary[skillName])-1];
@@ -197,7 +197,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
         temp += `<td></td>`;
       }
       temp += plusMinusSet('wapon');
-      temp += `<td>${skillKoka}</td></tr>`;
+      temp += `<td>${skillEffect}</td></tr>`;
     }
   }
   document.getElementById('ChoiceSkill').innerHTML = `
