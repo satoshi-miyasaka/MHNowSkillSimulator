@@ -11,7 +11,9 @@ document.querySelector('#app').innerHTML = `
 </section>
 <section>
   <!-- 削除ボタンを止め、トグルボタンに変更 -->
-  <div id="SkillDiv"></div>
+  <div id="SkillDiv">
+  ${element.makeSkillDiv(config['skillData'])}
+  </div>
   <h2>装備選択<button class="foldButton" value="armor">▼</button></h2>
   <div id="armor" style="display:none" class="skill_div">
     <!-- 選択したスキルの装備を全部並べる -->
@@ -27,6 +29,5 @@ document.querySelector('#app').innerHTML = `
 </section>
 `
 
-document.getElementById('SkillDiv').innerHTML = element.setSkillDiv(config['skillData']);
 onEvent.setSkillButton(config);
 onEvent.setFoldButtonScript();

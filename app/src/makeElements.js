@@ -1,48 +1,91 @@
 import * as common from './common.js'
 
-export function setSkillDiv(skillData) {
-  const makeSkillButton = function(main, sub, map) {
-    let result = '';
-    result += `<h2>${main}<button class="foldButton" value="${main}">▼</button></h2>`;
-    result += `<div id="${main}" class="skill_div" style="display: none;">`;
-
-    for (let i = 0; i < sub.length; i++) {
-      result += `<h3>${sub[i]}</h3>`;
-
-      let  divButtonsNothing = '';
-      let divButtonsExist = '';
-      let divButtonsOnly = '';
-      const button = function(key, clazz) {return `<button class="SkillButton NonSelect ${clazz}" value="${key}">${key}</button>`};
-      map.forEach((value, key) => {
-        if (value['tag'].includes(sub[i])) {
-          if ('憑依' in value && 'あり' ==  value['憑依']) {
-            divButtonsExist += button(key, 'Exist');
-          } else if ('憑依' in value && 'のみ' ==  value['憑依']) {
-            divButtonsOnly += button(key, 'Only');
-          } else {
-            divButtonsNothing += button(key, 'Nothing');
-          }
+export function makeSkillDiv(skillData) {
+  const subLoop = function(sub, map) {
+    const button = function(key, clazz) {return `<button class="SkillButton NonSelect ${clazz}" value="${key}">${key}</button>`};
+    let nothing = '';
+    let exist = '';
+    let only = '';
+    map.forEach((value, key) => {
+      if (value['tag'].includes(sub)) {
+        if ('憑依' in value && 'あり' ==  value['憑依']) {
+          exist += button(key, 'Exist');
+        } else if ('憑依' in value && 'のみ' ==  value['憑依']) {
+          only += button(key, 'Only');
+        } else {
+          nothing += button(key, 'Nothing');
         }
-      });
-      result += divButtonsNothing.length ? divButtonsNothing : '';
-      result += divButtonsExist.length ? divButtonsExist : '';
-      result += divButtonsOnly.length ? divButtonsOnly : '';
+      }
+    });
+    return `<h3>${sub}</h3>
+      ${nothing}
+      ${exist}
+      ${only}
+    `;
+  }
+  const makeSkillButton = function(main, sub, map) {
+    const devInner = function(sub, map) {
+      let res = '';
+      for (let i = 0; i < sub.length; i++) {
+        res += subLoop(sub[i], map);
+      }
+      return res
     }
-    result += '</div>';
-    return result;
+    return `
+    <h2>${main}<button class="foldButton" value="${main}">▼</button></h2>
+    <div id="${main}" class="skill_div" style="display: none;">
+    ${devInner(sub, map)}
+    </div>`;
   }
 
   let map = new Map(Object.entries(skillData));
-  let result = '';
-  result += makeSkillButton('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '攻撃・その他'], map);
-  result += makeSkillButton('属性・状態異常', ['属性', '状態異常'], map);
-  result += makeSkillButton('アクション', ['アクション'], map);
-  result += makeSkillButton('防御・耐性', ['防御', '耐性'], map);
-  result += makeSkillButton('その他', ['その他'], map);
-  return result;
+  return `
+    ${makeSkillButton('攻撃', ['攻撃力アップ', 'ダメージアップ', '会心', '攻撃・その他'], map)}
+    ${makeSkillButton('属性・状態異常', ['属性', '状態異常'], map)}
+    ${makeSkillButton('アクション', ['アクション'], map)}
+    ${makeSkillButton('防御・耐性', ['防御', '耐性'], map)}
+    ${makeSkillButton('その他', ['その他'], map)}
+  `;
 }
 
-export function setArmorChoice(skillList, config) {
+export function makeArmorChoice(skillList, config) {
+  const MakekArmorRows = class {
+    constructor(armorData, slotData, options) {
+      this.armorData = armorData;
+      this.slotData = slotData;
+      this.armorNameWork = '';
+      this.skillWork = '';
+      this.count = 0;
+      this.options = options;
+    }
+    setElement(i, armors, pos) {
+      if (i < armors.length) {
+        let armorName = armors[i];
+        this.armorNameWork += `<td rowspan="2"><input type="radio" name="${pos}" value="${armorName}" /></td>`;
+        this.armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${this.options}</select></td>`;
+        this.skillWork += `<td>${common.selectSkillGrade(armorName, 8, this.armorData, this.slotData)}</td>`;
+      } else {
+        this.armorNameWork += `<td rowspan="2"></td><td></td>`;
+        this.skillWork += `<td></td>`;
+        this.count++;
+      }
+    }
+    get getArmorNameWork() {
+      return this.armorNameWork
+    }
+    get getSkillWork() {
+      return this.skillWork
+    }
+    get isBreak() {
+      return 5 == this.count
+    }
+  }
+
+  const setArmorData = function(pos, skillData, posArmor) {
+    if (!skillData[pos]) return;
+    for (let key in skillData[pos]) if (!posArmor.includes(key)) posArmor.push(key);
+  }
+
   let skillData = config['skillData'];
   let armorData = config['armorData'];
   let slotData = config['slotData'];
@@ -53,25 +96,12 @@ export function setArmorChoice(skillList, config) {
   let waistArmor = [];
   let footArmor = [];
 
-  let selectedArmorName = [];
-
-  const setArmorData = function(pos, skillData, selectedArmorName, posArmor) {
-    if (skillData[pos]) {
-      for (let key in skillData[pos]) {
-        if (!selectedArmorName.includes(key)) {
-          selectedArmorName.push(key);
-          posArmor.push(key);
-        }
-      }
-    }
-  }
-
   for (let i = 0; i < skillList.length; i++) {
-    setArmorData('head', skillData[skillList[i]], selectedArmorName, headArmor);
-    setArmorData('body', skillData[skillList[i]], selectedArmorName, bodyArmor);
-    setArmorData('arm', skillData[skillList[i]], selectedArmorName, armArmor);
-    setArmorData('waist', skillData[skillList[i]], selectedArmorName, waistArmor);
-    setArmorData('foot', skillData[skillList[i]], selectedArmorName, footArmor);
+    setArmorData('head', skillData[skillList[i]], headArmor);
+    setArmorData('body', skillData[skillList[i]], bodyArmor);
+    setArmorData('arm', skillData[skillList[i]], armArmor);
+    setArmorData('waist', skillData[skillList[i]], waistArmor);
+    setArmorData('foot', skillData[skillList[i]], footArmor);
   }
 
   let options = '';
@@ -81,46 +111,14 @@ export function setArmorChoice(skillList, config) {
   let result = '';
   let i = 0;
   while (true) {
-    const MakeClass = class {
-      constructor(armorData, slotData, options) {
-        this.armorData = armorData;
-        this.slotData = slotData;
-        this.armorNameWork = '';
-        this.skillWork = '';
-        this.count = 0;
-        this.options = options;
-      }
-      setElement(i, armors, pos) {
-        if (i < armors.length) {
-          let armorName = armors[i];
-          this.armorNameWork += `<td rowspan="2"><input type="radio" name="${pos}" value="${armorName}" /></td>`;
-          this.armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${this.options}</select></td>`;
-          this.skillWork += `<td>${common.selectSkillGrade(armorName, 8, this.armorData, this.slotData)}</td>`;
-        } else {
-          this.armorNameWork += `<td rowspan="2"></td><td></td>`;
-          this.skillWork += `<td></td>`;
-          this.count++;
-        }
-      }
-      get getArmorNameWork() {
-        return this.armorNameWork
-      }
-      get getSkillWork() {
-        return this.skillWork
-      }
-      get isBreak() {
-        return 5 == this.count
-      }
-    }
-
-    let make = new MakeClass(armorData, slotData, options);
-    make.setElement(i, headArmor, 'head');
-    make.setElement(i, bodyArmor, 'body');
-    make.setElement(i, armArmor, 'arm');
-    make.setElement(i, waistArmor, 'waist');
-    make.setElement(i, footArmor, 'foot');
-    if (make.isBreak) break;
-    result += `<tr>${make.armorNameWork}</tr><tr>${make.skillWork}</tr>`;
+    let block = new MakekArmorRows(armorData, slotData, options);
+    block.setElement(i, headArmor, 'head');
+    block.setElement(i, bodyArmor, 'body');
+    block.setElement(i, armArmor, 'arm');
+    block.setElement(i, waistArmor, 'waist');
+    block.setElement(i, footArmor, 'foot');
+    if (block.isBreak) break;
+    result += `<tr>${block.armorNameWork}</tr><tr>${block.skillWork}</tr>`;
     i++;
   }
   let free = '';
