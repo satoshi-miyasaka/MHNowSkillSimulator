@@ -10,8 +10,8 @@ export function setSkillButton(config) {
         this.classList.remove('OnSelect')
       }
       let skillList = makeSkillList();
-      element.makeArmorChoice(skillList, config);
-      makeArmorChoiceRadio(skillList, config);
+      element.setArmorChoice(skillList, config);
+      setArmorChoiceRadio(skillList, config);
       setArmorGradeSelect(config);
     });
   });
@@ -32,7 +32,7 @@ export function setFoldButtonScript() {
   });
 }
 
-function makeArmorChoiceRadio(skillList, config) {
+function setArmorChoiceRadio(skillList, config) {
   document.querySelectorAll('input[type="radio"]').forEach((radio) => {
     radio.addEventListener('click', () => {
       let choiseArmor = makeChoiseArmor();

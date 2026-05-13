@@ -48,15 +48,18 @@ export function makeSkillDiv(skillData) {
   `;
 }
 
-export function makeArmorChoice(skillList, config) {
+export function setArmorChoice(skillList, config) {
   const MakekArmorRows = class {
-    constructor(armorData, slotData, options) {
+    constructor(armorData, slotData) {
       this.armorData = armorData;
       this.slotData = slotData;
       this.armorNameWork = '';
       this.skillWork = '';
       this.count = 0;
-      this.options = options;
+      this.options = '';
+
+      for (let i = 1; i <= 7; i++) this.options += `<option value="${i}">Grade${i}</option>`;
+      this.options += `<option selected="true" value="8">Grade8～</option>`;
     }
     setElement(i, armors, pos) {
       if (i < armors.length) {
@@ -86,6 +89,14 @@ export function makeArmorChoice(skillList, config) {
     for (let key in skillData[pos]) if (!posArmor.includes(key)) posArmor.push(key);
   }
 
+  const freeArmor = function() {
+    let free = '';
+    ['head', 'body', 'arm', 'waist', 'foot'].forEach((pos) => {
+      free += `<td><input type="radio" name="${pos}" value="自由枠" checked /></td><td>自由枠</td> `
+    });
+    return `<tr>${free}</tr>`;
+  }
+
   let skillData = config['skillData'];
   let armorData = config['armorData'];
   let slotData = config['slotData'];
@@ -104,45 +115,52 @@ export function makeArmorChoice(skillList, config) {
     setArmorData('foot', skillData[skillList[i]], footArmor);
   }
 
-  let options = '';
-  for (let i = 1; i <= 7; i++) options += `<option value="${i}">Grade${i}</option>`;
-  options += `<option selected="true" value="8">Grade8～</option>`;
-
-  let result = '';
+  let choiseArmor = '';
   let i = 0;
   while (true) {
-    let block = new MakekArmorRows(armorData, slotData, options);
+    let block = new MakekArmorRows(armorData, slotData);
     block.setElement(i, headArmor, 'head');
     block.setElement(i, bodyArmor, 'body');
     block.setElement(i, armArmor, 'arm');
     block.setElement(i, waistArmor, 'waist');
     block.setElement(i, footArmor, 'foot');
+
     if (block.isBreak) break;
-    result += `<tr>${block.armorNameWork}</tr><tr>${block.skillWork}</tr>`;
+    choiseArmor += `<tr>${block.armorNameWork}</tr><tr>${block.skillWork}</tr>`;
     i++;
   }
-  let free = '';
-  ['head', 'body', 'arm', 'waist', 'foot'].forEach((pos) => {
-    free += `<td><input type="radio" name="${pos}" value="自由枠" checked /></td><td>自由枠</td> `
-  });
   document.getElementById('ArmorChoice').innerHTML = `
     <table>
       <tr>
         <th colspan="2">頭</th><th colspan="2">胴</th><th colspan="2">腕</th><th colspan="2">腰</th><th colspan="2">足</th>
       </tr>
-      <tr>${free}</tr>
-      ${result}
+      ${freeArmor()}
+      ${choiseArmor}
     </table>
   `
 }
 
 export function setChoiceSkill(skillList, selectHash, config) {
+  const plusMinusSet = function(arg, isInner=true) {
+    let inner = '';
+    if (isInner) {
+      inner = `
+        <button class="minus ${arg}">-</button>
+        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric ${arg}" />
+        <button class="plus ${arg}">+</button>
+        `;
+    }
+    return `<td>${inner}</td>`;
+  }
+
   let skillData = config['skillData'];
   let armorData = config['armorData'];
   let slotData = config['slotData'];
 
   let skillSummary = {};
   let slotSummary = 0;
+  let skillRows = '';
+
   for (let armorName in selectHash) {
     for (let skillName in armorData[armorName]) {
       if (!(skillName in skillSummary)) skillSummary[skillName] = 0;
@@ -150,14 +168,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
     }
     slotSummary += common.choiceLevel(slotData[armorName], selectHash[armorName]);
   }
-  let temp = '';
-  const plusMinusSet = function(arg) {
-    return `<td>
-    <button class="minus ${arg}">-</button>
-    <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric ${arg}" />
-    <button class="plus ${arg}">+</button>
-    </td>`;
-  }
+
   for (let skillName in skillSummary) {
     let level = 0;
     let styleClass = '';
@@ -168,18 +179,14 @@ export function setChoiceSkill(skillList, selectHash, config) {
       level = skillSummary[skillName];
     }
     let skillEffect = skillData[skillName]['効果'][level -1];
-    temp += `<tr><td>${skillName}</td>
-    <td>
+    skillRows += `
+      <tr><td>${skillName}</td><td>
       <input type="text" value="${skillSummary[skillName]}"
       readonly="true" size="1" maxlength="1" class="inputNumeric${styleClass}" />
-    </td>`;
-    if ('憑依' in skillData[skillName]) {
-      temp += plusMinusSet('slot');
-    } else {
-      temp += `<td></td>`;
-    }
-    temp += plusMinusSet('wapon');
-    temp += `<td>${skillEffect}</td></tr>`;
+      </td>`;
+    skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
+    skillRows += plusMinusSet('wapon');
+    skillRows += `<td>${skillEffect}</td></tr>`;
   }
   for (let i = 0; i < skillList.length; i++) {
     let skillName = skillList[i];
@@ -188,14 +195,10 @@ export function setChoiceSkill(skillList, selectHash, config) {
       ? skillData[skillName]['max_level']
       : skillSummary[skillName])-1];
     if (!(skillList[i] in skillSummary)) {
-      temp += `<tr><td>${skillName}</td><td>0</td>`;
-      if ('憑依' in skillData[skillName]) {
-        temp += plusMinusSet('slot');
-      } else {
-        temp += `<td></td>`;
-      }
-      temp += plusMinusSet('wapon');
-      temp += `<td>${skillEffect}</td></tr>`;
+      skillRows += `<tr><td>${skillName}</td><td>0</td>`;
+      skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
+      skillRows += plusMinusSet('wapon');
+      skillRows += `<td>${skillEffect}</td></tr>`;
     }
   }
   document.getElementById('ChoiceSkill').innerHTML = `
@@ -206,7 +209,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
         <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" /></th>
         <th>武器スキル</th><th>効果</th>
       </tr>
-      ${temp}
+      ${skillRows}
     </table>
     `
 }
