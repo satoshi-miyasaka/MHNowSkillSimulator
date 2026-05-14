@@ -115,3 +115,55 @@ function makeChoiseArmor() {
   }
   return choiseArmor;
 }
+
+export function setCalcDamageScript() {
+  document.querySelectorAll('input.damageValue').forEach((target) => {
+    target.addEventListener('input', function() {
+      console.log("2");
+      // 入力から数字以外を削除する
+      this.value = this.value.replace(/[\D]/g, '');
+
+      const a1 = Number(document.getElementById('a1').value);
+      const a3 = Number(document.getElementById('a3').value) / 100 + 1;
+      const a4 = Number(document.getElementById('a4').value);
+      const a5 = Number(document.getElementById('a5').value);
+      const a6 = Number(document.getElementById('a6').value) / 100 + 1;
+
+      const aObj = document.getElementById('a');
+      let a = Math.floor(Math.floor(a1 * a3 + a4 + a5) * a6);
+      aObj.value = a;
+
+      const b1 = Number(document.getElementById('b1').value);
+      const b3 = Number(document.getElementById('b3').value) / 100 + 1;
+      const b4 = Number(document.getElementById('b4').value);
+      const b5 = Number(document.getElementById('b5').value) / 100 + 1;
+      const b6 = 1;
+
+      const bObj = document.getElementById('b');
+      let b  = Math.floor(Math.floor((b1 * b3 + b4) * b5) * b6);
+      bObj.value = b;
+
+      const c1 = Number(document.getElementById('c1').value) / 100 + 1;
+      const c3 = Number(document.getElementById('c3').value) / 100;
+      const c6 = Number(document.getElementById('c6').value) / 100;
+      const c7 = Number(document.getElementById('c7').value) / 100;
+      const c8 = Number(document.getElementById('c8').value) / 100;
+
+      const cObj = document.getElementById('c');
+      let c = Math.ceil((a + b) * c1 * c6 * c7);
+      cObj.value = c;
+
+      const dObj = document.getElementById('d');
+      let d = Math.ceil(c * c3);
+      dObj.value = d;
+
+      const eObj = document.getElementById('e');
+      let e = Math.ceil(c * 0.75);
+      eObj.value = e;
+
+      const fObj = document.getElementById('f');
+      let f = Math.ceil(c * c8);
+      fObj.value = f;
+    })
+  })
+}
