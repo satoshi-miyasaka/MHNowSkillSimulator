@@ -259,7 +259,7 @@ export function setDamageArea() {
     <hr />
      ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP
     + 属性値 ${makeInputReadOnly('b4', 0)} UP )
-    × 古龍属性 ${makeInputReadOnly('b5', 0)} %UP
+    × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP
     <hr />
     ( 物理攻撃力 ${makeInputReadOnly('a')}
     + 属性攻撃力 ${makeInputReadOnly('b')} )
@@ -280,7 +280,9 @@ export function setDamageArea() {
   </div>
   <hr />
   ※ トレーニングエリアでのダメージを想定しています<br />
+  ※ 会心撃【属性】は、会心ダメージを見るときのみに、反映チェックを付けてください。（修正予定）<br />
   ※ 武器固有補正 武器SP倍率 状態異常補正 はシンプルにしたかったので、省略しています<br />
+  ※ 砲撃、ビンダメージ等は今後追加します。<br />
   ※ 計算式は「<a href="https://mhnowcalc.com/ja/home/">ナウかる研究所</a>」様の物を参考に作成しています。
   `;
 }
