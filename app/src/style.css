@@ -117,13 +117,13 @@ button.OnSelect {
   color: #aaa
 }
 button.Nothing {
-  background-color: #aff
+  background-color: light-dark(#aff, #500)
 }
 button.Exist {
-  background-color: #faf
+  background-color: light-dark(#faf, #050)
 }
 button.Only {
-  background-color: #ffa
+  background-color: light-dark(#ffa, #005)
 }
 
 .hyoiari {
