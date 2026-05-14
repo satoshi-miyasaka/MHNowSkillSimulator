@@ -49,93 +49,59 @@ export function makeSkillDiv(skillData) {
 }
 
 export function setArmorChoice(skillList, config) {
-  const MakekArmorRows = class {
-    constructor(armorData, slotData) {
-      this.armorData = armorData;
-      this.slotData = slotData;
-      this.armorNameWork = '';
-      this.skillWork = '';
-      this.count = 0;
-      this.options = '';
-
-      for (let i = 1; i <= 7; i++) this.options += `<option value="${i}">Grade${i}</option>`;
-      this.options += `<option selected="true" value="8">Grade8～</option>`;
-    }
-    setElement(i, armors, pos) {
-      if (i < armors.length) {
-        let armorName = armors[i];
-        this.armorNameWork += `<td rowspan="2"><input type="radio" name="${pos}" value="${armorName}" /></td>`;
-        this.armorNameWork += `<td><p>${armorName}</p><select class="armorGrade">${this.options}</select></td>`;
-        this.skillWork += `<td>${common.selectSkillGrade(armorName, 8, this.armorData, this.slotData)}</td>`;
-      } else {
-        this.armorNameWork += `<td rowspan="2"></td><td></td>`;
-        this.skillWork += `<td></td>`;
-        this.count++;
-      }
-    }
-    get getArmorNameWork() {
-      return this.armorNameWork
-    }
-    get getSkillWork() {
-      return this.skillWork
-    }
-    get isBreak() {
-      return 5 == this.count
-    }
-  }
-
-  const setArmorData = function(pos, skillData, posArmor) {
-    if (!skillData[pos]) return;
-    for (let key in skillData[pos]) if (!posArmor.includes(key)) posArmor.push(key);
-  }
-
-  const freeArmor = function() {
-    let free = '';
-    ['head', 'body', 'arm', 'waist', 'foot'].forEach((pos) => {
-      free += `<td><input type="radio" name="${pos}" value="自由枠" checked /></td><td>自由枠</td> `
-    });
-    return `<tr>${free}</tr>`;
-  }
-
   let skillData = config['skillData'];
   let armorData = config['armorData'];
   let slotData = config['slotData'];
 
-  let headArmor = [];
-  let bodyArmor = [];
-  let armArmor = [];
-  let waistArmor = [];
-  let footArmor = [];
-
-  for (let i = 0; i < skillList.length; i++) {
-    setArmorData('head', skillData[skillList[i]], headArmor);
-    setArmorData('body', skillData[skillList[i]], bodyArmor);
-    setArmorData('arm', skillData[skillList[i]], armArmor);
-    setArmorData('waist', skillData[skillList[i]], waistArmor);
-    setArmorData('foot', skillData[skillList[i]], footArmor);
+  const makeArmorData = function(pos, skillList, skillData) {
+    let selectArmor = '';
+    let selected = [];
+    for (let i = 0; i < skillList.length; i++) {
+      if (!skillData[skillList[i]][pos]) continue;
+      for (let key in skillData[skillList[i]][pos]) if (!selected.includes(key)) {
+        selected.push(key);
+        selectArmor += `<option>${key}</option>`;
+      }
+    }
+    return `<option>自由枠</option>${selectArmor}`
   }
+  let armorGradeOptions = '';
+  for (let i = 1; i <= 7; i++) armorGradeOptions += `<option value="${i}">Grade${i}</option>`;
+  armorGradeOptions += `<option selected="true" value="8">Grade8～</option>`;
 
-  let choiseArmor = '';
-  let i = 0;
-  while (true) {
-    let block = new MakekArmorRows(armorData, slotData);
-    block.setElement(i, headArmor, 'head');
-    block.setElement(i, bodyArmor, 'body');
-    block.setElement(i, armArmor, 'arm');
-    block.setElement(i, waistArmor, 'waist');
-    block.setElement(i, footArmor, 'foot');
-
-    if (block.isBreak) break;
-    choiseArmor += `<tr>${block.armorNameWork}</tr><tr>${block.skillWork}</tr>`;
-    i++;
-  }
+  let headSelect = makeArmorData('head', skillList, skillData);
   document.getElementById('ArmorChoice').innerHTML = `
     <table>
       <tr>
-        <th colspan="2">頭</th><th colspan="2">胴</th><th colspan="2">腕</th><th colspan="2">腰</th><th colspan="2">足</th>
+        <th>頭</th>
+        <td><select class="Armor">${makeArmorData('head', skillList, skillData)}</select></td>
+        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td></td>
       </tr>
-      ${freeArmor()}
-      ${choiseArmor}
+      <tr>
+        <th>胴</th>
+        <td><select class="Armor">${makeArmorData('body', skillList, skillData)}</select></td>
+        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th>腕</th>
+        <td><select class="Armor">${makeArmorData('arm', skillList, skillData)}</select></td>
+        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th>腰</th>
+        <td><select class="Armor">${makeArmorData('waist', skillList, skillData)}</select></td>
+        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th>足</th>
+        <td><select class="Armor">${makeArmorData('foot', skillList, skillData)}</select></td>
+        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td></td>
+      </tr>
     </table>
   `
 }

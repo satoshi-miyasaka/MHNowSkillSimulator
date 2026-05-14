@@ -11,7 +11,8 @@ export function setSkillButton(config) {
       }
       let skillList = makeSkillList();
       element.setArmorChoice(skillList, config);
-      setArmorChoiceRadio(skillList, config);
+      // setArmorChoiceRadio(skillList, config);
+      setArmorChoiceScript(config);
       setArmorGradeSelect(config);
     });
   });
@@ -32,14 +33,14 @@ export function setFoldButtonScript() {
   });
 }
 
-function setArmorChoiceRadio(skillList, config) {
-  document.querySelectorAll('input[type="radio"]').forEach((radio) => {
-    radio.addEventListener('click', () => {
-      let choiseArmor = makeChoiseArmor();
-      element.setChoiceSkill(skillList, choiseArmor, config);
-      setPlusMinusButton(config);
-      setSkillActiveScript(config);
-      setDamageValue(config);
+function setArmorChoiceScript(config) {
+  document.querySelectorAll('select.Armor, select.Grade').forEach((select) => {
+    select.addEventListener('change', function() {
+      const parentElement = this.parentElement.parentElement;
+      const armorName = parentElement.querySelector('td:nth-child(2) > select').value;
+      const armorGrade = parentElement.querySelector('td:nth-child(3) > select').value;
+      parentElement.querySelector('td:nth-child(4)').innerHTML =
+          common.selectSkillGrade(armorName, armorGrade, config['armorData'], config['slotData']);
     });
   });
 }
