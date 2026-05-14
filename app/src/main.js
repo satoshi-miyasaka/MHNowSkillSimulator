@@ -31,4 +31,4 @@ document.querySelector('#app').innerHTML = `
 element.setDamageArea();
 onEvent.setSkillButton(config);
 onEvent.setFoldButtonScript();
-onEvent.setCalcDamageScript();
+onEvent.setCalcDamageScript(config);

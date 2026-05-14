@@ -209,11 +209,12 @@ function setDamageValue(config) {
   calcDamage();
 }
 
-export function setCalcDamageScript() {
+export function setCalcDamageScript(config) {
   document.querySelectorAll('input.damageValue').forEach((target) => {
     target.addEventListener('input', function() {
       // 入力から数字以外を削除する
       this.value = this.value.replace(/[\D]/g, '');
+      setDamageValue(config);
       calcDamage()
     })
   })
