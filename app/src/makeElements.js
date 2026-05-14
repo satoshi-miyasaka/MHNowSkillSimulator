@@ -141,7 +141,6 @@ export function setArmorChoice(skillList, config) {
 }
 
 export function setChoiceSkill(skillList, selectHash, config) {
-  // TODO スキルを選択したら、連想配列を作ってダメージ計算に流用できるようにする
   const plusMinusSet = function(arg, isInner=true) {
     let inner = '';
     if (isInner) {
@@ -200,7 +199,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
       skillRows += `<tr><td>${skillName}</td><td>0</td>`;
       skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
       skillRows += plusMinusSet('wapon');
-      skillRows += `<td>${skillEffect}</td></tr>`;
+      skillRows += `<td>${skillEffect}</td>`;
       skillRows += `<td><input type="checkbox" name="skillActive" checked /></td></tr>`;
     }
   }
@@ -210,7 +209,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
         <th>スキル</th>
         <th>装備レベル</th>
         <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" /></th>
-        <th>武器スキル</th><th>効果</th><th>ダメージ計算反映</th>
+        <th>武器スキル等</th><th>効果</th><th>ダメージ計算反映</th>
       </tr>
       ${skillRows}
     </table>
@@ -226,7 +225,7 @@ export function setDamageArea() {
   document.getElementById('CalcDamage').innerHTML = `
     <table>
       <tr>
-        <th>攻撃力</th> <th>属性値</th> <th>肉質</th> <th>モーション値</th>
+        <th>攻撃力</th> <th>属性値</th> <th>肉質</th> <th>モーション値</th><th>会心率</th>
       </tr>
       <tr><td>
         ${makeButton('a1', 1000)}
@@ -236,6 +235,8 @@ export function setDamageArea() {
         ${makeButton('c6', 130)}
       </td><td>
         ${makeButton('c7', 27)}
+      </td><td>
+        ${makeButton('d1', 0)}
       </td></tr>
     </table>
     <hr />
@@ -255,7 +256,7 @@ export function setDamageArea() {
   <hr />
   = 基本ダメージ ${makeButton('c')}
   <br />
-  基本ダメージ × 会心倍率 ${makeButton('c3', 125)} %
+  基本ダメージ × 会心ダメージ ${makeButton('c3', 125)} %
   = 会心ダメージ ${makeButton('d')}
   <br />
   基本ダメージ × 0.75

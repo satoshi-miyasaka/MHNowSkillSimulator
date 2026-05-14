@@ -36,7 +36,6 @@ function setArmorChoiceRadio(skillList, config) {
   document.querySelectorAll('input[type="radio"]').forEach((radio) => {
     radio.addEventListener('click', () => {
       let choiseArmor = makeChoiseArmor();
-      // TODO スキル選択箇所
       element.setChoiceSkill(skillList, choiseArmor, config);
       setPlusMinusButton(config);
       setSkillActiveScript(config);
@@ -83,7 +82,6 @@ function setEffect(parentTr, skillData) {
   const maxLevel = skillData[skillName]['max_level'];
   const effect = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
   parentTr.querySelector('td:nth-child(5)').innerText = effect;
-  // TODO 再計算したスキルレベルをhiddenに設定
   parentTr.querySelector('td:nth-child(2) > input[type=hidden]').value = Math.min(levelSum, maxLevel);
 }
 
@@ -100,7 +98,9 @@ function setArmorGradeSelect(config) {
       if (this.parentElement.previousElementSibling.children[0].checked) {
         element.setChoiceSkill(makeSkillList(), makeChoiseArmor(), config);
         setPlusMinusButton(config);
+        setSkillActiveScript(config);
       }
+      setDamageValue(config);
     });
   });
 }
@@ -142,6 +142,9 @@ function setDamageValue(config) {
   let dragonUp = 0;
   let damageUp = 0;
   let kassei = 0;
+  let criticalUp = 0;
+  let criticalDamageUp = 125;
+  let badCriticalDamageUp = 0;
 
   for (let skillName in skillHash) {
     if ('攻撃力PLUS' in skillData[skillName]) {
@@ -162,14 +165,30 @@ function setDamageValue(config) {
     if ('古龍属性値UP' in skillData[skillName]) {
       dragonUp += Number(skillData[skillName]['古龍属性値UP'][Number(skillHash[skillName]) -1]);
     }
+    if ('攻撃活性UP' in skillData[skillName]) {
+      kassei += Number(skillData[skillName]['攻撃活性UP'][Number(skillHash[skillName]) -1]);
+    }
+    if ('会心率UP' in skillData[skillName]) {
+      criticalUp += Number(skillData[skillName]['会心率UP'][Number(skillHash[skillName]) -1]);
+    }
+    if ('会心ダメージUP' in skillData[skillName]) {
+      criticalDamageUp += Number(skillData[skillName]['会心ダメージUP'][Number(skillHash[skillName]) -1]);
+    }
+    if ('凶会心ダメージUP' in skillData[skillName]) {
+      badCriticalDamageUp += Number(skillData[skillName]['凶会心ダメージUP'][Number(skillHash[skillName]) -1]);
+    }
   }
-  
+
   document.getElementById('a3').value = attackUp;
   document.getElementById('a4').value = attackPlus;
+  document.getElementById('a6').value = kassei;
   document.getElementById('b3').value = attrUp;
   document.getElementById('b4').value = attrPlus;
   document.getElementById('b5').value = dragonUp;
   document.getElementById('c1').value = damageUp;
+  document.getElementById('c3').value = criticalDamageUp;
+  document.getElementById('c8').value = badCriticalDamageUp;
+  document.getElementById('d1').value = criticalUp;
 
   calcDamage();
 }
