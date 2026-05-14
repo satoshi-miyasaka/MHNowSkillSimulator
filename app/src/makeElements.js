@@ -217,54 +217,66 @@ export function setChoiceSkill(skillList, selectHash, config) {
 }
 
 export function setDamageArea() {
-  const makeButton = function(id, value='') {
+  const makeInput = function(id, value) {
+    return `<input type="text" id="${id}" value="${value}"
+      size="4" maxlength="4" inputmode="numeric" class="inputNumeric damageValue" />`
+  }
+  const makeInputReadOnly = function(id, value='') {
     const clazz = value ? 'damageValue' : 'damageResult';
     return `<input type="text" id="${id}" value="${value}"
-      size="4" maxlength="4" inputmode="numeric" class="inputNumeric ${clazz}" />`
+      size="4" maxlength="4" inputmode="numeric" class="inputNumeric damageResult" readonly />`
   }
   document.getElementById('CalcDamage').innerHTML = `
     <table>
       <tr>
-        <th>攻撃力</th> <th>属性値</th> <th>肉質</th> <th>モーション値</th><th>会心率</th>
+        <th>攻撃力</th><th>属性値</th><th>会心率</th><th>尻上がり段階</th><th>肉質</th><th>モーション値</th>
       </tr>
       <tr><td>
-        ${makeButton('a1', 1000)}
+        ${makeInput('a1', 1000)}
       </td><td>
-        ${makeButton('b1', 1000)}
+        ${makeInput('b1', 1000)}
       </td><td>
-        ${makeButton('c6', 130)}
+        ${makeInput('d2', 0)}
       </td><td>
-        ${makeButton('c7', 27)}
+        ${makeInput('d3', 0)}
       </td><td>
-        ${makeButton('d1', 0)}
+        ${makeInput('c6', 130)}
+      </td><td>
+        ${makeInput('c7', 27)}
+      </td></tr>
+      <tr>
+        <th>会心率(スキル)</th>
+      </tr>
+      <tr><td>
+        ${makeInputReadOnly('d1', 0)}
       </td></tr>
     </table>
     <hr />
-    ( 攻撃力 × 攻撃力 ${makeButton('a3', 0)} %UP
-    + 攻撃力 ${makeButton('a4', 0)} UP
-    + 錬成パラメータ ${makeButton('a5', 0)} )
-    × 攻撃活性 ${makeButton('a6', 0)} %UP
+    ( 攻撃力 × 攻撃力 ${makeInputReadOnly('a3', 0)} %UP
+    + 攻撃力 ${makeInputReadOnly('a4', 0)} UP
+    + 錬成パラメータ ${makeInput('a5', 0)} )
+    × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP
     <hr />
-     ( 属性値 × 属性値 ${makeButton('b3', 0)} %UP
-    + 属性値 ${makeButton('b4', 0)} UP )
-    × 古龍属性 ${makeButton('b5', 0)} %UP
+     ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP
+    + 属性値 ${makeInputReadOnly('b4', 0)} UP )
+    × 古龍属性 ${makeInputReadOnly('b5', 0)} %UP
     <hr />
-    ( 物理攻撃力 ${makeButton('a')}
-    + 属性攻撃力 ${makeButton('b')} )
-    × ダメージ ${makeButton('c1', 0)} %UP
+    ( 物理攻撃力 ${makeInputReadOnly('a')}
+    + 属性攻撃力 ${makeInputReadOnly('b')} )
+    × ダメージ ${makeInputReadOnly('c1', 0)} %UP
     × ( 肉質 / 100 ) × ( モーション値 / 100 )
   <hr />
-  = 基本ダメージ ${makeButton('c')}
+  = 基本ダメージ ${makeInputReadOnly('c')}
   <br />
-  基本ダメージ × 会心ダメージ ${makeButton('c3', 125)} %
-  = 会心ダメージ ${makeButton('d')}
+  基本ダメージ × 会心ダメージ ${makeInputReadOnly('c3', 125)} %
+  = 会心ダメージ ${makeInputReadOnly('d')}
   <br />
   基本ダメージ × 0.75
-  = マイナス会心ダメージ ${makeButton('e')}
+  = マイナス会心ダメージ ${makeInputReadOnly('e')}
   <br />
   <div style="display: in-line" id="KyokaishinDamage">
-  基本ダメージ × 凶会心 ${makeButton('c8', 0)}
-  = 凶会心ダメージ ${makeButton('f')}
+  基本ダメージ × 凶会心 ${makeInputReadOnly('c8', 0)}
+  = 凶会心ダメージ ${makeInputReadOnly('f')}
   </div>
   <hr />
   ※ トレーニングエリアでのダメージを想定しています<br />

@@ -145,6 +145,9 @@ function setDamageValue(config) {
   let criticalUp = 0;
   let criticalDamageUp = 125;
   let badCriticalDamageUp = 0;
+  let isAttackPower = false;
+  let stepAttackPlus = 0;
+  let stepLevel = 0;
 
   for (let skillName in skillHash) {
     if ('攻撃力PLUS' in skillData[skillName]) {
@@ -177,10 +180,23 @@ function setDamageValue(config) {
     if ('凶会心ダメージUP' in skillData[skillName]) {
       badCriticalDamageUp += Number(skillData[skillName]['凶会心ダメージUP'][Number(skillHash[skillName]) -1]);
     }
+    if (skillData[skillName]['tag'].includes('攻撃増強')) {
+      isAttackPower = true;
+    }
+    if ('段階攻撃力PLUS' in skillData[skillName]) {
+      stepAttackPlus += Number(skillData[skillName]['段階攻撃力PLUS'][Number(skillHash[skillName]) -1]);
+      stepLevel = Math.min(Number(document.getElementById('d3').value), skillData[skillName]['段階MAX']);
+    }
+  }
+
+  if (isAttackPower) {
+    attackPlus +=
+      (criticalUp + Number(document.getElementById('d2').value)) * 8;
   }
 
   document.getElementById('a3').value = attackUp;
-  document.getElementById('a4').value = attackPlus;
+  document.getElementById('a4').value =
+    attackPlus + (stepLevel * stepAttackPlus);
   document.getElementById('a6').value = kassei;
   document.getElementById('b3').value = attrUp;
   document.getElementById('b4').value = attrPlus;
