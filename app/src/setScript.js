@@ -36,8 +36,10 @@ function setArmorChoiceRadio(skillList, config) {
   document.querySelectorAll('input[type="radio"]').forEach((radio) => {
     radio.addEventListener('click', () => {
       let choiseArmor = makeChoiseArmor();
+      // TODO スキル選択箇所
       element.setChoiceSkill(skillList, choiseArmor, config);
       setPlusMinusButton(config);
+      setDamageValue(config);
     });
   });
 }
@@ -53,6 +55,7 @@ function setPlusMinusButton(config) {
         if (!isWapon) slotSum.value = Number(slotSum.value) + 1;
       }
       setEffect(this.parentElement.parentElement, config['skillData']);
+      setDamageValue(config);
     })
   });
   document.querySelectorAll('button.plus').forEach((button) => {
@@ -65,20 +68,24 @@ function setPlusMinusButton(config) {
         if (!isWapon) slotSum.value = Number(slotSum.value) - 1;
       }
       setEffect(this.parentElement.parentElement, config['skillData']);
+      setDamageValue(config);
     })
   });
 }
 
 function setEffect(parentTr, skillData) {
   let levelSum = 0;
-  parentTr.querySelectorAll('input').forEach((input) => {
+  parentTr.querySelectorAll('input.inputNumeric').forEach((input) => {
     levelSum += Number(input.value);
   })
   const skillName = parentTr.firstElementChild.innerText;
   const maxLevel = skillData[skillName]['max_level'];
   const effect = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
   parentTr.querySelector('td:nth-child(5)').innerText = effect;
+  // TODO 再計算したスキルレベルをhiddenに設定
+  parentTr.querySelector('td:nth-child(2) > input[type=hidden]').value = Math.min(levelSum, maxLevel);
 }
+
 
 function setArmorGradeSelect(config) {
   document.querySelectorAll('select.armorGrade').forEach((select) => {
@@ -114,6 +121,54 @@ function makeChoiseArmor() {
         choise[i].parentElement.nextElementSibling.querySelector('select').value;
   }
   return choiseArmor;
+}
+
+function setDamageValue(config) {
+  const skillData = config['skillData'];
+  const skillNames = document.querySelectorAll('input[name=skillName]');
+  const skillLevels = document.querySelectorAll('input[name=skillLevel]');
+
+  let skillHash = {};
+
+  for (let i = 0; i < skillNames.length; i++) {
+    skillHash[skillNames[i].value] = skillLevels[i].value;
+  }
+
+  let attackPlus = 0;
+  let attackUp = 0;
+  let attrPlus = 0;
+  let attrUp = 0;
+  let dragonUp = 0;
+  let damageUp = 0;
+  let kassei = 0;
+
+  for (let skillName in skillHash) {
+    if ('攻撃力PLUS' in skillData[skillName]) {
+      attackPlus += Number(skillData[skillName]['攻撃力PLUS'][Number(skillHash[skillName]) -1]);
+    }
+    if ('攻撃力UP' in skillData[skillName]) {
+      attackUp += Number(skillData[skillName]['攻撃力UP'][Number(skillHash[skillName]) -1]);
+    }
+    if ('属性攻撃力PLUS' in skillData[skillName]) {
+      attrPlus += Number(skillData[skillName]['属性攻撃力PLUS'][Number(skillHash[skillName]) -1]);
+    }
+    if ('属性攻撃力UP' in skillData[skillName]) {
+      attrUp += Number(skillData[skillName]['属性攻撃力UP'][Number(skillHash[skillName]) -1]);
+    }
+    if ('ダメージUP' in skillData[skillName]) {
+      damageUp += Number(skillData[skillName]['ダメージUP'][Number(skillHash[skillName]) -1]);
+    }
+    if ('古龍属性値UP' in skillData[skillName]) {
+      dragonUp += Number(skillData[skillName]['古龍属性値UP'][Number(skillHash[skillName]) -1]);
+    }
+  }
+  
+  document.getElementById('a3').value = attackUp;
+  document.getElementById('a4').value = attackPlus;
+  document.getElementById('b3').value = attrUp;
+  document.getElementById('b4').value = attrPlus;
+  document.getElementById('b5').value = dragonUp;
+  document.getElementById('c1').value = damageUp;
 }
 
 export function setCalcDamageScript() {

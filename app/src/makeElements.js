@@ -141,6 +141,7 @@ export function setArmorChoice(skillList, config) {
 }
 
 export function setChoiceSkill(skillList, selectHash, config) {
+  // TODO スキルを選択したら、連想配列を作ってダメージ計算に流用できるようにする
   const plusMinusSet = function(arg, isInner=true) {
     let inner = '';
     if (isInner) {
@@ -180,13 +181,15 @@ export function setChoiceSkill(skillList, selectHash, config) {
     }
     let skillEffect = skillData[skillName]['効果'][level -1];
     skillRows += `
-      <tr><td>${skillName}</td><td>
+      <tr><td><p>${skillName}</p><input type="hidden" value="${skillName}" name="skillName" /></td><td>
       <input type="text" value="${skillSummary[skillName]}"
       readonly="true" size="1" maxlength="1" class="inputNumeric${styleClass}" />
+      <input type="hidden" value="${level}" name="skillLevel" />
       </td>`;
     skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
     skillRows += plusMinusSet('wapon');
-    skillRows += `<td>${skillEffect}</td></tr>`;
+    skillRows += `<td>${skillEffect}</td>
+    </tr>`;
   }
   for (let i = 0; i < skillList.length; i++) {
     let skillName = skillList[i];
