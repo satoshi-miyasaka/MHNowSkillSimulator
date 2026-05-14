@@ -18,7 +18,7 @@ document.querySelector('#app').innerHTML = `
   <div id="armor" style="display:none" class="skill_div">
     <!-- 選択したスキルの装備を全部並べる -->
     <div id="ArmorChoice"></div>
-    <!-- 選択したスキルをレベル0で並べ、選択した装備でレベルと憑依錬成数を反映する -->
+    <!-- 選択したスキルをレベル8で並べ、選択した装備でレベルと憑依錬成数を反映する -->
     <div id="ChoiceSkill"></div>
     <!-- ダメージ計算 -->
     <div id="CalcDamage"></div>
@@ -28,6 +28,6 @@ document.querySelector('#app').innerHTML = `
   <div id="copyRight">&copy;iKnowLab,</div>
 </section>
 `
-
+element.setDamageArea();
 onEvent.setSkillButton(config);
 onEvent.setFoldButtonScript();
