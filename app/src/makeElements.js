@@ -188,8 +188,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
       </td>`;
     skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
     skillRows += plusMinusSet('wapon');
-    skillRows += `<td>${skillEffect}</td>
-    </tr>`;
+    skillRows += `<td>${skillEffect}</td><td><input type="checkbox" name="skillActive" checked /></td></tr>`;
   }
   for (let i = 0; i < skillList.length; i++) {
     let skillName = skillList[i];
@@ -202,6 +201,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
       skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
       skillRows += plusMinusSet('wapon');
       skillRows += `<td>${skillEffect}</td></tr>`;
+      skillRows += `<td><input type="checkbox" name="skillActive" checked /></td></tr>`;
     }
   }
   document.getElementById('ChoiceSkill').innerHTML = `
@@ -210,7 +210,7 @@ export function setChoiceSkill(skillList, selectHash, config) {
         <th>スキル</th>
         <th>装備レベル</th>
         <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" /></th>
-        <th>武器スキル</th><th>効果</th>
+        <th>武器スキル</th><th>効果</th><th>ダメージ計算反映</th>
       </tr>
       ${skillRows}
     </table>
