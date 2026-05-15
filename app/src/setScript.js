@@ -34,10 +34,11 @@ export function setFoldButtonScript() {
 function setArmorChoiceScript(config) {
   document.querySelectorAll('select.Armor, select.Grade').forEach((select) => {
     select.addEventListener('change', function() {
-      const parentElement = this.parentElement.parentElement;
-      const armorName = parentElement.querySelector('td:nth-child(2) > select').value;
-      const armorGrade = parentElement.querySelector('td:nth-child(3) > select').value;
-      parentElement.querySelector('td:nth-child(4)').innerHTML =
+      const parentElement = this.parentElement.parentElement.parentElement;
+      const armorName = parentElement.querySelector('td:nth-child(2) > p:nth-child(1) > select').value;
+      const armorGrade = parentElement.querySelector('td:nth-child(2) > p:nth-child(2) > select').value;
+      console.log( parentElement.querySelector('td:nth-child(3)'));
+      parentElement.querySelector('td:nth-child(3)').innerHTML =
           common.selectSkillGrade(armorName, armorGrade, config['armorData'], config['slotData']);
 
       element.makeSkillTable(config, makeSkillList());
@@ -165,10 +166,7 @@ function setDamageValue(config) {
     }
   }
 
-  if (isAttackPower) {
-    attackPlus +=
-      (criticalUp + Number(document.getElementById('d2').value)) * 8;
-  }
+  if (isAttackPower) attackPlus += (Math.max(0, Number(document.getElementById('d2').value))) * 8;
 
   document.getElementById('a3').value = attackUp;
   document.getElementById('a4').value = attackPlus + (stepLevel * stepAttackPlus);

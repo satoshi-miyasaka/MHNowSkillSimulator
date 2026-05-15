@@ -74,32 +74,42 @@ export function setArmorChoice(skillList, config) {
     <table>
       <tr>
         <th>頭</th>
-        <td><select class="Armor">${makeArmorData('head', skillList, skillData)}</select></td>
-        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td>
+          <p><select class="Armor">${makeArmorData('head', skillList, skillData)}</select></p>
+          <p><select class="Grade">${armorGradeOptions}</select></p>
+        </td>
         <td></td>
       </tr>
       <tr>
         <th>胴</th>
-        <td><select class="Armor">${makeArmorData('body', skillList, skillData)}</select></td>
-        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td>
+          <p><select class="Armor">${makeArmorData('body', skillList, skillData)}</select></p>
+          <p><select class="Grade">${armorGradeOptions}</select></p>
+        </td>
         <td></td>
       </tr>
       <tr>
         <th>腕</th>
-        <td><select class="Armor">${makeArmorData('arm', skillList, skillData)}</select></td>
-        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td>
+          <p><select class="Armor">${makeArmorData('arm', skillList, skillData)}</select></p>
+          <p><select class="Grade">${armorGradeOptions}</select></p>
+        </td>
         <td></td>
       </tr>
       <tr>
         <th>腰</th>
-        <td><select class="Armor">${makeArmorData('waist', skillList, skillData)}</select></td>
-        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td>
+          <p><select class="Armor">${makeArmorData('waist', skillList, skillData)}</select></p>
+          <p><select class="Grade">${armorGradeOptions}</select></p>
+        </td>
         <td></td>
       </tr>
       <tr>
         <th>足</th>
-        <td><select class="Armor">${makeArmorData('foot', skillList, skillData)}</select></td>
-        <td><select class="Grade">${armorGradeOptions}</select></td>
+        <td>
+          <p><select class="Armor">${makeArmorData('foot', skillList, skillData)}</select></p>
+          <p><select class="Grade">${armorGradeOptions}</select></p>
+        </td>
         <td></td>
       </tr>
     </table>
@@ -216,7 +226,7 @@ export function setDamageArea() {
       </tr><tr>
         <td>${makeInput('d3', 0)}</td>
         <td>${makeInput('c6', 130)}</td>
-        <td>${makeInput('c7', 27)}</td>
+        <td>${makeInput('c7', 18)}</td>
       </tr>
     </table>
     <hr />
