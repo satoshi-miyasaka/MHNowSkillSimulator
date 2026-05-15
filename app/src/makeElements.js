@@ -120,7 +120,7 @@ export function makeSkillTable(config) {
     skillGradeHash[armorNames[i].value] = armorGrades[i].value;
   }
 
-  const makeSkillRowSet = function(skillName, skillLevel, skillEfect, levelClass) {
+  const makeSkillRowSet = function(skillName, sumLevel, skillEfect, levelClass, skillLevel) {
     return `
     <tr>
       <td rowspan="5"><input type="checkbox" name="skillActive" checked /></td>
@@ -134,7 +134,7 @@ export function makeSkillTable(config) {
       <input type="hidden" value="${skillName}" name="skillName" />
       <input type="hidden" value="${skillLevel}" name="skillLevel" />
       <td>
-        <input type="text" value="${skillLevel}" readonly="true"
+        <input type="text" value="${sumLevel}" readonly="true"
         size="1" maxlength="1" class="inputNumeric ${levelClass}" />
       </td><td>
         <button class="minus">-</button>
@@ -166,7 +166,7 @@ export function makeSkillTable(config) {
     let skillLevel = Math.min(sumLevel, maxLevel);
     let skillEfect = skillData[skillName]['効果'][skillLevel -1];
     let levelClass = sumLevel > maxLevel ? 'level_over' : '';
-    skillRows += makeSkillRowSet(skillName, sumLevel, skillEfect, levelClass);
+    skillRows += makeSkillRowSet(skillName, sumLevel, skillEfect, levelClass, skillLevel);
   }
 
   document.getElementById('ChoiceSkill').innerHTML = `
