@@ -106,7 +106,7 @@ export function setArmorChoice(skillList, config) {
   `
 }
 
-export function makeSkillTable(config) {
+export function makeSkillTable(config, skillList) {
   let skillGradeHash = {};
 
   const skillData = config['skillData'];
@@ -120,7 +120,7 @@ export function makeSkillTable(config) {
     skillGradeHash[armorNames[i].value] = armorGrades[i].value;
   }
 
-  const makeSkillRowSet = function(skillName, sumLevel, skillEfect, levelClass, skillLevel) {
+  const makeSkillRowSet = function(skillName, skillEfect, sumLevel=0, skillLevel=0, levelClass='') {
     return `
     <tr>
       <td rowspan="5"><input type="checkbox" name="skillActive" checked /></td>
@@ -166,7 +166,11 @@ export function makeSkillTable(config) {
     let skillLevel = Math.min(sumLevel, maxLevel);
     let skillEfect = skillData[skillName]['効果'][skillLevel -1];
     let levelClass = sumLevel > maxLevel ? 'level_over' : '';
-    skillRows += makeSkillRowSet(skillName, sumLevel, skillEfect, levelClass, skillLevel);
+    skillRows += makeSkillRowSet(skillName, skillEfect, sumLevel, skillLevel, levelClass);
+  }
+  for (let i = 0; i < skillList.length; i++) {
+    if (!(skillList[i] in skillSummary))
+      skillRows += makeSkillRowSet(skillList[i], skillData[skillList[i]]['説明']);
   }
 
   document.getElementById('ChoiceSkill').innerHTML = `

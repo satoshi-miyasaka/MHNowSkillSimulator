@@ -12,7 +12,6 @@ export function setSkillButton(config) {
       let skillList = makeSkillList();
       element.setArmorChoice(skillList, config);
       setArmorChoiceScript(config);
-      setArmorGradeSelect(config);
     });
   });
 }
@@ -41,7 +40,7 @@ function setArmorChoiceScript(config) {
       parentElement.querySelector('td:nth-child(4)').innerHTML =
           common.selectSkillGrade(armorName, armorGrade, config['armorData'], config['slotData']);
 
-      element.makeSkillTable(config);
+      element.makeSkillTable(config, makeSkillList());
       setPlusMinusButton(config);
       setSkillActiveScript(config);
       setDamageValue(config)
@@ -85,7 +84,8 @@ function setEffect(parentTr, skillData) {
   })
   const skillName = parentTr.querySelector('input[name=skillName]').value;
   const maxLevel = skillData[skillName]['max_level'];
-  const effect = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
+  const effect = levelSum < 1 ?  skillData[skillName]['説明']
+    : skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
   // 2行上に効果を設定
   parentTr.previousElementSibling.previousElementSibling.querySelector('td').innerText = effect;
   parentTr.querySelector('input[name=skillLevel]').value = Math.min(levelSum, maxLevel);
@@ -191,7 +191,7 @@ export function setCalcDamageScript(config) {
     });
     target.addEventListener('input', function() {
       // 入力から数字以外を削除する
-      this.value = this.value.replace(/[\D]/g, '');
+      this.value = this.value.replace(/[^0-9\-]/g, '');
       setDamageValue(config)
     })
   })
