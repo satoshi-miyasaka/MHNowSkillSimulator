@@ -106,80 +106,77 @@ export function setArmorChoice(skillList, config) {
   `
 }
 
-export function setChoiceSkill(skillList, selectHash, config) {
-  const plusMinusSet = function(arg, isInner=true) {
-    let inner = '';
-    if (isInner) {
-      inner = `
-        <button class="minus ${arg}">-</button>
-        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric ${arg}" />
-        <button class="plus ${arg}">+</button>
-        `;
-    }
-    return `<td>${inner}</td>`;
+export function makeSkillTable(config) {
+  let skillGradeHash = {};
+
+  const skillData = config['skillData'];
+  const armorData = config['armorData'];
+  const slotData = config['slotData'];
+
+  const armorNames = document.querySelectorAll('select.Armor');
+  const armorGrades = document.querySelectorAll('select.Grade');
+
+  for (let i = 0; i < armorNames.length; i++) {
+    skillGradeHash[armorNames[i].value] = armorGrades[i].value;
   }
 
-  let skillData = config['skillData'];
-  let armorData = config['armorData'];
-  let slotData = config['slotData'];
+  const makeSkillRowSet = function(skillName, skillLevel, skillEfect, levelClass) {
+    return `
+    <tr>
+      <td rowspan="3"><input type="checkbox" /></td>
+      <th>スキル</th><td>${skillName}</td>
+      <th>レベル</th><td>
+        <input type="text" value="${skillLevel}" readonly="true"
+        size="1" maxlength="1" class="inputNumeric ${levelClass}" />
+      </td>
+    </tr>
+    <tr>
+      <th>憑依錬成</th><td>
+        <button class="minus">-</button>
+        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+        <button class="plus">+</button>
+      </td>
+      <th>武器スキル等</th><td>
+        <button class="minus wapon">-</button>
+        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
+        <button class="plus">+</button>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">${skillEfect}</td>
+    </tr>
+    `
+  }
 
   let skillSummary = {};
   let slotSummary = 0;
-  let skillRows = '';
-
-  for (let armorName in selectHash) {
+  for (let armorName in skillGradeHash) {
     for (let skillName in armorData[armorName]) {
       if (!(skillName in skillSummary)) skillSummary[skillName] = 0;
-      skillSummary[skillName] += common.choiceLevel(armorData[armorName][skillName], selectHash[armorName]);
+      skillSummary[skillName] += common.choiceLevel(armorData[armorName][skillName], skillGradeHash[armorName]);
     }
-    slotSummary += common.choiceLevel(slotData[armorName], selectHash[armorName]);
+    slotSummary += common.choiceLevel(slotData[armorName], skillGradeHash[armorName]);
   }
 
+  let skillRows = '';
   for (let skillName in skillSummary) {
-    let level = 0;
-    let styleClass = '';
-    if (skillSummary[skillName] > skillData[skillName]['max_level']) {
-      level = skillData[skillName]['max_level'];
-      styleClass = ' level_over';
-    } else {
-      level = skillSummary[skillName];
-    }
-    let skillEffect = skillData[skillName]['効果'][level -1];
-    skillRows += `
-      <tr><td><p>${skillName}</p><input type="hidden" value="${skillName}" name="skillName" /></td><td>
-      <input type="text" value="${skillSummary[skillName]}"
-      readonly="true" size="1" maxlength="1" class="inputNumeric${styleClass}" />
-      <input type="hidden" value="${level}" name="skillLevel" />
-      </td>`;
-    skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
-    skillRows += plusMinusSet('wapon');
-    skillRows += `<td>${skillEffect}</td><td><input type="checkbox" name="skillActive" checked /></td></tr>`;
+    let sumLevel = skillSummary[skillName];
+    let maxLevel = skillData[skillName]['max_level'];
+    let skillLevel = Math.min(sumLevel, maxLevel);
+    let skillEfect = skillData[skillName]['効果'][skillLevel -1];
+    let levelClass = sumLevel > maxLevel ? 'level_over' : '';
+    skillRows += makeSkillRowSet(skillName, sumLevel, skillEfect, levelClass);
   }
-  for (let i = 0; i < skillList.length; i++) {
-    let skillName = skillList[i];
-    let skillEffect = skillData[skillName]['効果']
-      [(skillSummary[skillName] > skillData[skillName]['max_level']
-      ? skillData[skillName]['max_level']
-      : skillSummary[skillName])-1];
-    if (!(skillList[i] in skillSummary)) {
-      skillRows += `<tr><td>${skillName}</td><td>0</td>`;
-      skillRows += plusMinusSet('slot', ('憑依' in skillData[skillName]));
-      skillRows += plusMinusSet('wapon');
-      skillRows += `<td>${skillEffect}</td>`;
-      skillRows += `<td><input type="checkbox" name="skillActive" checked /></td></tr>`;
-    }
-  }
+
   document.getElementById('ChoiceSkill').innerHTML = `
-    <table>
-      <tr>
-        <th>スキル</th>
-        <th>装備レベル</th>
-        <th>憑依錬成<input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" /></th>
-        <th>武器スキル等</th><th>効果</th><th>ダメージ計算反映</th>
-      </tr>
-      ${skillRows}
-    </table>
-    `
+  <table>
+    <tr><th>憑依錬成</th>
+    <td>
+      <input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" />
+    </td><td colspan="3"></td></tr>
+    ${skillRows}
+  </table>
+  `
 }
 
 export function setDamageArea() {

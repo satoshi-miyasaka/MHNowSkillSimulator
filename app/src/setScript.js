@@ -41,6 +41,9 @@ function setArmorChoiceScript(config) {
       const armorGrade = parentElement.querySelector('td:nth-child(3) > select').value;
       parentElement.querySelector('td:nth-child(4)').innerHTML =
           common.selectSkillGrade(armorName, armorGrade, config['armorData'], config['slotData']);
+
+      element.makeSkillTable(config);
+      setPlusMinusButton(config);
     });
   });
 }
