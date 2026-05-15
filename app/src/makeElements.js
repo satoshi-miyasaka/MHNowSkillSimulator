@@ -55,15 +55,15 @@ export function setArmorChoice(skillList, config) {
 
   const makeArmorData = function(pos, skillList, skillData) {
     let selectArmor = '';
-    let selected = [];
     for (let i = 0; i < skillList.length; i++) {
       if (!skillData[skillList[i]][pos]) continue;
-      for (let key in skillData[skillList[i]][pos]) if (!selected.includes(key)) {
-        selected.push(key);
+      selectArmor += `<optgroup label="${skillList[i]}">`;
+      for (let key in skillData[skillList[i]][pos]) {
         selectArmor += `<option>${key}</option>`;
       }
+      selectArmor += `</optgroup>`;
     }
-    return `<option>自由枠</option>${selectArmor}`
+    return `<option>選択してください</option>${selectArmor}`
   }
   let armorGradeOptions = '';
   for (let i = 1; i <= 7; i++) armorGradeOptions += `<option value="${i}">Grade${i}</option>`;
@@ -123,13 +123,21 @@ export function makeSkillTable(config) {
   const makeSkillRowSet = function(skillName, skillLevel, skillEfect, levelClass) {
     return `
     <tr>
-      <td rowspan="3"><input type="checkbox" name="skillActive" checked /></td><th>スキル</th><td colspan="2">${skillName}</td>
+      <td rowspan="7"><input type="checkbox" name="skillActive" checked /></td><th colspan="3">スキル</th>
+    </tr>
+    <tr>
+      <td colspan="3">${skillName}</td>
+    </tr>
+    <tr>
     </tr>
     <tr>
       <th>レベル</th><th>憑依錬成</th><th>武器スキル等</th>
     </tr>
     <tr>
-      <input type="hidden" value="${skillName}" name="skillName" />
+      <td colspan="3">
+        <input type="hidden" value="${skillName}" name="skillName" />
+      </td>
+    </tr><tr>
       <input type="hidden" value="${skillLevel}" name="skillLevel" />
       <td>
         <input type="text" value="${skillLevel}" readonly="true"
@@ -147,7 +155,7 @@ export function makeSkillTable(config) {
       </td>
     </tr>
     <tr>
-      <td colspan="4">${skillEfect}</td>
+      <td colspan="3">${skillEfect}</td>
     </tr>
     `
   }
@@ -174,10 +182,13 @@ export function makeSkillTable(config) {
 
   document.getElementById('ChoiceSkill').innerHTML = `
   <table>
-    <tr><th>憑依錬成</th>
-    <td>
-      <input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" />
-    </td><td colspan="3"></td></tr>
+    <tr>
+      <td></td>
+      <th>憑依錬成</th>
+      <td colspan="2">
+        <input type="text" size="1" maxlength="1" class="inputNumeric" value="${slotSummary}" id="SlotSum" />
+      </td>
+    </tr>
     ${skillRows}
   </table>
   `
@@ -197,25 +208,22 @@ export function setDamageArea() {
     <table>
       <tr>
         <th>攻撃力</th>
-        <td>${makeInput('a1', 1000)}</td>
-      </tr><tr>
         <th>属性値</th>
-        <td>${makeInput('b1', 1000)}</td>
-      </tr><tr>
         <th>会心率</th>
+        <th>会心率(スキル)</th>
+      </tr><tr>
+        <td>${makeInput('a1', 1000)}</td>
+        <td>${makeInput('b1', 1000)}</td>
         <td>${makeInput('d2', 0)}</td>
+        <td>${makeInputReadOnly('d1', 0)}</td>
       </tr><tr>
         <th>尻上がり段階</th>
-        <td>${makeInput('d3', 0)}</td>
-      </tr><tr>
         <th>肉質</th>
-        <td>${makeInput('c6', 130)}</td>
-      </tr><tr>
         <th>モーション値</th>
-        <td>${makeInput('c7', 27)}</td>
       </tr><tr>
-        <th>会心率(スキル)</th>
-        <td>${makeInputReadOnly('d1', 0)}</td>
+        <td>${makeInput('d3', 0)}</td>
+        <td>${makeInput('c6', 130)}</td>
+        <td>${makeInput('c7', 27)}</td>
       </tr>
     </table>
     <hr />
