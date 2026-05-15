@@ -123,23 +123,27 @@ export function makeSkillTable(config) {
   const makeSkillRowSet = function(skillName, skillLevel, skillEfect, levelClass) {
     return `
     <tr>
-      <td rowspan="3"><input type="checkbox" /></td>
-      <th>スキル</th><td>${skillName}</td>
-      <th>レベル</th><td>
+      <td rowspan="3"><input type="checkbox" name="skillActive" checked /></td><th>スキル</th><td colspan="2">${skillName}</td>
+    </tr>
+    <tr>
+      <th>レベル</th><th>憑依錬成</th><th>武器スキル等</th>
+    </tr>
+    <tr>
+      <input type="hidden" value="${skillName}" name="skillName" />
+      <input type="hidden" value="${skillLevel}" name="skillLevel" />
+      <td>
         <input type="text" value="${skillLevel}" readonly="true"
         size="1" maxlength="1" class="inputNumeric ${levelClass}" />
       </td>
-    </tr>
-    <tr>
-      <th>憑依錬成</th><td>
+      <td>
         <button class="minus">-</button>
         <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
         <button class="plus">+</button>
       </td>
-      <th>武器スキル等</th><td>
+      <td>
         <button class="minus wapon">-</button>
         <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-        <button class="plus">+</button>
+        <button class="plus wapon">+</button>
       </td>
     </tr>
     <tr>
@@ -192,27 +196,27 @@ export function setDamageArea() {
   document.getElementById('CalcDamage').innerHTML = `
     <table>
       <tr>
-        <th>攻撃力</th><th>属性値</th><th>会心率</th><th>尻上がり段階</th><th>肉質</th><th>モーション値</th>
-      </tr>
-      <tr><td>
-        ${makeInput('a1', 1000)}
-      </td><td>
-        ${makeInput('b1', 1000)}
-      </td><td>
-        ${makeInput('d2', 0)}
-      </td><td>
-        ${makeInput('d3', 0)}
-      </td><td>
-        ${makeInput('c6', 130)}
-      </td><td>
-        ${makeInput('c7', 27)}
-      </td></tr>
-      <tr>
+        <th>攻撃力</th>
+        <td>${makeInput('a1', 1000)}</td>
+      </tr><tr>
+        <th>属性値</th>
+        <td>${makeInput('b1', 1000)}</td>
+      </tr><tr>
+        <th>会心率</th>
+        <td>${makeInput('d2', 0)}</td>
+      </tr><tr>
+        <th>尻上がり段階</th>
+        <td>${makeInput('d3', 0)}</td>
+      </tr><tr>
+        <th>肉質</th>
+        <td>${makeInput('c6', 130)}</td>
+      </tr><tr>
+        <th>モーション値</th>
+        <td>${makeInput('c7', 27)}</td>
+      </tr><tr>
         <th>会心率(スキル)</th>
+        <td>${makeInputReadOnly('d1', 0)}</td>
       </tr>
-      <tr><td>
-        ${makeInputReadOnly('d1', 0)}
-      </td></tr>
     </table>
     <hr />
     ( 攻撃力 × 攻撃力 ${makeInputReadOnly('a3', 0)} %UP

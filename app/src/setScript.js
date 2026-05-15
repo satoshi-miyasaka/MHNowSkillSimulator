@@ -82,13 +82,12 @@ function setEffect(parentTr, skillData) {
   parentTr.querySelectorAll('input.inputNumeric').forEach((input) => {
     levelSum += Number(input.value);
   })
-  const skillName = parentTr.firstElementChild.innerText;
+  const skillName = parentTr.querySelector('input[name=skillName]').value;
   const maxLevel = skillData[skillName]['max_level'];
   const effect = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
-  parentTr.querySelector('td:nth-child(5)').innerText = effect;
-  parentTr.querySelector('td:nth-child(2) > input[type=hidden]').value = Math.min(levelSum, maxLevel);
+  parentTr.nextElementSibling.querySelector('td').innerText = effect;
+  parentTr.querySelector('input[name=skillLevel]').value = Math.min(levelSum, maxLevel);
 }
-
 
 function setArmorGradeSelect(config) {
   document.querySelectorAll('select.armorGrade').forEach((select) => {
