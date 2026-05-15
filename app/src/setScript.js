@@ -11,7 +11,6 @@ export function setSkillButton(config) {
       }
       let skillList = makeSkillList();
       element.setArmorChoice(skillList, config);
-      // setArmorChoiceRadio(skillList, config);
       setArmorChoiceScript(config);
       setArmorGradeSelect(config);
     });
@@ -85,7 +84,8 @@ function setEffect(parentTr, skillData) {
   const skillName = parentTr.querySelector('input[name=skillName]').value;
   const maxLevel = skillData[skillName]['max_level'];
   const effect = skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
-  parentTr.nextElementSibling.querySelector('td').innerText = effect;
+  // 2行上に効果を設定
+  parentTr.previousElementSibling.previousElementSibling.querySelector('td').innerText = effect;
   parentTr.querySelector('input[name=skillLevel]').value = Math.min(levelSum, maxLevel);
 }
 
@@ -198,8 +198,7 @@ function setDamageValue(config) {
   }
 
   document.getElementById('a3').value = attackUp;
-  document.getElementById('a4').value =
-    attackPlus + (stepLevel * stepAttackPlus);
+  document.getElementById('a4').value = attackPlus + (stepLevel * stepAttackPlus);
   document.getElementById('a6').value = kassei;
   document.getElementById('b3').value = attrUp;
   document.getElementById('b4').value = attrPlus;

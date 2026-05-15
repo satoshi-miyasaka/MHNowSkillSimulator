@@ -123,39 +123,28 @@ export function makeSkillTable(config) {
   const makeSkillRowSet = function(skillName, skillLevel, skillEfect, levelClass) {
     return `
     <tr>
-      <td rowspan="7"><input type="checkbox" name="skillActive" checked /></td><th colspan="3">スキル</th>
-    </tr>
-    <tr>
-      <td colspan="3">${skillName}</td>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-      <th>レベル</th><th>憑依錬成</th><th>武器スキル等</th>
-    </tr>
-    <tr>
-      <td colspan="3">
-        <input type="hidden" value="${skillName}" name="skillName" />
-      </td>
+      <td rowspan="5"><input type="checkbox" name="skillActive" checked /></td>
     </tr><tr>
+      <td colspan="3">${skillName}</td>
+    </tr><tr>
+      <td colspan="3">${skillEfect}</td>
+    </tr><tr>
+      <th>レベル</th><th>憑依錬成</th><th>武器スキル等</th>
+    </tr><tr>
+      <input type="hidden" value="${skillName}" name="skillName" />
       <input type="hidden" value="${skillLevel}" name="skillLevel" />
       <td>
         <input type="text" value="${skillLevel}" readonly="true"
         size="1" maxlength="1" class="inputNumeric ${levelClass}" />
-      </td>
-      <td>
+      </td><td>
         <button class="minus">-</button>
         <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
         <button class="plus">+</button>
-      </td>
-      <td>
+      </td><td>
         <button class="minus wapon">-</button>
         <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
         <button class="plus wapon">+</button>
       </td>
-    </tr>
-    <tr>
-      <td colspan="3">${skillEfect}</td>
     </tr>
     `
   }
