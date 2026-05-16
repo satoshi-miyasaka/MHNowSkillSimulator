@@ -223,34 +223,34 @@ export function setDamageArea() {
         <td>${makeInput('d2', 0)}</td>
         <td>${makeInputReadOnly('d1', 0)}</td>
       </tr><tr>
+        <th>錬成パラメータ</th>
         <th>尻上がり段階</th>
         <th>肉質</th>
         <th>モーション値</th>
       </tr><tr>
+        <td>${makeInput('a5', 0)}</td>
         <td>${makeInput('d3', 0)}</td>
         <td>${makeInput('c6', 130)}</td>
         <td>${makeInput('c7', 18)}</td>
       </tr>
     </table>
     <hr />
-    物理攻撃力 =<br />
     ( 攻撃力 × 攻撃力 ${makeInputReadOnly('a3', 0)} %UP<br />
     + 攻撃力 ${makeInputReadOnly('a4', 0)} UP<br />
-    + 錬成パラメータ ${makeInput('a5', 0)} )<br />
+    + 錬成パラメータ )<br />
     × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP<br />
+    = 物理攻撃力<br />
     <hr />
-    属性攻撃力 =<br />
      ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP<br />
     + 属性値 ${makeInputReadOnly('b4', 0)} UP )<br />
     × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP<br />
+    = 属性攻撃力<br />
     <hr />
-    基本ダメージ =<br />
     ( 物理攻撃力 ${makeInputReadOnly('a')}<br />
     + 属性攻撃力 ${makeInputReadOnly('b')} )<br />
     × ダメージ ${makeInputReadOnly('c1', 0)} %UP<br />
     × ( 肉質 / 100 ) × ( モーション値 / 100 )<br />
-  <hr />
-  = 基本ダメージ ${makeInputReadOnly('c')}<br />
+    = 基本ダメージ ${makeInputReadOnly('c')}<br />
   <hr />
   <div style="display: in-line" id="kaishinDamage">
   基本ダメージ × 会心ダメージ倍率 ${makeInputReadOnly('c3', 125)} %<br />
@@ -269,7 +269,7 @@ export function setDamageArea() {
   ※ 会心撃【属性】は、会心ダメージを見るときのみに、反映チェックを付けてください。（修正予定）<br />
   ※ 武器固有補正 武器SP倍率 状態異常補正 はシンプルにしたかったので、省略しています<br />
   ※ 砲撃、ビンダメージ等は今後追加します。<br />
-  ※ 計算式は「<a href="https://mhnowcalc.com/ja/home/">ナウかる研究所</a>」様の物を参考に作成しています。
+  ※ 計算式は「<a href="https://mhnowcalc.com/ja/home/" target="_brank">ナウかる研究所</a>」様の物を参考に作成しています。
   `;
 }
 
