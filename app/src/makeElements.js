@@ -130,12 +130,22 @@ export function makeSkillTable(config, skillList) {
     skillGradeHash[armorNames[i].value] = armorGrades[i].value;
   }
 
-  const makeSkillRowSet = function(skillName, skillEfect, sumLevel=0, skillLevel=0, levelClass='') {
+  const makeSkillRowSet = function(skillName, skillSummary, skillData) {
+    let sumLevel = skillName in skillSummary ? skillSummary[skillName] : 0;
+    let maxLevel = skillData[skillName]['max_level'];
+    let skillLevel = Math.min(sumLevel, maxLevel);
+    let skillNote = skillData[skillName]['説明'];
+    let skillEfect = 0 < skillLevel ? skillData[skillName]['効果'][skillLevel -1] : '';
+    let levelClass = sumLevel > maxLevel ? 'level_over' : '';
+    let isRensei = '憑依' in skillData[skillName] ? '' : 'disable';
+
     return `
     <tr>
-      <td rowspan="5"><input type="checkbox" name="skillActive" checked /></td>
+      <td rowspan="6"><input type="checkbox" name="skillActive" checked /></td>
     </tr><tr>
       <td colspan="3">${skillName}</td>
+    </tr><tr>
+      <td colspan="3">${skillNote}</td>
     </tr><tr>
       <td colspan="3">${skillEfect}</td>
     </tr><tr>
@@ -170,18 +180,11 @@ export function makeSkillTable(config, skillList) {
   }
 
   let skillRows = '';
-  for (let skillName in skillSummary) {
-    let sumLevel = skillSummary[skillName];
-    let maxLevel = skillData[skillName]['max_level'];
-    let skillLevel = Math.min(sumLevel, maxLevel);
-    let skillEfect = skillData[skillName]['効果'][skillLevel -1];
-    let levelClass = sumLevel > maxLevel ? 'level_over' : '';
-    skillRows += makeSkillRowSet(skillName, skillEfect, sumLevel, skillLevel, levelClass);
-  }
-  for (let i = 0; i < skillList.length; i++) {
+  for (let skillName in skillSummary) 
+    skillRows += makeSkillRowSet(skillName, skillSummary, skillData);
+  for (let i = 0; i < skillList.length; i++)
     if (!(skillList[i] in skillSummary))
-      skillRows += makeSkillRowSet(skillList[i], skillData[skillList[i]]['説明']);
-  }
+      skillRows += makeSkillRowSet(skillList[i], skillSummary, skillData);
 
   document.getElementById('ChoiceSkill').innerHTML = `
   <table>

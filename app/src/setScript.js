@@ -85,8 +85,7 @@ function setEffect(parentTr, skillData) {
   })
   const skillName = parentTr.querySelector('input[name=skillName]').value;
   const maxLevel = skillData[skillName]['max_level'];
-  const effect = levelSum < 1 ?  skillData[skillName]['説明']
-    : skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1];
+  const effect = 0 < levelSum ? skillData[skillName]['効果'][Math.min(levelSum, maxLevel) -1] : '';
   // 2行上に効果を設定
   parentTr.previousElementSibling.previousElementSibling.querySelector('td').innerText = effect;
   parentTr.querySelector('input[name=skillLevel]').value = Math.min(levelSum, maxLevel);
