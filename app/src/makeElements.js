@@ -137,7 +137,7 @@ export function makeSkillTable(config, skillList) {
     let skillNote = skillData[skillName]['説明'];
     let skillEfect = 0 < skillLevel ? skillData[skillName]['効果'][skillLevel -1] : '';
     let levelClass = sumLevel > maxLevel ? 'level_over' : '';
-    let isRensei = '憑依' in skillData[skillName] ? '' : 'disable';
+    let disabled = '憑依' in skillData[skillName] ? '' : 'disabled';
 
     return `
     <tr>
@@ -157,9 +157,9 @@ export function makeSkillTable(config, skillList) {
         <input type="text" value="${sumLevel}" readonly="true"
         size="1" maxlength="1" class="inputNumeric ${levelClass}" />
       </td><td>
-        <button class="minus">-</button>
-        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
-        <button class="plus">+</button>
+        <button class="minus" ${disabled}>-</button>
+        <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" ${disabled}/>
+        <button class="plus" ${disabled}>+</button>
       </td><td>
         <button class="minus wapon">-</button>
         <input type="text" value="0" readonly="true" size="1" maxlength="1" class="inputNumeric" />
@@ -239,16 +239,14 @@ export function setDamageArea() {
     + 攻撃力 ${makeInputReadOnly('a4', 0)} UP<br />
     + 錬成パラメータ )<br />
     × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP<br />
-    = 物理攻撃力<br />
+    = 物理攻撃力 ${makeInputReadOnly('a')}<br />
     <hr />
      ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP<br />
     + 属性値 ${makeInputReadOnly('b4', 0)} UP )<br />
     × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP<br />
-    = 属性攻撃力<br />
+    = 属性攻撃力 ${makeInputReadOnly('b')}<br />
     <hr />
-    ( 物理攻撃力 ${makeInputReadOnly('a')}<br />
-    + 属性攻撃力 ${makeInputReadOnly('b')} )<br />
-    × ダメージ ${makeInputReadOnly('c1', 0)} %UP<br />
+    ( 物理攻撃力 + 属性攻撃力 ) × ダメージ ${makeInputReadOnly('c1', 0)} %UP<br />
     × ( 肉質 / 100 ) × ( モーション値 / 100 )<br />
     = 基本ダメージ ${makeInputReadOnly('c')}<br />
   <hr />
