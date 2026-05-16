@@ -233,31 +233,36 @@ export function setDamageArea() {
       </tr>
     </table>
     <hr />
-    ( 攻撃力 × 攻撃力 ${makeInputReadOnly('a3', 0)} %UP
-    + 攻撃力 ${makeInputReadOnly('a4', 0)} UP
-    + 錬成パラメータ ${makeInput('a5', 0)} )
-    × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP
+    物理攻撃力 =<br />
+    ( 攻撃力 × 攻撃力 ${makeInputReadOnly('a3', 0)} %UP<br />
+    + 攻撃力 ${makeInputReadOnly('a4', 0)} UP<br />
+    + 錬成パラメータ ${makeInput('a5', 0)} )<br />
+    × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP<br />
     <hr />
-     ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP
-    + 属性値 ${makeInputReadOnly('b4', 0)} UP )
-    × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP
+    属性攻撃力 =<br />
+     ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP<br />
+    + 属性値 ${makeInputReadOnly('b4', 0)} UP )<br />
+    × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP<br />
     <hr />
-    ( 物理攻撃力 ${makeInputReadOnly('a')}
-    + 属性攻撃力 ${makeInputReadOnly('b')} )
-    × ダメージ ${makeInputReadOnly('c1', 0)} %UP
-    × ( 肉質 / 100 ) × ( モーション値 / 100 )
+    基本ダメージ =<br />
+    ( 物理攻撃力 ${makeInputReadOnly('a')}<br />
+    + 属性攻撃力 ${makeInputReadOnly('b')} )<br />
+    × ダメージ ${makeInputReadOnly('c1', 0)} %UP<br />
+    × ( 肉質 / 100 ) × ( モーション値 / 100 )<br />
   <hr />
-  = 基本ダメージ ${makeInputReadOnly('c')}
-  <br />
-  基本ダメージ × 会心ダメージ ${makeInputReadOnly('c3', 125)} %
-  = 会心ダメージ ${makeInputReadOnly('d')}
-  <br />
-  基本ダメージ × 0.75
-  = マイナス会心ダメージ ${makeInputReadOnly('e')}
-  <br />
+  = 基本ダメージ ${makeInputReadOnly('c')}<br />
+  <hr />
+  <div style="display: in-line" id="kaishinDamage">
+  基本ダメージ × 会心ダメージ倍率 ${makeInputReadOnly('c3', 125)} %<br />
+  = 会心ダメージ ${makeInputReadOnly('d')}<br />
+  </div>
+  <div style="display: in-line" id="MinusKaishinDamage">
+  基本ダメージ × マイナス会心ダメージ倍率 0.75 <br />
+  = マイナス会心ダメージ ${makeInputReadOnly('e')} <br />
+  </div>
   <div style="display: in-line" id="KyokaishinDamage">
-  基本ダメージ × 凶会心 ${makeInputReadOnly('c8', 0)}
-  = 凶会心ダメージ ${makeInputReadOnly('f')}
+  基本ダメージ × 凶会心ダメージ倍率 ${makeInputReadOnly('c8', 0)} <br />
+  = 凶会心ダメージ ${makeInputReadOnly('f')} <br />
   </div>
   <hr />
   ※ トレーニングエリアでのダメージを想定しています<br />

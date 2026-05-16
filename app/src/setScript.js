@@ -126,40 +126,40 @@ function setDamageValue(config) {
   let stepLevel = 0;
 
   for (let skillName in skillHash) {
-    if ('攻撃力PLUS' in skillData[skillName] && 0 < skillData[skillName]['攻撃力PLUS']) {
+    if ('攻撃力PLUS' in skillData[skillName] && 0 < skillHash[skillName]) {
       attackPlus += Number(skillData[skillName]['攻撃力PLUS'][Number(skillHash[skillName]) -1]);
     }
-    if ('攻撃力UP' in skillData[skillName] && 0 < skillData[skillName]['攻撃力UP']) {
+    if ('攻撃力UP' in skillData[skillName] && 0 < skillHash[skillName]) {
       attackUp += Number(skillData[skillName]['攻撃力UP'][Number(skillHash[skillName]) -1]);
     }
-    if ('属性攻撃力PLUS' in skillData[skillName] && 0 < skillData[skillName]['属性攻撃力PLUS']) {
+    if ('属性攻撃力PLUS' in skillData[skillName] && 0 < skillHash[skillName]) {
       attrPlus += Number(skillData[skillName]['属性攻撃力PLUS'][Number(skillHash[skillName]) -1]);
     }
-    if ('属性攻撃力UP' in skillData[skillName] && 0 < skillData[skillName]['属性攻撃力UP']) {
+    if ('属性攻撃力UP' in skillData[skillName] && 0 < skillHash[skillName]) {
       attrUp += Number(skillData[skillName]['属性攻撃力UP'][Number(skillHash[skillName]) -1]);
     }
-    if ('ダメージUP' in skillData[skillName] && 0 < skillData[skillName]['ダメージUP']) {
+    if ('ダメージUP' in skillData[skillName] && 0 < skillHash[skillName]) {
       damageUp += Number(skillData[skillName]['ダメージUP'][Number(skillHash[skillName]) -1]);
     }
-    if ('古龍属性値UP' in skillData[skillName] && 0 < skillData[skillName]['古龍属性値UP']) {
+    if ('古龍属性値UP' in skillData[skillName] && 0 < skillHash[skillName]) {
       dragonUp += Number(skillData[skillName]['古龍属性値UP'][Number(skillHash[skillName]) -1]);
     }
-    if ('攻撃活性UP' in skillData[skillName] && 0 < skillData[skillName]['攻撃活性UP']) {
+    if ('攻撃活性UP' in skillData[skillName] && 0 < skillHash[skillName]) {
       kassei += Number(skillData[skillName]['攻撃活性UP'][Number(skillHash[skillName]) -1]);
     }
-    if ('会心率UP' in skillData[skillName] && 0 < skillData[skillName]['会心率UP']) {
+    if ('会心率UP' in skillData[skillName] && 0 < skillHash[skillName]) {
       criticalUp += Number(skillData[skillName]['会心率UP'][Number(skillHash[skillName]) -1]);
     }
-    if ('会心ダメージUP' in skillData[skillName] && 0 < skillData[skillName]['会心ダメージUP']) {
+    if ('会心ダメージUP' in skillData[skillName] && 0 < skillHash[skillName]) {
       criticalDamageUp += Number(skillData[skillName]['会心ダメージUP'][Number(skillHash[skillName]) -1]);
     }
-    if ('凶会心ダメージUP' in skillData[skillName] && 0 < skillData[skillName]['凶会心ダメージUP']) {
+    if ('凶会心ダメージUP' in skillData[skillName] && 0 < skillHash[skillName]) {
       badCriticalDamageUp += Number(skillData[skillName]['凶会心ダメージUP'][Number(skillHash[skillName]) -1]);
     }
     if (skillData[skillName]['tag'].includes('攻撃増強')) {
       isAttackPower = true;
     }
-    if ('段階攻撃力PLUS' in skillData[skillName] && 0 < skillData[skillName]['段階攻撃力PLUS']) {
+    if ('段階攻撃力PLUS' in skillData[skillName] && 0 < skillHash[skillName]) {
       stepAttackPlus += Number(skillData[skillName]['段階攻撃力PLUS'][Number(skillHash[skillName]) -1]);
       stepLevel = Math.min(Number(document.getElementById('d3').value), skillData[skillName]['段階MAX']);
     }
