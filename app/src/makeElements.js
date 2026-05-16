@@ -130,12 +130,22 @@ export function makeSkillTable(config, skillList) {
     skillGradeHash[armorNames[i].value] = armorGrades[i].value;
   }
 
-  const makeSkillRowSet = function(skillName, skillEfect, sumLevel=0, skillLevel=0, levelClass='') {
+  const makeSkillRowSet = function(skillName, skillSummary, skillData) {
+    let sumLevel = skillName in skillSummary ? skillSummary[skillName] : 0;
+    let maxLevel = skillData[skillName]['max_level'];
+    let skillLevel = Math.min(sumLevel, maxLevel);
+    let skillNote = skillData[skillName]['説明'];
+    let skillEfect = 0 < skillLevel ? skillData[skillName]['効果'][skillLevel -1] : '';
+    let levelClass = sumLevel > maxLevel ? 'level_over' : '';
+    let isRensei = '憑依' in skillData[skillName] ? '' : 'disable';
+
     return `
     <tr>
-      <td rowspan="5"><input type="checkbox" name="skillActive" checked /></td>
+      <td rowspan="6"><input type="checkbox" name="skillActive" checked /></td>
     </tr><tr>
       <td colspan="3">${skillName}</td>
+    </tr><tr>
+      <td colspan="3">${skillNote}</td>
     </tr><tr>
       <td colspan="3">${skillEfect}</td>
     </tr><tr>
@@ -170,18 +180,11 @@ export function makeSkillTable(config, skillList) {
   }
 
   let skillRows = '';
-  for (let skillName in skillSummary) {
-    let sumLevel = skillSummary[skillName];
-    let maxLevel = skillData[skillName]['max_level'];
-    let skillLevel = Math.min(sumLevel, maxLevel);
-    let skillEfect = skillData[skillName]['効果'][skillLevel -1];
-    let levelClass = sumLevel > maxLevel ? 'level_over' : '';
-    skillRows += makeSkillRowSet(skillName, skillEfect, sumLevel, skillLevel, levelClass);
-  }
-  for (let i = 0; i < skillList.length; i++) {
+  for (let skillName in skillSummary) 
+    skillRows += makeSkillRowSet(skillName, skillSummary, skillData);
+  for (let i = 0; i < skillList.length; i++)
     if (!(skillList[i] in skillSummary))
-      skillRows += makeSkillRowSet(skillList[i], skillData[skillList[i]]['説明']);
-  }
+      skillRows += makeSkillRowSet(skillList[i], skillSummary, skillData);
 
   document.getElementById('ChoiceSkill').innerHTML = `
   <table>
@@ -220,48 +223,53 @@ export function setDamageArea() {
         <td>${makeInput('d2', 0)}</td>
         <td>${makeInputReadOnly('d1', 0)}</td>
       </tr><tr>
+        <th>錬成パラメータ</th>
         <th>尻上がり段階</th>
         <th>肉質</th>
         <th>モーション値</th>
       </tr><tr>
+        <td>${makeInput('a5', 0)}</td>
         <td>${makeInput('d3', 0)}</td>
         <td>${makeInput('c6', 130)}</td>
         <td>${makeInput('c7', 18)}</td>
       </tr>
     </table>
     <hr />
-    ( 攻撃力 × 攻撃力 ${makeInputReadOnly('a3', 0)} %UP
-    + 攻撃力 ${makeInputReadOnly('a4', 0)} UP
-    + 錬成パラメータ ${makeInput('a5', 0)} )
-    × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP
+    ( 攻撃力 × 攻撃力 ${makeInputReadOnly('a3', 0)} %UP<br />
+    + 攻撃力 ${makeInputReadOnly('a4', 0)} UP<br />
+    + 錬成パラメータ )<br />
+    × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP<br />
+    = 物理攻撃力<br />
     <hr />
-     ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP
-    + 属性値 ${makeInputReadOnly('b4', 0)} UP )
-    × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP
+     ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP<br />
+    + 属性値 ${makeInputReadOnly('b4', 0)} UP )<br />
+    × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP<br />
+    = 属性攻撃力<br />
     <hr />
-    ( 物理攻撃力 ${makeInputReadOnly('a')}
-    + 属性攻撃力 ${makeInputReadOnly('b')} )
-    × ダメージ ${makeInputReadOnly('c1', 0)} %UP
-    × ( 肉質 / 100 ) × ( モーション値 / 100 )
+    ( 物理攻撃力 ${makeInputReadOnly('a')}<br />
+    + 属性攻撃力 ${makeInputReadOnly('b')} )<br />
+    × ダメージ ${makeInputReadOnly('c1', 0)} %UP<br />
+    × ( 肉質 / 100 ) × ( モーション値 / 100 )<br />
+    = 基本ダメージ ${makeInputReadOnly('c')}<br />
   <hr />
-  = 基本ダメージ ${makeInputReadOnly('c')}
-  <br />
-  基本ダメージ × 会心ダメージ ${makeInputReadOnly('c3', 125)} %
-  = 会心ダメージ ${makeInputReadOnly('d')}
-  <br />
-  基本ダメージ × 0.75
-  = マイナス会心ダメージ ${makeInputReadOnly('e')}
-  <br />
+  <div style="display: in-line" id="kaishinDamage">
+  基本ダメージ × 会心ダメージ倍率 ${makeInputReadOnly('c3', 125)} %<br />
+  = 会心ダメージ ${makeInputReadOnly('d')}<br />
+  </div>
+  <div style="display: in-line" id="MinusKaishinDamage">
+  基本ダメージ × マイナス会心ダメージ倍率 0.75 <br />
+  = マイナス会心ダメージ ${makeInputReadOnly('e')} <br />
+  </div>
   <div style="display: in-line" id="KyokaishinDamage">
-  基本ダメージ × 凶会心 ${makeInputReadOnly('c8', 0)}
-  = 凶会心ダメージ ${makeInputReadOnly('f')}
+  基本ダメージ × 凶会心ダメージ倍率 ${makeInputReadOnly('c8', 0)} <br />
+  = 凶会心ダメージ ${makeInputReadOnly('f')} <br />
   </div>
   <hr />
   ※ トレーニングエリアでのダメージを想定しています<br />
   ※ 会心撃【属性】は、会心ダメージを見るときのみに、反映チェックを付けてください。（修正予定）<br />
   ※ 武器固有補正 武器SP倍率 状態異常補正 はシンプルにしたかったので、省略しています<br />
   ※ 砲撃、ビンダメージ等は今後追加します。<br />
-  ※ 計算式は「<a href="https://mhnowcalc.com/ja/home/">ナウかる研究所</a>」様の物を参考に作成しています。
+  ※ 計算式は「<a href="https://mhnowcalc.com/ja/home/" target="_brank">ナウかる研究所</a>」様の物を参考に作成しています。
   `;
 }
 
