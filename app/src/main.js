@@ -10,7 +10,10 @@ document.querySelector('#app').innerHTML = `
   <h1>Moster&nbsp;Hunter&nbsp;Now Skill&nbsp;Simulator</h1>
 </section>
 <section>
-  <!-- 削除ボタンを止め、トグルボタンに変更 -->
+  <!-- スキル検索 -->
+  <h2>スキルリスト<button class="foldButton" value="SkillSearch">▼</button></h2>
+  <div id="SkillSearch" style="display:none" class="skill_div">
+  </div>
   <div id="SkillDiv">
   ${element.makeSkillDiv(config['skillData'])}
   </div>
@@ -32,3 +35,28 @@ element.setDamageArea();
 onEvent.setSkillButton(config);
 onEvent.setFoldButtonScript();
 onEvent.setCalcDamageScript(config);
+
+const makeSkillSearch = function(config) {
+  const skillData = config['skillData'];
+  let skillNames = [];
+
+  // TODO スキルのリストは作れた
+  let rows = [];
+  for (let skillName in skillData) {
+    let note = skillData[skillName]['説明'];
+    let rensei = skillData[skillName]['錬成'];
+    rensei = rensei ? rensei : 'なし';
+    let level = '';
+    for (let key in skillData[skillName]['効果']) {
+      level += `<p>Lv.${Number(key) +1} : ${skillData[skillName]['効果'][key]}</p>`
+    }
+    let tag = `#${skillData[skillName]['tag'].join(' #')}`;
+    rows.push(`<td><p>${skillName}</p><p>錬成:${rensei}</p></td><td><p>${note}</p><p>${tag}</p></td><td>${level}</td>`);
+  }
+
+  return `<table><tr>${rows.join('</tr><tr>')}</tr></table>`
+}
+
+document.getElementById('SkillSearch').innerHTML = `
+  ${makeSkillSearch(config)}
+`;
