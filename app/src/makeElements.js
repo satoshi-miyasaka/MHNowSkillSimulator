@@ -239,16 +239,14 @@ export function setDamageArea() {
     + 攻撃力 ${makeInputReadOnly('a4', 0)} UP<br />
     + 錬成パラメータ )<br />
     × 攻撃活性 ${makeInputReadOnly('a6', 0)} %UP<br />
-    = 物理攻撃力<br />
+    = 物理攻撃力 ${makeInputReadOnly('a')}<br />
     <hr />
      ( 属性値 × 属性値 ${makeInputReadOnly('b3', 0)} %UP<br />
     + 属性値 ${makeInputReadOnly('b4', 0)} UP )<br />
     × 古龍スキル ${makeInputReadOnly('b5', 0)} %UP<br />
-    = 属性攻撃力<br />
+    = 属性攻撃力 ${makeInputReadOnly('b')}<br />
     <hr />
-    ( 物理攻撃力 ${makeInputReadOnly('a')}<br />
-    + 属性攻撃力 ${makeInputReadOnly('b')} )<br />
-    × ダメージ ${makeInputReadOnly('c1', 0)} %UP<br />
+    ( 物理攻撃力 + 属性攻撃力 ) × ダメージ ${makeInputReadOnly('c1', 0)} %UP<br />
     × ( 肉質 / 100 ) × ( モーション値 / 100 )<br />
     = 基本ダメージ ${makeInputReadOnly('c')}<br />
   <hr />
