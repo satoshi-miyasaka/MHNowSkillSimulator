@@ -14,8 +14,8 @@ document.querySelector('#app').innerHTML = `
   <h2>スキルリスト<button class="foldButton" value="SkillSearch">▼</button></h2>
   <div id="SkillSearch" style="display:none" class="skill_div">
   </div>
-  <div id="ArmorList">
-  </div>
+  <h2>装備リスト<button class="foldButton" value="ArmorList">▼</button></h2>
+  <div id="ArmorList" style="display:none" class="skill_div"></div>
   <div id="SkillDiv">
   ${element.makeSkillDiv(config['skillData'])}
   </div>
@@ -61,20 +61,29 @@ const makeSkillSearch = function(config) {
 const makeArmorList = function(config) {
   const armorData = config['armorData'];
   const slotData = config['slotData'];
-  
+  const partsMap = {'head': '頭', 'body': '胴', 'arm': '腕', 'waist': '腰', 'foot': '足'};
+
+  let rows = [];
   for (let armorName in armorData) {
     let parts = armorData[armorName]['parts'];
 
+    let skillNames = [];
+    let slots = [];
     for (let skillName in armorData[armorName]) {
       if ('parts' == skillName) continue;
+
+      skillNames.push(skillName);
       for (let key in armorData[armorName][skillName]) {
-      }
-      for (let key in slotData[armorName]) {
+        skillNames.push(`Grade.${key} : Lv.${armorData[armorName][skillName][key]}`);
       }
     }
+    for (let key in slotData[armorName]) {
+      slots.push(`Grade.${key} : ${slotData[armorName][key]}`);
+    }
+    rows.push(`<td><p>${armorName}</p><p>${partsMap[parts]}</p></td><td><p>${skillNames.join('</p><p>')}</p></td><td><p>${slots.join('</p><p>')}</p></td>`);
   }
 
-  return `工事中`
+  return `<table><tr>${rows.join('</tr><tr>')}</tr></table>`
 }
 document.getElementById('SkillSearch').innerHTML = `
   ${makeSkillSearch(config)}
