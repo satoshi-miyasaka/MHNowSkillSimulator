@@ -27,6 +27,7 @@ function makeArmorData(skillData) {
           if (!(armor in outputData)) outputData[armor] = {}
           if (!(skill in outputData[armor])) outputData[armor][skill] = {};
           outputData[armor][skill] = skillData[skill][parts][armor];
+          outputData[armor]['parts'] = parts;
         }
       }
     }

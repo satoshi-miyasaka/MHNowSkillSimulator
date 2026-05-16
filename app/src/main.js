@@ -14,6 +14,8 @@ document.querySelector('#app').innerHTML = `
   <h2>スキルリスト<button class="foldButton" value="SkillSearch">▼</button></h2>
   <div id="SkillSearch" style="display:none" class="skill_div">
   </div>
+  <div id="ArmorList">
+  </div>
   <div id="SkillDiv">
   ${element.makeSkillDiv(config['skillData'])}
   </div>
@@ -38,7 +40,6 @@ onEvent.setCalcDamageScript(config);
 
 const makeSkillSearch = function(config) {
   const skillData = config['skillData'];
-  let skillNames = [];
 
   // TODO スキルのリストは作れた
   let rows = [];
@@ -57,6 +58,28 @@ const makeSkillSearch = function(config) {
   return `<table><tr>${rows.join('</tr><tr>')}</tr></table>`
 }
 
+const makeArmorList = function(config) {
+  const armorData = config['armorData'];
+  const slotData = config['slotData'];
+  
+  for (let armorName in armorData) {
+    let parts = armorData[armorName]['parts'];
+
+    for (let skillName in armorData[armorName]) {
+      if ('parts' == skillName) continue;
+      for (let key in armorData[armorName][skillName]) {
+      }
+      for (let key in slotData[armorName]) {
+      }
+    }
+  }
+
+  return `工事中`
+}
 document.getElementById('SkillSearch').innerHTML = `
   ${makeSkillSearch(config)}
+`;
+
+document.getElementById('ArmorList').innerHTML = `
+  ${makeArmorList(config)}
 `;
