@@ -1,5 +1,5 @@
-# Monstar Hunter Now Skill Simulator
-AWS Amplifyで公開する Monstar Hunter Now のスキルシミュレータ
+# Monster Hunter Now Skill Simulator
+AWS Amplifyで公開する Monster Hunter Now のスキルシミュレータ
 開発はViteで行う
 
 ## 構成
@@ -30,4 +30,3 @@ npm install
 npm run dev
 
 ---
-

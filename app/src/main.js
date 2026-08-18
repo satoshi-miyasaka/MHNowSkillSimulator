@@ -7,7 +7,7 @@ const config = await common.loadConfig();
 
 document.querySelector('#app').innerHTML = `
 <section>
-  <h1>Moster&nbsp;Hunter&nbsp;Now Skill&nbsp;Simulator</h1>
+  <h1>Monster&nbsp;Hunter&nbsp;Now Skill&nbsp;Simulator</h1>
 </section>
 <section>
   <!-- 削除ボタンを止め、トグルボタンに変更 -->
